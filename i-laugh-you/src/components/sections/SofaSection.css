@@ -1,0 +1,262 @@
+/* --- Sofa Section --- */
+#sofa-wrapper {
+  display: block;
+  background-color: #d9d9d9;
+  overflow: hidden;
+  position: relative;
+  z-index: 4;
+  height: 100vh;
+  min-height: 600px;
+}
+
+/* Inner positioning context — offsets for header overlap */
+#sofa-scene {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* --- Backgrounds (wall, floor, horizon) --- */
+
+#sofa-wall {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3100px;
+  height: 100%;
+  background: url("/img/sofa/white-wall-textures.webp") 0 0 / 11%;
+}
+
+#sofa-wall::after {
+  content: "";
+  position: absolute;
+  top: 23%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, white, transparent, black);
+  mix-blend-mode: multiply;
+  opacity: 0.3;
+}
+
+/* Floor — top set by JS via --horizon */
+#sofa-floor {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: var(--horizon, 70%);
+  bottom: -10%;
+  overflow: hidden;
+}
+
+#sofa-floor img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  filter: brightness(1.5) contrast(1.25);
+  display: block;
+}
+
+/* Edge shadow at horizon */
+#sofa-edge-contour {
+  position: absolute;
+  top: var(--horizon, 70%);
+  transform: translateY(-50%);
+  left: -500px;
+  width: 9000px;
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  filter: blur(15px);
+}
+
+/* Gradient overlay for depth */
+#sofa-gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    #2f3847 0%,
+    transparent 2%,
+    transparent 99%,
+    #14171c 100%
+  );
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* --- Sofa (size & position from JS) --- */
+
+#sofaWrapper {
+  position: absolute;
+}
+
+.sofa-svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.sofa-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sofa-overlay-multiply {
+  mix-blend-mode: multiply;
+}
+
+.sofa-overlay-hardlight {
+  mix-blend-mode: hard-light;
+}
+
+.sofa-cat {
+  position: absolute;
+  width: 22.5%;
+  height: 34.65%;
+  left: 20.89%;
+  top: 20.32%;
+  pointer-events: none;
+}
+
+/* --- Love Bar --- */
+
+#loveBarWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 20;
+}
+
+#loveBar {
+  height: auto;
+  z-index: 20;
+  background-color: black;
+  color: #ff004e;
+  position: relative;
+  font-family: var(--font-oswald), "Oswald", sans-serif;
+  font-size: clamp(24px, 3vw, 40px);
+  padding: 16px 24px;
+  text-align: center;
+}
+
+#loveBar p {
+  margin: 0;
+}
+
+#loveBar .icon {
+  display: inline-block;
+  font-size: 1.3em;
+  vertical-align: -4px;
+}
+
+/* --- Paintings (position & size from JS) --- */
+
+#sofaImages {
+  position: absolute;
+  display: flex;
+  z-index: 99;
+}
+
+#sofaImages .sofaImage {
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 4px dashed white;
+  box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+  transition: box-shadow 800ms, background 800ms ease-out;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+#sofaImages .sofaImage > div {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+#sofaImages .sofaImage.imagePlaced {
+  border: var(--frame-w, 6px) solid;
+  border-color: #2c2c2c #1a1a1a #111 #252525;
+  box-shadow:
+    4px 6px 18px rgba(0, 0, 0, 0.35),
+    2px 3px 5px rgba(0, 0, 0, 0.25),
+    inset 0 0 12px rgba(0, 0, 0, 0.45),
+    inset 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#sofaImages .sofaImage.ui-state-hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 60px rgba(255, 255, 255, 1);
+}
+
+/* --- Color Swatches (position from JS) --- */
+
+#sofaColorSwatches {
+  position: absolute;
+  display: flex;
+  gap: 10px;
+  transform: translateX(-50%);
+}
+
+.sofa-swatch {
+  width: clamp(18px, 2.2vw, 28px);
+  height: clamp(18px, 2.2vw, 28px);
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.sofa-swatch:hover {
+  transform: scale(1.25);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.sofa-swatch.active {
+  border-color: white;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Love Bar Thumbnails --- */
+
+#loveBar-thumbnails {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.lovebar-thumb {
+  flex-shrink: 0;
+  width: 60px;
+  height: 80px;
+  overflow: hidden;
+  cursor: grab;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  position: relative;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.lovebar-thumb:hover {
+  transform: scale(1.1);
+  border-color: #ff004e;
+}
+
+.lovebar-thumb.placed {
+  opacity: 0.4;
+}
+
+.lovebar-thumb.dragging {
+  opacity: 0.5;
+}

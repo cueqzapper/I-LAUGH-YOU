@@ -1,0 +1,37 @@
+{
+  "cart": {
+    "title": "Tu Carrito",
+    "empty": "Tu carrito est\u00e1 vac\u00edo.",
+    "continueShopping": "Seguir comprando",
+    "itemCount": "{{count}} pieza(s)",
+    "currency": "Moneda",
+    "applyAllFrames": "Aplicar marco a todas",
+    "applyAll": "Aplicar",
+    "remove": "Eliminar",
+    "soldBadge": "VENDIDA",
+    "soldWarning": "{{count}} art\u00edculo(s) en tu carrito han sido vendidos por otra persona y ser\u00e1n excluidos del pago.",
+    "unitPrice": "Precio por pieza",
+    "quantity": "Cantidad",
+    "subtotal": "Total"
+  },
+  "frameColor": {
+    "white": "Blanco",
+    "black": "Negro",
+    "natural": "Madera natural"
+  },
+  "checkout": {
+    "proceed": "Proceder al pago",
+    "processing": "Procesando...",
+    "error": "El pago fall\u00f3. Int\u00e9ntalo de nuevo."
+  },
+  "success": {
+    "title": "\u00a1Gracias!",
+    "subtitle": "Tu pedido ha sido confirmado. Un correo de confirmaci\u00f3n est\u00e1 en camino.",
+    "loading": "Cargando detalles del pedido...",
+    "orderNumber": "Pedido #{{id}}",
+    "pieces": "Piezas compradas",
+    "frame": "marco",
+    "emailSent": "Se ha enviado un correo de confirmaci\u00f3n con los detalles de tu pedido.",
+    "backToGallery": "Volver a la Galer\u00eda"
+  }
+}

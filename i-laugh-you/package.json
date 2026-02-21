@@ -1,0 +1,45 @@
+{
+  "name": "i-laugh-you",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -H 127.0.0.1 -p 4321",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@react-three/postprocessing": "^3.0.4",
+    "better-sqlite3": "^11.10.0",
+    "d3": "^7.9.0",
+    "firebase": "^12.9.0",
+    "fitty": "^2.4.2",
+    "framer-motion": "^12.34.0",
+    "i18next": "^25.8.10",
+    "next": "16.1.6",
+    "openseadragon": "^5.0.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-i18next": "^16.5.4",
+    "resend": "^6.9.2",
+    "stripe": "^20.3.1",
+    "three": "^0.182.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/d3": "^7.4.3",
+    "@types/node": "^20",
+    "@types/openseadragon": "^5.0.2",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/three": "^0.182.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@9.15.3+sha512.1f79bc245a66eb0b07c5d4d83131240774642caaa86ef7d0434ab47c0d16f66b04e21e0c086eb61e62c77efc4d7f7ec071afad3796af64892fae66509173893a"
+}

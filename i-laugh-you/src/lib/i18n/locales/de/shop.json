@@ -1,0 +1,37 @@
+{
+  "cart": {
+    "title": "Dein Warenkorb",
+    "empty": "Dein Warenkorb ist leer.",
+    "continueShopping": "Weiter st\u00f6bern",
+    "itemCount": "{{count}} St\u00fcck(e)",
+    "currency": "W\u00e4hrung",
+    "applyAllFrames": "Rahmen f\u00fcr alle anwenden",
+    "applyAll": "Anwenden",
+    "remove": "Entfernen",
+    "soldBadge": "VERKAUFT",
+    "soldWarning": "{{count}} Artikel in Deinem Warenkorb wurden von jemand anderem gekauft und werden beim Checkout ausgeschlossen.",
+    "unitPrice": "Preis pro St\u00fcck",
+    "quantity": "Anzahl",
+    "subtotal": "Gesamt"
+  },
+  "frameColor": {
+    "white": "Weiss",
+    "black": "Schwarz",
+    "natural": "Naturholz"
+  },
+  "checkout": {
+    "proceed": "Zur Kasse",
+    "processing": "Wird verarbeitet...",
+    "error": "Checkout fehlgeschlagen. Bitte versuche es erneut."
+  },
+  "success": {
+    "title": "Vielen Dank!",
+    "subtitle": "Deine Bestellung wurde best\u00e4tigt. Eine Best\u00e4tigungs-E-Mail ist unterwegs.",
+    "loading": "Bestelldetails werden geladen...",
+    "orderNumber": "Bestellung #{{id}}",
+    "pieces": "Gekaufte St\u00fccke",
+    "frame": "Rahmen",
+    "emailSent": "Eine Best\u00e4tigungs-E-Mail mit Deinen Bestelldetails wurde gesendet.",
+    "backToGallery": "Zur\u00fcck zur Galerie"
+  }
+}

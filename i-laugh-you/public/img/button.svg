@@ -1,0 +1,33 @@
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+<g>
+	<circle class="button0" cx="50" cy="50" r="48.5"/>
+<!-- 	<linearGradient id="BUTTONID_1" gradientUnits="userSpaceOnUse" x1="50" y1="93.5493" x2="50" y2="10.2057">
+		<stop  offset="0" style="stop-color:#1E1E1C;stop-opacity:0"/>
+		<stop  offset="0.5251" style="stop-color:#13192E;stop-opacity:0.4"/>
+		<stop  offset="1" style="stop-color:#020203;stop-opacity:0"/>
+	</linearGradient> -->
+	<circle class="button1" cx="50" cy="50" r="48.5"/>
+<!-- 	<radialGradient id="BUTTONID_2" cx="50" cy="50" r="48.5317" gradientUnits="userSpaceOnUse">
+		<stop  offset="0.8101" style="stop-color:#020203;stop-opacity:0"/>
+		<stop  offset="1" style="stop-color:#1E1E1C;stop-opacity:0.2"/>
+	</radialGradient> -->
+	<circle class="button2" cx="50" cy="50" r="48.5"/>
+<!-- 	<radialGradient id="BUTTONID_3" cx="50" cy="50" r="48.5317" fx="28.9197" fy="27.5659" gradientUnits="userSpaceOnUse">
+		<stop  offset="1.389830e-03" style="stop-color:#FFFFFF;stop-opacity:0.6"/>
+		<stop  offset="1" style="stop-color:#FFFFFF;stop-opacity:4.000000e-02"/>
+	</radialGradient> -->
+	<circle class="button3" cx="50" cy="50" r="48.5"/>
+<!-- 	<radialGradient id="BUTTONID_4" cx="50" cy="50" r="48.5317" fx="26.9531" fy="25.8122" gradientUnits="userSpaceOnUse">
+		<stop  offset="6.284583e-02" style="stop-color:#FFFFFF;stop-opacity:0.3"/>
+		<stop  offset="0.4302" style="stop-color:#FFFFFF;stop-opacity:4.000000e-02"/>
+	</radialGradient> -->
+	<circle class="button4" cx="50" cy="50" r="48.5"/>
+<!-- 	<radialGradient id="BUTTONID_5" cx="50" cy="50" r="48.5317" fx="66.6367" fy="74.4769" gradientUnits="userSpaceOnUse">
+		<stop  offset="0.1211" style="stop-color:#FFFFFF;stop-opacity:0.3"/>
+		<stop  offset="1" style="stop-color:#FFFFFF;stop-opacity:0"/>
+	</radialGradient> -->
+	<circle class="button5" cx="50" cy="50" r="48.5"/>
+	<circle class="button6" cx="50" cy="50" r="48.5"/>
+</g>
+</svg>

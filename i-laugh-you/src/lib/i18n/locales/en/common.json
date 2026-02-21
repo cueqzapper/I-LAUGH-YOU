@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "pickAPiece": "Pick a piece of me",
+    "lovelySmile": "A lovely smile",
+    "whatDoesItCost": "What does it cost?",
+    "castingCouch": "The casting couch",
+    "whoIsTheGuy": "Who is the guy?"
+  },
+  "footer": {
+    "madeWith": "Made with love and laughter in Switzerland",
+    "about": "About us",
+    "blog": "Blog"
+  }
+}

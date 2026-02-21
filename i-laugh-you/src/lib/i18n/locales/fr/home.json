@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "gallery": "Dans la Galerie",
+    "headline": "Pas cher aujourd'hui, inestimable demain !",
+    "subline": "Unique pour toujours : Choisis ton morceau du plus grand autoportrait de l'histoire de l'art !",
+    "loading": "Chargement...",
+    "start": "Découvre le Chef-d'œuvre"
+  },
+  "usp1": {
+    "title": "L\u00e0 o\u00f9 tout a commenc\u00e9",
+    "imgAlt": "Un \u00e9tudiant en art peint un immense autoportrait \u00e0 l'huile",
+    "subtitle": "Un \u00e9tudiant en art. Une immense peinture \u00e0 l'huile. Un objectif.",
+    "text": "Le plus grand autoportrait du monde \u2014 peint \u00e0 la main."
+  },
+  "usp2": {
+    "title": "De la toile au web",
+    "imgAlt": "La peinture \u00e0 l'huile est num\u00e9ris\u00e9e pi\u00e8ce par pi\u00e8ce",
+    "subtitle": "Photographi\u00e9 pi\u00e8ce par pi\u00e8ce, num\u00e9ris\u00e9 pixel par pixel.",
+    "text": "C'est ainsi que la peinture sur toile est devenue une \u0153uvre d'art num\u00e9rique."
+  },
+  "usp3": {
+    "title": "Ta pi\u00e8ce du tout",
+    "imgAlt": "{{total}} images uniques \u00e0 d\u00e9couvrir",
+    "subtitle": "{{total}} fragments uniques \u2014 chacun un original.",
+    "text": "Trouve celui qui t'appartient."
+  },
+  "colorPicker": {
+    "label": "Choisis une couleur :",
+    "helpText": "Clique ici pour choisir une couleur"
+  },
+  "price": {
+    "title": "ACHETER MAINTENANT OU PLUS TARD ?",
+    "currentPrice": "Prix actuel :",
+    "soldPieces": "Pi\u00e8ces vendues :",
+    "tip": "Astuce :",
+    "tipText": "\u00c7a ne fait qu'augmenter !",
+    "firstLast": "La premi\u00e8re image co\u00fbte {{firstPrice}} \u2013 la derni\u00e8re {{lastPrice}}.",
+    "beQuick": "Alors sois rapide : plus t\u00f4t tu ach\u00e8tes,",
+    "cheaper": "moins cher tu l'obtiendras.",
+    "hesitation": "H\u00e9siter co\u00fbte cher."
+  },
+  "chart": {
+    "xAxis": "Image N\u00b0",
+    "yAxis": "Prix",
+    "priceLabel": "Prix : {{price}}"
+  },
+  "sofa": {
+    "text": "Quand tu cliques sur <heartIcon/> sur une image, elle sera ajout\u00e9e ici.",
+    "catAlt": "Chat sur le canap\u00e9"
+  },
+  "bid": {
+    "title": "Acqu\u00e9rir l'original ?",
+    "description": "Fais ton offre ici. D\u00e8s que la derni\u00e8re pi\u00e8ce du tableau est vendue, la peinture originale appartient au plus offrant.",
+    "currentHighest": "Offre la plus \u00e9lev\u00e9e :",
+    "noBids": "Pas encore d'offres",
+    "successTitle": "Merci ! Ton offre a \u00e9t\u00e9 soumise avec succ\u00e8s.",
+    "successSub": "Je te contacterai pour confirmer ton offre.",
+    "newBid": "Faire une nouvelle offre",
+    "nameLabel": "Ton nom *",
+    "emailLabel": "Ton e-mail *",
+    "amountLabel": "Ton offre (USD) *",
+    "amountPlaceholder": "p. ex. 50000",
+    "messageLabel": "Message (facultatif)",
+    "messagePlaceholder": "Ton message...",
+    "submit": "Soumettre l'offre",
+    "submitting": "Envoi en cours...",
+    "submitError": "L'offre n'a pas pu \u00eatre envoy\u00e9e",
+    "contactNote": "(Je te contacterai et v\u00e9rifierai ton offre)"
+  },
+  "concept": {
+    "title": "Le Concept",
+    "intro": "<b>I-LAUGH-YOU</b> est un projet ARTISTIQUE qui souhaite discuter publiquement de la <u>relation</u> entre <b><artHighlight>l'Art</artHighlight> et le <capHighlight>Capitalisme</capHighlight></b>.",
+    "body1": "Le tableau est un autoportrait de l'artiste et est vendu en <span>{{total}} pi\u00e8ces diff\u00e9rentes</span>. Chaque pi\u00e8ce ne peut \u00eatre vendue qu'une seule fois. La premi\u00e8re pi\u00e8ce est la moins ch\u00e8re (<b_cap>{{firstPrice}}</b_cap>). Le prix augmente de fa\u00e7on exponentielle ; la derni\u00e8re pi\u00e8ce co\u00fbte <b_cap>{{lastPrice}}</b_cap>.",
+    "body2": "\u00c0 travers ce syst\u00e8me, le projet veut montrer comment le <u>prix de l'art \u00e9volue avec la popularit\u00e9</u>. Probablement, les premi\u00e8res pi\u00e8ces \u2014 qui sont les <capHighlight>moins ch\u00e8res</capHighlight> \u2014 seront aussi les <artHighlight>plus belles/int\u00e9ressantes</artHighlight>. Mais plus le projet devient populaire, plus il est prestigieux de poss\u00e9der une pi\u00e8ce de l'artiste \u2014 et les gens sont alors pr\u00eats \u00e0 payer beaucoup d'argent.",
+    "body3": "Chaque pi\u00e8ce est livr\u00e9e chez toi. Elle mesure 30\u00d740 cm.",
+    "outro": "Amuse-toi \u00e0 d\u00e9couvrir cette (<i>tr\u00e8s \u00e9trange</i>) <loveHighlight>lettre d'amour</loveHighlight> \u00e0 une fille partie pour toujours, mais jamais oubli\u00e9e !",
+    "artist": "L'ARTISTE"
+  }
+}

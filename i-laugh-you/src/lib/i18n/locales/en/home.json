@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "gallery": "In the Gallery",
+    "headline": "Cheap today, priceless tomorrow!",
+    "subline": "Forever unique: Choose your piece of the largest self-portrait in art history!",
+    "loading": "Loading...",
+    "start": "Discover the Masterpiece"
+  },
+  "usp1": {
+    "title": "Where it all began",
+    "imgAlt": "An art student paints a huge self-portrait in oil",
+    "subtitle": "An art student. A huge oil painting. One goal.",
+    "text": "The world's largest self-portrait \u2014 painted by hand."
+  },
+  "usp2": {
+    "title": "From canvas to the web",
+    "imgAlt": "The oil painting is digitized piece by piece",
+    "subtitle": "Photographed piece by piece, digitized pixel by pixel.",
+    "text": "This is how paint on canvas became a digital artwork."
+  },
+  "usp3": {
+    "title": "Your piece of the whole",
+    "imgAlt": "{{total}} unique individual images to discover",
+    "subtitle": "{{total}} unique fragments \u2014 each an original.",
+    "text": "Find the one that belongs to you."
+  },
+  "colorPicker": {
+    "label": "Pick a color:",
+    "helpText": "Click here to pick a color"
+  },
+  "price": {
+    "title": "BUY NOW OR LATER?",
+    "currentPrice": "Current price:",
+    "soldPieces": "Pieces sold:",
+    "tip": "Tip:",
+    "tipText": "It keeps getting more expensive!",
+    "firstLast": "The first image costs {{firstPrice}} \u2013 the last one {{lastPrice}}.",
+    "beQuick": "So be quick \u2013 the earlier you buy,",
+    "cheaper": "the cheaper you get it.",
+    "hesitation": "Hesitation is expensive."
+  },
+  "chart": {
+    "xAxis": "Image No.",
+    "yAxis": "Price",
+    "priceLabel": "Price: {{price}}"
+  },
+  "sofa": {
+    "text": "When you click <heartIcon/> on an image, it will be added here.",
+    "catAlt": "Cat on the sofa"
+  },
+  "bid": {
+    "title": "Acquire the original?",
+    "description": "Place your bid here. Once the last piece of the painting is sold, the original painting belongs to the highest bidder.",
+    "currentHighest": "Current highest bid:",
+    "noBids": "No bids yet",
+    "successTitle": "Thank you! Your bid has been submitted successfully.",
+    "successSub": "I will contact you to confirm your offer.",
+    "newBid": "Place a new bid",
+    "nameLabel": "Your name *",
+    "emailLabel": "Your email *",
+    "amountLabel": "Your bid (USD) *",
+    "amountPlaceholder": "e.g. 50000",
+    "messageLabel": "Message (optional)",
+    "messagePlaceholder": "Your message...",
+    "submit": "Place bid",
+    "submitting": "Submitting...",
+    "submitError": "Bid could not be submitted",
+    "contactNote": "(I will contact you and verify your offer)"
+  },
+  "concept": {
+    "title": "The Concept",
+    "intro": "<b>I-LAUGH-YOU</b> is an ART project that aims to publicly discuss the <u>relationship</u> between <b><artHighlight>Art</artHighlight> and <capHighlight>Capitalism</capHighlight></b>.",
+    "body1": "The painting is a self-portrait of the artist and is sold in <span>{{total}} different pieces</span>. Each piece can only be sold once. The first piece is the cheapest (<b_cap>{{firstPrice}}</b_cap>). The price rises exponentially; the last piece costs <b_cap>{{lastPrice}}</b_cap>.",
+    "body2": "Through this system, the project aims to show how the <u>price of art evolves with popularity</u>. Most likely, the first pieces \u2014 which are the <capHighlight>cheapest</capHighlight> \u2014 will also be the <artHighlight>most beautiful/interesting</artHighlight> ones. But the more popular the project becomes, the more prestigious it is to own a piece from the artist \u2014 and so people are willing to pay a lot of money.",
+    "body3": "Each piece will be delivered to your home. It measures 30\u00d740 cm.",
+    "outro": "Have fun discovering this (<i>very strange</i>) <loveHighlight>love letter</loveHighlight> to a girl who is gone forever but will never be forgotten!",
+    "artist": "THE ARTIST"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "gallery": "En la Galer\u00eda",
+    "headline": "\u00a1Barato hoy, invaluable ma\u00f1ana!",
+    "subline": "\u00danico para siempre: \u00a1Elige tu pieza del autorretrato m\u00e1s grande de la historia del arte!",
+    "loading": "Cargando...",
+    "start": "Descubre la Obra Maestra"
+  },
+  "usp1": {
+    "title": "Donde todo comenz\u00f3",
+    "imgAlt": "Un estudiante de arte pinta un enorme autorretrato al \u00f3leo",
+    "subtitle": "Un estudiante de arte. Un enorme \u00f3leo. Un objetivo.",
+    "text": "El autorretrato m\u00e1s grande del mundo \u2014 pintado a mano."
+  },
+  "usp2": {
+    "title": "Del lienzo a la red",
+    "imgAlt": "La pintura al \u00f3leo se digitaliza pieza a pieza",
+    "subtitle": "Fotografiado pieza a pieza, digitalizado p\u00edxel a p\u00edxel.",
+    "text": "As\u00ed la pintura sobre lienzo se convirti\u00f3 en una obra de arte digital."
+  },
+  "usp3": {
+    "title": "Tu pieza del todo",
+    "imgAlt": "{{total}} im\u00e1genes \u00fanicas por descubrir",
+    "subtitle": "{{total}} fragmentos \u00fanicos \u2014 cada uno un original.",
+    "text": "Encuentra el que te pertenece."
+  },
+  "colorPicker": {
+    "label": "Elige un color:",
+    "helpText": "Haz clic aqu\u00ed para elegir un color"
+  },
+  "price": {
+    "title": "\u00bfCOMPRAR AHORA O DESPU\u00c9S?",
+    "currentPrice": "Precio actual:",
+    "soldPieces": "Piezas vendidas:",
+    "tip": "Consejo:",
+    "tipText": "\u00a1Cada vez es m\u00e1s caro!",
+    "firstLast": "La primera imagen cuesta {{firstPrice}} \u2013 la \u00faltima {{lastPrice}}.",
+    "beQuick": "As\u00ed que s\u00e9 r\u00e1pido: cuanto antes compres,",
+    "cheaper": "m\u00e1s barato te saldr\u00e1.",
+    "hesitation": "Dudar es caro."
+  },
+  "chart": {
+    "xAxis": "Imagen N.\u00ba",
+    "yAxis": "Precio",
+    "priceLabel": "Precio: {{price}}"
+  },
+  "sofa": {
+    "text": "Cuando hagas clic en <heartIcon/> en una imagen, se a\u00f1adir\u00e1 aqu\u00ed.",
+    "catAlt": "Gato en el sof\u00e1"
+  },
+  "bid": {
+    "title": "\u00bfAdquirir el original?",
+    "description": "Haz tu oferta aqu\u00ed. Una vez vendida la \u00faltima pieza del cuadro, la pintura original pertenecer\u00e1 al mejor postor.",
+    "currentHighest": "Oferta m\u00e1s alta actual:",
+    "noBids": "A\u00fan no hay ofertas",
+    "successTitle": "\u00a1Gracias! Tu oferta ha sido enviada con \u00e9xito.",
+    "successSub": "Me pondr\u00e9 en contacto contigo para confirmar tu oferta.",
+    "newBid": "Hacer una nueva oferta",
+    "nameLabel": "Tu nombre *",
+    "emailLabel": "Tu correo electr\u00f3nico *",
+    "amountLabel": "Tu oferta (USD) *",
+    "amountPlaceholder": "p. ej. 50000",
+    "messageLabel": "Mensaje (opcional)",
+    "messagePlaceholder": "Tu mensaje...",
+    "submit": "Enviar oferta",
+    "submitting": "Enviando...",
+    "submitError": "No se pudo enviar la oferta",
+    "contactNote": "(Me pondr\u00e9 en contacto contigo y verificar\u00e9 tu oferta)"
+  },
+  "concept": {
+    "title": "El Concepto",
+    "intro": "<b>I-LAUGH-YOU</b> es un proyecto ART\u00cdSTICO que busca discutir p\u00fablicamente la <u>relaci\u00f3n</u> entre <b><artHighlight>Arte</artHighlight> y <capHighlight>Capitalismo</capHighlight></b>.",
+    "body1": "La pintura es un autorretrato del artista y se vende en <span>{{total}} piezas diferentes</span>. Cada pieza solo puede venderse una vez. La primera pieza es la m\u00e1s barata (<b_cap>{{firstPrice}}</b_cap>). El precio sube exponencialmente; la \u00faltima pieza cuesta <b_cap>{{lastPrice}}</b_cap>.",
+    "body2": "A trav\u00e9s de este sistema, el proyecto quiere mostrar c\u00f3mo el <u>precio del arte evoluciona con la popularidad</u>. Probablemente, las primeras piezas \u2014 que son las <capHighlight>m\u00e1s baratas</capHighlight> \u2014 ser\u00e1n tambi\u00e9n las <artHighlight>m\u00e1s bonitas/interesantes</artHighlight>. Pero cuanto m\u00e1s popular se vuelve el proyecto, m\u00e1s prestigioso es poseer una pieza del artista \u2014 y as\u00ed la gente est\u00e1 dispuesta a pagar mucho dinero.",
+    "body3": "Cada pieza se env\u00eda a tu casa. Mide 30\u00d740 cm.",
+    "outro": "\u00a1Divi\u00e9rtete descubriendo esta (<i>muy extra\u00f1a</i>) <loveHighlight>carta de amor</loveHighlight> a una chica que se fue para siempre, pero nunca ser\u00e1 olvidada!",
+    "artist": "EL ARTISTA"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "gallery": "In der Galerie",
+    "headline": "Heute g\u00fcnstig, morgen unbezahlbar!",
+    "subline": "F\u00fcr immer einzigartig: W\u00e4hle Dein St\u00fcck des gr\u00f6ssten Selbstportr\u00e4ts der Kunstgeschichte!",
+    "loading": "Laden...",
+    "start": "Meisterwerk entdecken"
+  },
+  "usp1": {
+    "title": "Wo alles begann",
+    "imgAlt": "Ein Kunststudent malt ein riesiges Selbstportr\u00e4t in \u00d6l",
+    "subtitle": "Ein Kunststudent. Ein riesiges \u00d6lgem\u00e4lde. Ein Ziel.",
+    "text": "Das gr\u00f6sste Selbstportr\u00e4t der Welt \u2014 gemalt von Hand."
+  },
+  "usp2": {
+    "title": "Von der Leinwand ins Netz",
+    "imgAlt": "Das \u00d6lgem\u00e4lde wird St\u00fcck f\u00fcr St\u00fcck digitalisiert",
+    "subtitle": "St\u00fcck f\u00fcr St\u00fcck fotografiert, Pixel f\u00fcr Pixel digitalisiert.",
+    "text": "So wurde aus Farbe auf Leinwand ein digitales Kunstwerk."
+  },
+  "usp3": {
+    "title": "Dein St\u00fcck vom Ganzen",
+    "imgAlt": "{{total}} einzigartige Einzelbilder zum Entdecken",
+    "subtitle": "{{total}} einzigartige Fragmente \u2014 jedes ein Original.",
+    "text": "Finde das eine, das zu Dir geh\u00f6rt."
+  },
+  "colorPicker": {
+    "label": "W\u00e4hle eine Farbe aus:",
+    "helpText": "Hier klicken um eine Farbe auszuw\u00e4hlen"
+  },
+  "price": {
+    "title": "JETZT ODER SP\u00c4TER KAUFEN?",
+    "currentPrice": "Aktueller Preis:",
+    "soldPieces": "Verkaufte St\u00fccke:",
+    "tip": "Tipp:",
+    "tipText": "Es wird immer teurer!",
+    "firstLast": "Das erste Bild kostet {{firstPrice}} - das letzte {{lastPrice}}.",
+    "beQuick": "Also sei schnell, je fr\u00fcher Du kaufst,",
+    "cheaper": "desto g\u00fcnstiger bekommst Du es.",
+    "hesitation": "Z\u00f6gern ist teuer."
+  },
+  "chart": {
+    "xAxis": "Bild Nr.",
+    "yAxis": "Preis",
+    "priceLabel": "Preis: {{price}}"
+  },
+  "sofa": {
+    "text": "Wenn Du auf <heartIcon/> bei einem Bild klickst, wird es hier hinzugef\u00fcgt.",
+    "catAlt": "Katze auf dem Sofa"
+  },
+  "bid": {
+    "title": "Das Original erwerben?",
+    "description": "Gib hier Dein Gebot ab. Sobald das letzte St\u00fcck des Bildes verkauft ist, geh\u00f6rt das Originalgem\u00e4lde dem H\u00f6chstbietenden.",
+    "currentHighest": "Aktuelles H\u00f6chstgebot:",
+    "noBids": "Noch keine Gebote",
+    "successTitle": "Vielen Dank! Dein Gebot wurde erfolgreich eingereicht.",
+    "successSub": "Ich werde Dich kontaktieren, um Dein Angebot zu best\u00e4tigen.",
+    "newBid": "Neues Gebot abgeben",
+    "nameLabel": "Dein Name *",
+    "emailLabel": "Deine E-Mail *",
+    "amountLabel": "Dein Gebot (USD) *",
+    "amountPlaceholder": "z.B. 50000",
+    "messageLabel": "Nachricht (optional)",
+    "messagePlaceholder": "Deine Nachricht...",
+    "submit": "Gebot abgeben",
+    "submitting": "Wird gesendet...",
+    "submitError": "Gebot konnte nicht abgesendet werden",
+    "contactNote": "(Ich werde Dich kontaktieren und Dein Angebot verifizieren)"
+  },
+  "concept": {
+    "title": "Das Konzept",
+    "intro": "<b>I-LAUGH-YOU</b> ist ein KUNST-Projekt, das \u00f6ffentlich die <u>Beziehung</u> zwischen <b><artHighlight>Kunst</artHighlight> und <capHighlight>Kapitalismus</capHighlight></b> diskutieren m\u00f6chte.",
+    "body1": "Das Bild ist ein Selbstportr\u00e4t des K\u00fcnstlers und wird in <span>{{total}} verschiedenen St\u00fccken</span> verkauft. Jedes St\u00fcck kann nur einmal verkauft werden. Das erste St\u00fcck ist am g\u00fcnstigsten (<b_cap>{{firstPrice}}</b_cap>). Der Preis steigt exponentiell, das letzte St\u00fcck kostet <b_cap>{{lastPrice}}</b_cap>.",
+    "body2": "Durch dieses System m\u00f6chte das Projekt zeigen, wie sich der <u>Preis von Kunst mit der Beliebtheit entwickelt</u>. Wahrscheinlich werden die ersten St\u00fccke, die am <capHighlight>g\u00fcnstigsten</capHighlight> sind, die <artHighlight>sch\u00f6nsten/interessantesten</artHighlight> sein. Aber je popul\u00e4rer das Projekt wird, desto prestigetr\u00e4chtiger wird es, ein St\u00fcck des K\u00fcnstlers zu besitzen \u2014 und so sind die Leute auch bereit, viel Geld zu bezahlen.",
+    "body3": "Jedes St\u00fcck wird Dir nach Hause geliefert. Es misst 30x40cm.",
+    "outro": "Viel Spass beim Entdecken dieses (<i>sehr seltsamen</i>) <loveHighlight>Liebesbriefs</loveHighlight> an ein M\u00e4dchen, das f\u00fcr immer fort ist, aber nie vergessen wird!",
+    "artist": "DER K\u00dcNSTLER"
+  }
+}

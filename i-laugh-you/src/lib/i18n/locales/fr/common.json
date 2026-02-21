@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "pickAPiece": "Choisis un morceau de moi",
+    "lovelySmile": "Un joli sourire",
+    "whatDoesItCost": "Combien \u00e7a co\u00fbte ?",
+    "castingCouch": "Le canap\u00e9 de casting",
+    "whoIsTheGuy": "Qui est ce type ?"
+  },
+  "footer": {
+    "madeWith": "Fait avec amour et rires en Suisse",
+    "about": "\u00c0 propos",
+    "blog": "Blog"
+  }
+}

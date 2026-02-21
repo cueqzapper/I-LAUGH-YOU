@@ -1,0 +1,37 @@
+{
+  "cart": {
+    "title": "Ton Panier",
+    "empty": "Ton panier est vide.",
+    "continueShopping": "Continuer les achats",
+    "itemCount": "{{count}} pi\u00e8ce(s)",
+    "currency": "Devise",
+    "applyAllFrames": "Appliquer le cadre \u00e0 toutes",
+    "applyAll": "Appliquer",
+    "remove": "Supprimer",
+    "soldBadge": "VENDUE",
+    "soldWarning": "{{count}} article(s) dans ton panier ont \u00e9t\u00e9 vendus par quelqu'un d'autre et seront exclus du paiement.",
+    "unitPrice": "Prix par pi\u00e8ce",
+    "quantity": "Quantit\u00e9",
+    "subtotal": "Total"
+  },
+  "frameColor": {
+    "white": "Blanc",
+    "black": "Noir",
+    "natural": "Bois naturel"
+  },
+  "checkout": {
+    "proceed": "Passer \u00e0 la caisse",
+    "processing": "Traitement en cours...",
+    "error": "Le paiement a \u00e9chou\u00e9. Veuillez r\u00e9essayer."
+  },
+  "success": {
+    "title": "Merci !",
+    "subtitle": "Ta commande a \u00e9t\u00e9 confirm\u00e9e. Un e-mail de confirmation est en route.",
+    "loading": "Chargement des d\u00e9tails de la commande...",
+    "orderNumber": "Commande #{{id}}",
+    "pieces": "Pi\u00e8ces achet\u00e9es",
+    "frame": "cadre",
+    "emailSent": "Un e-mail de confirmation avec les d\u00e9tails de ta commande a \u00e9t\u00e9 envoy\u00e9.",
+    "backToGallery": "Retour \u00e0 la Galerie"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty.",
+    "continueShopping": "Continue Shopping",
+    "itemCount": "{{count}} piece(s)",
+    "currency": "Currency",
+    "applyAllFrames": "Apply frame to all",
+    "applyAll": "Apply",
+    "remove": "Remove",
+    "soldBadge": "SOLD",
+    "soldWarning": "{{count}} item(s) in your cart have been sold by someone else and will be excluded from checkout.",
+    "unitPrice": "Price per piece",
+    "quantity": "Quantity",
+    "subtotal": "Total"
+  },
+  "frameColor": {
+    "white": "White",
+    "black": "Black",
+    "natural": "Natural Wood"
+  },
+  "checkout": {
+    "proceed": "Proceed to Checkout",
+    "processing": "Processing...",
+    "error": "Checkout failed. Please try again."
+  },
+  "success": {
+    "title": "Thank you!",
+    "subtitle": "Your order has been confirmed. A confirmation email is on its way.",
+    "loading": "Loading order details...",
+    "orderNumber": "Order #{{id}}",
+    "pieces": "Pieces purchased",
+    "frame": "frame",
+    "emailSent": "A confirmation email with your order details has been sent.",
+    "backToGallery": "Back to Gallery"
+  }
+}
