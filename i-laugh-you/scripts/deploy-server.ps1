@@ -23,7 +23,7 @@ Write-Host "[1/6] Creating deployment package..." -ForegroundColor Yellow
 $tempDir = [System.IO.Path]::GetTempPath()
 $tarFile = Join-Path $tempDir "ily-deploy.tar.gz"
 
-tar --exclude='node_modules' `
+& "$env:SystemRoot\System32\tar.exe" --exclude='node_modules' `
     --exclude='.next' `
     --exclude='.git' `
     --exclude='data/*.sqlite*' `
