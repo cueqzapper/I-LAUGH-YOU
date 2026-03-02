@@ -4,27 +4,24 @@ import { useState, useCallback, useEffect } from "react";
 import { type Currency, detectCurrency } from "@/lib/pricing";
 
 const STORAGE_KEY = "ily-currency";
-
-function loadCurrency(): Currency | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw === "CHF" || raw === "EUR" || raw === "USD") return raw;
-    return null;
-  } catch {
-    return null;
-  }
-}
+const DEFAULT_CURRENCY: Currency = "USD";
 
 export function useCurrency() {
-  const [currency, setCurrencyState] = useState<Currency>(() => {
-    const stored = loadCurrency();
-    if (stored) return stored;
-    if (typeof navigator !== "undefined") {
-      return detectCurrency(navigator.language);
+  const [currency, setCurrencyState] = useState<Currency>(DEFAULT_CURRENCY);
+
+  // Hydrate from localStorage / browser locale after mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored === "CHF" || stored === "EUR" || stored === "USD") {
+        setCurrencyState(stored);
+        return;
+      }
+    } catch {
+      // ignore
     }
-    return "USD";
-  });
+    setCurrencyState(detectCurrency(navigator.language));
+  }, []);
 
   useEffect(() => {
     try {

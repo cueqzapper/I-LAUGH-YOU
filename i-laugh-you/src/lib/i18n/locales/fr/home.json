@@ -73,7 +73,7 @@
     "body1": "Le tableau est un autoportrait de l'artiste et est vendu en <span>{{total}} pi\u00e8ces diff\u00e9rentes</span>. Chaque pi\u00e8ce ne peut \u00eatre vendue qu'une seule fois. La premi\u00e8re pi\u00e8ce est la moins ch\u00e8re (<b_cap>{{firstPrice}}</b_cap>). Le prix augmente de fa\u00e7on exponentielle ; la derni\u00e8re pi\u00e8ce co\u00fbte <b_cap>{{lastPrice}}</b_cap>.",
     "body2": "\u00c0 travers ce syst\u00e8me, le projet veut montrer comment le <u>prix de l'art \u00e9volue avec la popularit\u00e9</u>. Probablement, les premi\u00e8res pi\u00e8ces \u2014 qui sont les <capHighlight>moins ch\u00e8res</capHighlight> \u2014 seront aussi les <artHighlight>plus belles/int\u00e9ressantes</artHighlight>. Mais plus le projet devient populaire, plus il est prestigieux de poss\u00e9der une pi\u00e8ce de l'artiste \u2014 et les gens sont alors pr\u00eats \u00e0 payer beaucoup d'argent.",
     "body3": "Chaque pi\u00e8ce est livr\u00e9e chez toi. Elle mesure 30\u00d740 cm.",
-    "outro": "Amuse-toi \u00e0 d\u00e9couvrir cette (<i>tr\u00e8s \u00e9trange</i>) <loveHighlight>lettre d'amour</loveHighlight> \u00e0 une fille partie pour toujours, mais jamais oubli\u00e9e !",
+    "outro": "Amuse-toi \u00e0 d\u00e9couvrir cette (<i>tr\u00e8s \u00e9trange</i>) <loveHighlight>lettre d'amour</loveHighlight> \u00e0 quelqu'un qui est parti pour toujours, mais jamais oubli\u00e9 !",
     "artist": "L'ARTISTE"
   }
 }

@@ -2,17 +2,24 @@
   "cart": {
     "title": "Your Cart",
     "empty": "Your cart is empty.",
-    "continueShopping": "Continue Shopping",
+    "emptySubtitle": "Discover unique art pieces from the world's largest collaborative artwork.",
+    "continueShopping": "Explore the Gallery",
     "itemCount": "{{count}} piece(s)",
     "currency": "Currency",
-    "applyAllFrames": "Apply frame to all",
+    "applyAllFrames": "Frame for all",
     "applyAll": "Apply",
     "remove": "Remove",
     "soldBadge": "SOLD",
     "soldWarning": "{{count}} item(s) in your cart have been sold by someone else and will be excluded from checkout.",
     "unitPrice": "Price per piece",
     "quantity": "Quantity",
-    "subtotal": "Total"
+    "subtotal": "Total",
+    "pieceLabel": "Piece #{{id}}",
+    "uniqueNote": "1 of 1 — unique forever",
+    "framedPoster": "Premium Framed Poster 12\u00d716\"",
+    "frame": "Frame",
+    "shippingNote": "Free worldwide shipping included",
+    "orderSummary": "Order Summary"
   },
   "frameColor": {
     "white": "White",

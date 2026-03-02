@@ -609,15 +609,16 @@ export default function Home() {
   const applyOsdZoneVisibility = useCallback((inOsdZone: boolean) => {
     osdZoneRef.current = inOsdZone;
 
-    // Match original behavior: hide/show particle container directly.
-    // Also keep hidden when scrolled past all fullpage sections.
+    // Hide particles in OSD zone and for all sections after it (5+)
     const particleEl = document.getElementById("particleImage");
     if (particleEl) {
-      const pastFullpage = window.scrollY >= window.innerHeight * 10;
-      particleEl.style.display = inOsdZone || pastFullpage ? "none" : "block";
+      const pastParticleZone = window.scrollY >= window.innerHeight * 5;
+      particleEl.style.display = inOsdZone || pastParticleZone ? "none" : "block";
     }
 
-    setParticlesVisible((prev) => (prev === !inOsdZone ? prev : !inOsdZone));
+    const pastParticleZone2 = window.scrollY >= window.innerHeight * 5;
+    const shouldShowParticles = !inOsdZone && !pastParticleZone2;
+    setParticlesVisible((prev) => (prev === shouldShowParticles ? prev : shouldShowParticles));
     setOsdVisible((prev) => (prev === inOsdZone ? prev : inOsdZone));
 
     // Match original behavior: toggle the OSD canvas itself.
@@ -632,8 +633,8 @@ export default function Home() {
   // --- Scroll handler: updates particle progress via ref (no re-renders) ---
   const handleScroll = useCallback(() => {
     const scrollTop = window.scrollY;
-    const sectionHeight = window.innerHeight;
-    const section5Top = sectionHeight * 5;
+    const sections = document.querySelectorAll<HTMLElement>("#fullpage .section");
+    const section5Top = sections[5] ? sections[5].offsetTop : window.innerHeight * 5;
 
     // scrollEnd = curve value at section5Top, so progress reaches 1.0
     // exactly when scrollY arrives at the OSD section
@@ -644,8 +645,14 @@ export default function Home() {
     const scrollProgress = Math.min(newScrollTop / scrollEnd, 1);
     scrollRef.current = scrollProgress;
 
-    // Track current section for snapping logic
-    const currentSection = Math.floor(scrollTop / sectionHeight);
+    // Track current section for snapping logic — find which section we're in
+    let currentSection = 0;
+    for (let i = sections.length - 1; i >= 0; i--) {
+      if (scrollTop >= sections[i].offsetTop - 5) {
+        currentSection = i;
+        break;
+      }
+    }
     currentSectionRef.current = currentSection;
 
     if (!titleAnimated && scrollTop > 2) {
@@ -664,13 +671,12 @@ export default function Home() {
       }
     }
 
-    // Hide particle image once scrolled past all fullpage sections
-    // (prevents the artwork from bleeding through concept/footer area)
-    const fullpageBottom = sectionHeight * 10;
+    // Hide particle image once scrolled past the OSD section (section 5+)
+    // (prevents the artwork from bleeding through pickColor/price/bid/concept/footer)
+    const pastParticleZone = sections[5] ? scrollTop >= sections[5].offsetTop : false;
     const particleEl = document.getElementById("particleImage");
     if (particleEl) {
-      const pastFullpage = scrollTop >= fullpageBottom;
-      particleEl.style.display = pastFullpage || osdZoneRef.current ? "none" : "block";
+      particleEl.style.display = pastParticleZone || osdZoneRef.current ? "none" : "block";
     }
   }, [titleAnimated]);
 
@@ -679,12 +685,27 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
-    // Initial visibility sync (refresh/deeplink safety)
-    const initSH = window.innerHeight;
-    applyOsdZoneVisibility(window.scrollY >= initSH * 5 && window.scrollY < initSH * 6);
-
-    const sections = document.querySelectorAll("#fullpage .section");
+    const sections = document.querySelectorAll<HTMLElement>("#fullpage .section");
     const totalSections = sections.length;
+
+    // Helper: get actual offsetTop of a section (robust against mobile vh differences)
+    const getSectionTop = (index: number) => sections[index]?.offsetTop ?? 0;
+    const getFullpageBottom = () => {
+      const fp = document.getElementById("fullpage");
+      return fp ? fp.offsetTop + fp.offsetHeight : 0;
+    };
+    // Helper: find which section we're currently in by comparing actual offsets
+    const findCurrentSection = (scrollTop: number) => {
+      for (let i = totalSections - 1; i >= 0; i--) {
+        if (scrollTop >= getSectionTop(i) - 5) return i;
+      }
+      return 0;
+    };
+
+    // Initial visibility sync (refresh/deeplink safety)
+    const sec5Top = getSectionTop(5);
+    const sec6Top = getSectionTop(6);
+    applyOsdZoneVisibility(window.scrollY >= sec5Top && window.scrollY < sec6Top);
 
     let wheelAccum = 0;
     let wheelTimer: ReturnType<typeof setTimeout> | null = null;
@@ -692,15 +713,14 @@ export default function Home() {
 
     const handleWheel = (e: WheelEvent) => {
       const scrollTop = window.scrollY;
-      const sectionHeight = window.innerHeight;
-      const fullpageBottom = totalSections * sectionHeight;
+      const fullpageBottom = getFullpageBottom();
 
       // Past fullpage zone → allow normal scrolling in both directions
       if (scrollTop >= fullpageBottom) {
         return;
       }
 
-      const cur = Math.floor(scrollTop / sectionHeight);
+      const cur = findCurrentSection(scrollTop);
       if (cur === 5) {
         const osdWrapper = document.getElementById("openseadragonWrapper");
         const isInsideOsdWrapper =
@@ -747,13 +767,12 @@ export default function Home() {
       }
 
       isSnapping.current = true;
-      const target = next * sectionHeight;
+      const target = getSectionTop(next);
       window.scrollTo({ top: target, behavior: "smooth" });
 
       // Swap visibility AFTER scroll completes (when arriving at destination)
       // This keeps particles visible during the scroll animation to section 5
       if (zoneWillChange) {
-        // Use scrollend event if available, otherwise poll for arrival
         const swapOnArrival = () => {
           const arrived = Math.abs(window.scrollY - target) < 5;
           if (arrived) {
@@ -774,8 +793,7 @@ export default function Home() {
 
     const handleTouchStart = (e: TouchEvent) => {
       const scrollTop = window.scrollY;
-      const sectionHeight = window.innerHeight;
-      const fullpageBottom = totalSections * sectionHeight;
+      const fullpageBottom = getFullpageBottom();
 
       // Past fullpage zone → allow normal scrolling
       if (scrollTop >= fullpageBottom) return;
@@ -785,13 +803,12 @@ export default function Home() {
 
     const handleTouchMove = (e: TouchEvent) => {
       const scrollTop = window.scrollY;
-      const sectionHeight = window.innerHeight;
-      const fullpageBottom = totalSections * sectionHeight;
+      const fullpageBottom = getFullpageBottom();
 
       // Past fullpage zone → allow normal scrolling
       if (scrollTop >= fullpageBottom) return;
 
-      const cur = Math.floor(scrollTop / sectionHeight);
+      const cur = findCurrentSection(scrollTop);
 
       // Inside OSD wrapper → let OSD handle touch natively
       if (cur === 5) {
@@ -807,8 +824,7 @@ export default function Home() {
 
     const handleTouchEnd = (e: TouchEvent) => {
       const scrollTop = window.scrollY;
-      const sectionHeight = window.innerHeight;
-      const fullpageBottom = totalSections * sectionHeight;
+      const fullpageBottom = getFullpageBottom();
 
       // Past fullpage zone → allow normal scrolling
       if (scrollTop >= fullpageBottom) return;
@@ -820,7 +836,7 @@ export default function Home() {
 
       if (Math.abs(deltaY) < TOUCH_THRESHOLD) return;
 
-      const cur = Math.floor(scrollTop / sectionHeight);
+      const cur = findCurrentSection(scrollTop);
 
       // Inside OSD wrapper → let OSD handle touch natively
       if (cur === 5) {
@@ -848,7 +864,7 @@ export default function Home() {
       }
 
       isSnapping.current = true;
-      const target = next * sectionHeight;
+      const target = getSectionTop(next);
       window.scrollTo({ top: target, behavior: "smooth" });
 
       if (zoneWillChange) {
@@ -1652,7 +1668,7 @@ export default function Home() {
 
       <div id="footer-wrapper">
         <div id="where-is-me-from" className="big-title">
-          <p>
+          <p suppressHydrationWarning>
             &copy; {currentYear}
             <br />
             {t("common:footer.madeWith")}

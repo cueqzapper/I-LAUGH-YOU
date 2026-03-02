@@ -35,6 +35,8 @@ export default function AdminBlogSection({
   translationsMap,
 }: AdminBlogSectionProps) {
   const [generating, setGenerating] = useState(false);
+  const [batchTotal, setBatchTotal] = useState(0);
+  const [batchDone, setBatchDone] = useState(0);
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [lastResult, setLastResult] = useState<{
@@ -43,6 +45,9 @@ export default function AdminBlogSection({
     wordCount: number;
     imageCount: number;
   } | null>(null);
+  const [batchResults, setBatchResults] = useState<
+    { title: string; slug: string; wordCount: number; imageCount: number }[]
+  >([]);
 
   // Track translation state per article+lang
   const [translating, setTranslating] = useState<Record<string, boolean>>({});
@@ -51,35 +56,71 @@ export default function AdminBlogSection({
     () => ({ ...translationsMap })
   );
 
+  async function generateOne(label?: string): Promise<{
+    title: string;
+    slug: string;
+    wordCount: number;
+    imageCount: number;
+  }> {
+    setStatus(label ? `${label} — Generating...` : "Generating...");
+    const res = await fetch("/api/blog/generate", { method: "POST" });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.details || data.error || "Generation failed");
+    }
+    return {
+      title: data.article.title,
+      slug: data.article.slug,
+      wordCount: data.article.wordCount,
+      imageCount: data.imageCount,
+    };
+  }
+
   async function handleGenerate() {
     setGenerating(true);
-    setStatus("Starting article generation pipeline...");
+    setBatchTotal(1);
+    setBatchDone(0);
     setError(null);
     setLastResult(null);
+    setBatchResults([]);
 
     try {
-      setStatus("Step A: Researching topic via Perplexity...");
-
-      const res = await fetch("/api/blog/generate", { method: "POST" });
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.details || data.error || "Generation failed");
-      }
-
+      const result = await generateOne();
+      setLastResult(result);
+      setBatchDone(1);
       setStatus(null);
-      setLastResult({
-        title: data.article.title,
-        slug: data.article.slug,
-        wordCount: data.article.wordCount,
-        imageCount: data.imageCount,
-      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
       setStatus(null);
     } finally {
       setGenerating(false);
+      setBatchTotal(0);
     }
+  }
+
+  async function handleBatchGenerate(count: number) {
+    setGenerating(true);
+    setBatchTotal(count);
+    setBatchDone(0);
+    setError(null);
+    setLastResult(null);
+    setBatchResults([]);
+
+    for (let i = 0; i < count; i++) {
+      try {
+        const result = await generateOne(`[${i + 1}/${count}]`);
+        setBatchDone((prev) => prev + 1);
+        setBatchResults((prev) => [...prev, result]);
+        setLastResult(result);
+      } catch (err) {
+        setError(`Failed on article ${i + 1}/${count}: ${err instanceof Error ? err.message : "Unknown error"}`);
+        break;
+      }
+    }
+
+    setStatus(null);
+    setGenerating(false);
+    setBatchTotal(0);
   }
 
   async function handleTranslate(articleId: number, lang: TargetLang) {
@@ -161,15 +202,37 @@ export default function AdminBlogSection({
           2 watercolor images via ComfyUI Z-Image Turbo. Takes 2-5 minutes.
         </p>
 
-        <button
-          type="button"
-          className="admin-btn admin-btn-primary"
-          onClick={handleGenerate}
-          disabled={generating}
-          style={{ opacity: generating ? 0.6 : 1, cursor: generating ? "wait" : "pointer" }}
-        >
-          {generating ? "Generating..." : "Generate Article"}
-        </button>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button
+            type="button"
+            className="admin-btn admin-btn-primary"
+            onClick={handleGenerate}
+            disabled={generating}
+            style={{ opacity: generating ? 0.6 : 1, cursor: generating ? "wait" : "pointer" }}
+          >
+            {generating && batchTotal <= 1 ? "Generating..." : "Generate 1"}
+          </button>
+          {[5, 10, 20].map((n) => (
+            <button
+              key={n}
+              type="button"
+              className="admin-btn admin-btn-primary"
+              onClick={() => handleBatchGenerate(n)}
+              disabled={generating}
+              style={{
+                opacity: generating ? 0.6 : 1,
+                cursor: generating ? "wait" : "pointer",
+                background: "rgba(168,85,247,0.2)",
+                borderColor: "rgba(168,85,247,0.4)",
+                color: "#c084fc",
+              }}
+            >
+              {generating && batchTotal === n
+                ? `${batchDone}/${n}...`
+                : `Generate ${n}`}
+            </button>
+          ))}
+        </div>
 
         {status && (
           <div className="admin-alert admin-alert-info" style={{ marginTop: 16 }}>
@@ -185,7 +248,42 @@ export default function AdminBlogSection({
           </div>
         )}
 
-        {lastResult && (
+        {batchResults.length > 1 && (
+          <div style={{ marginTop: 16 }}>
+            <div style={{ fontSize: "0.8rem", color: "#a1a1aa", marginBottom: 8 }}>
+              Batch: {batchResults.length} articles generated
+            </div>
+            {batchResults.map((r, i) => (
+              <div
+                key={r.slug}
+                className="admin-alert admin-alert-info"
+                style={{
+                  marginTop: 4,
+                  borderColor: "rgba(34,197,94,0.3)",
+                  background: "rgba(34,197,94,0.08)",
+                  color: "#4ade80",
+                  padding: "6px 12px",
+                }}
+              >
+                <span>&#10003;</span>
+                <span style={{ fontSize: "0.85rem" }}>
+                  {i + 1}. <strong>{r.title}</strong> ({r.wordCount}w, {r.imageCount}img)
+                  {" — "}
+                  <a
+                    href={`/blog/${r.slug}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ color: "#86efac", textDecoration: "underline" }}
+                  >
+                    View
+                  </a>
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {batchResults.length <= 1 && lastResult && (
           <div className="admin-alert admin-alert-info" style={{ marginTop: 16, borderColor: "rgba(34,197,94,0.3)", background: "rgba(34,197,94,0.12)", color: "#4ade80" }}>
             <span>&#10003;</span>
             <span>

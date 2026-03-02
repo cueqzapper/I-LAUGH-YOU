@@ -41,6 +41,17 @@ function sectionToNavIndex(section: number): number {
   return -1;                                     // intro/title → none
 }
 
+function navIndexToSection(index: number): number {
+  switch (index) {
+    case 0: return 5; // pick a piece -> zoom (section 5)
+    case 1: return 2; // lovely smile -> USPs (section 2)
+    case 2: return 7; // money -> price (section 7)
+    case 3: return 8; // sofa -> sofa (section 8)
+    case 4: return 9; // info -> bid (section 9)
+    default: return 0;
+  }
+}
+
 export default function HeaderNav({ lang, onLangChange, likedCount = 0, basketCount = 0 }: HeaderNavProps) {
   const { t } = useTranslation("common");
   const [headerVisible, setHeaderVisible] = useState(false);
@@ -57,8 +68,14 @@ export default function HeaderNav({ lang, onLangChange, likedCount = 0, basketCo
       setHeaderVisible(opacity > 0);
       setNavVisible(opacity > 0);
 
-      const sectionHeight = window.innerHeight;
-      const currentSection = Math.round(scrollTop / sectionHeight);
+      const sections = document.querySelectorAll<HTMLElement>("#fullpage .section");
+      let currentSection = 0;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (scrollTop >= sections[i].offsetTop - 5) {
+          currentSection = i;
+          break;
+        }
+      }
       setActiveNavIndex(sectionToNavIndex(currentSection));
     };
 
@@ -75,6 +92,13 @@ export default function HeaderNav({ lang, onLangChange, likedCount = 0, basketCo
   const handleMobileNavClose = () => {
     setMobileNavOpen(false);
     document.body.style.overflow = "auto";
+  };
+
+  const scrollToNavIndex = (index: number) => {
+    const targetSection = navIndexToSection(index);
+    const sections = document.querySelectorAll<HTMLElement>("#fullpage .section");
+    const targetY = sections[targetSection]?.offsetTop ?? 0;
+    window.scrollTo({ top: targetY, behavior: "smooth" });
   };
 
   return (
@@ -135,7 +159,12 @@ export default function HeaderNav({ lang, onLangChange, likedCount = 0, basketCo
       {/* Desktop Side Nav */}
       <div id="desktop-nav" className={navVisible ? "visible" : ""}>
         {NAV_ICON_KEYS.map((item, i) => (
-          <div className={`nav-entry${i === activeNavIndex ? " activeNavEntry" : ""}`} key={i}>
+          <div 
+            className={`nav-entry${i === activeNavIndex ? " activeNavEntry" : ""}`} 
+            key={i}
+            onClick={() => scrollToNavIndex(i)}
+            style={{ cursor: "pointer" }}
+          >
             <NavButtonSvg />
             <div className={`icon ${item.icon}`} />
           </div>
@@ -169,7 +198,15 @@ export default function HeaderNav({ lang, onLangChange, likedCount = 0, basketCo
 
         <div id="mobile-nav-entries-wrapper">
           {NAV_ICON_KEYS.map((item, i) => (
-            <div className="nav-entry" key={i} onClick={handleMobileNavClose}>
+            <div 
+              className="nav-entry" 
+              key={i} 
+              onClick={() => {
+                scrollToNavIndex(i);
+                handleMobileNavClose();
+              }}
+              style={{ cursor: "pointer" }}
+            >
               <NavButtonSvg />
               <div className={`icon ${item.icon}`} />
               <span>{t(item.labelKey)}</span>

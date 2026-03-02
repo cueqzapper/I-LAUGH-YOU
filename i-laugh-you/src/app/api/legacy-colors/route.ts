@@ -28,11 +28,8 @@ async function loadLegacyColors(): Promise<LegacyColorsMap> {
 
   const legacyColorsPath = path.resolve(
     process.cwd(),
-    "..",
-    "oldWPpluginCode-TODELETEAFTERWARDS!",
-    "assets",
-    "js-ily",
-    "colors.js"
+    "public",
+    "legacy-colors.js"
   );
 
   const source = await readFile(legacyColorsPath, "utf8");

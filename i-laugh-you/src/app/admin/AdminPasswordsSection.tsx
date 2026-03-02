@@ -102,11 +102,11 @@ export default function AdminPasswordsSection({
         </div>
         <div className="admin-stat-card">
           <div className="admin-stat-label">Last Rotated</div>
-          <div className="admin-stat-value" style={{ fontSize: "1.1rem" }}>
-            {lastRotated ? new Date(lastRotated).toLocaleDateString() : "-"}
+          <div className="admin-stat-value" style={{ fontSize: "1.1rem" }} suppressHydrationWarning>
+            {lastRotated ? new Date(lastRotated).toLocaleDateString("de-CH") : "-"}
           </div>
-          <div className="admin-stat-meta">
-            {lastRotated ? new Date(lastRotated).toLocaleTimeString() : "no credentials"}
+          <div className="admin-stat-meta" suppressHydrationWarning>
+            {lastRotated ? new Date(lastRotated).toLocaleTimeString("de-CH") : "no credentials"}
           </div>
         </div>
       </div>

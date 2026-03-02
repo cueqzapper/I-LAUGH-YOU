@@ -886,7 +886,7 @@ export default function DeepZoomViewer({ onImageClick, visible, viewerRef: exter
       id="openseadragonWrapper"
       className="openseadragon"
       style={{
-        height: "100vh",
+        height: "100dvh",
         width: "80%",
         marginLeft: "10%",
         position: "relative",

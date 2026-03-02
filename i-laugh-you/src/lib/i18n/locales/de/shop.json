@@ -2,17 +2,24 @@
   "cart": {
     "title": "Dein Warenkorb",
     "empty": "Dein Warenkorb ist leer.",
-    "continueShopping": "Weiter st\u00f6bern",
+    "emptySubtitle": "Entdecke einzigartige Kunstst\u00fccke aus dem gr\u00f6ssten kollaborativen Kunstwerk der Welt.",
+    "continueShopping": "Galerie entdecken",
     "itemCount": "{{count}} St\u00fcck(e)",
     "currency": "W\u00e4hrung",
-    "applyAllFrames": "Rahmen f\u00fcr alle anwenden",
+    "applyAllFrames": "Rahmen f\u00fcr alle",
     "applyAll": "Anwenden",
     "remove": "Entfernen",
     "soldBadge": "VERKAUFT",
     "soldWarning": "{{count}} Artikel in Deinem Warenkorb wurden von jemand anderem gekauft und werden beim Checkout ausgeschlossen.",
     "unitPrice": "Preis pro St\u00fcck",
     "quantity": "Anzahl",
-    "subtotal": "Gesamt"
+    "subtotal": "Gesamt",
+    "pieceLabel": "St\u00fcck #{{id}}",
+    "uniqueNote": "1 von 1 — f\u00fcr immer einzigartig",
+    "framedPoster": "Premium Gerahmtes Poster 12\u00d716\"",
+    "frame": "Rahmen",
+    "shippingNote": "Kostenloser weltweiter Versand inklusive",
+    "orderSummary": "Bestell\u00fcbersicht"
   },
   "frameColor": {
     "white": "Weiss",

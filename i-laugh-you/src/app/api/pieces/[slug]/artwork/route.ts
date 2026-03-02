@@ -3,7 +3,7 @@ import { TOTAL_PIECES, PIECE_COLUMNS, PIECE_ROWS } from "@/lib/piece-config";
 
 export const runtime = "nodejs";
 
-const TILE_SERVER_BASE_URL = "http://ily.seez.ch/";
+const TILE_SERVER_BASE_URL = "https://ily.seez.ch/";
 const TILE_DIMENSION = 256;
 const MAX_ZOOM_LEVEL = 11;
 

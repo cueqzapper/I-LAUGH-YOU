@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import "@/lib/i18n/i18n";
 import { useTranslation } from "react-i18next";
@@ -25,6 +25,14 @@ interface OrderData {
 }
 
 export default function CheckoutSuccessPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: "100vh", color: "white", padding: "100px 20px", textAlign: "center" }}>Loading...</div>}>
+      <CheckoutSuccessContent />
+    </Suspense>
+  );
+}
+
+function CheckoutSuccessContent() {
   const { t } = useTranslation("shop");
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");

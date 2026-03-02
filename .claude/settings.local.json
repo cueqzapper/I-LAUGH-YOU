@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(npm install:*)",
+      "Bash(pnpm add:*)",
+      "Bash(npx next lint:*)",
+      "WebFetch(domain:i-laugh-you.com)",
+      "Bash(pnpm build:*)",
+      "WebFetch(domain:developers.printful.com)",
+      "WebFetch(domain:www.printful.com)",
+      "WebSearch",
+      "Bash(find:*)",
+      "WebFetch(domain:help.printful.com)",
+      "Bash(node -e:*)",
+      "WebFetch(domain:api.printful.com)",
+      "Bash(xargs:*)",
+      "Bash(npx next build)",
+      "Bash(echo:*)"
+    ]
+  }
+}

@@ -326,6 +326,7 @@ function createDatabase() {
 
   const database = new Database(SQLITE_FILE);
   database.pragma("journal_mode = WAL");
+  database.pragma("busy_timeout = 5000");
   database.pragma("foreign_keys = ON");
 
   initializeSchema(database);

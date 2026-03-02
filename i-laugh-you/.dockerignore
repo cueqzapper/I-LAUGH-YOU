@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.gitignore
+.claude
+.env*
+data/*.sqlite*
+docs/
+scripts/
+HOWTO-DEPLOY.md
+README.md
+docker-compose*.yml
+*.log

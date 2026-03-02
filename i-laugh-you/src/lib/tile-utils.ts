@@ -46,7 +46,7 @@ const FINAL_IMAGE_WIDTH =
 const FINAL_IMAGE_HEIGHT =
   (SOURCE_IMAGE_HEIGHT - SOURCE_OFFSETS.top - SOURCE_OFFSETS.bottom) / TILE_ROWS;
 
-const TILE_SERVER_BASE_URL = "http://ily.seez.ch/";
+const TILE_SERVER_BASE_URL = "https://ily.seez.ch/";
 
 export const DEFAULT_PALETTE: Rgb[] = [
   [220, 220, 220],

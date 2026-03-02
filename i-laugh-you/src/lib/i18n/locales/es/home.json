@@ -73,7 +73,7 @@
     "body1": "La pintura es un autorretrato del artista y se vende en <span>{{total}} piezas diferentes</span>. Cada pieza solo puede venderse una vez. La primera pieza es la m\u00e1s barata (<b_cap>{{firstPrice}}</b_cap>). El precio sube exponencialmente; la \u00faltima pieza cuesta <b_cap>{{lastPrice}}</b_cap>.",
     "body2": "A trav\u00e9s de este sistema, el proyecto quiere mostrar c\u00f3mo el <u>precio del arte evoluciona con la popularidad</u>. Probablemente, las primeras piezas \u2014 que son las <capHighlight>m\u00e1s baratas</capHighlight> \u2014 ser\u00e1n tambi\u00e9n las <artHighlight>m\u00e1s bonitas/interesantes</artHighlight>. Pero cuanto m\u00e1s popular se vuelve el proyecto, m\u00e1s prestigioso es poseer una pieza del artista \u2014 y as\u00ed la gente est\u00e1 dispuesta a pagar mucho dinero.",
     "body3": "Cada pieza se env\u00eda a tu casa. Mide 30\u00d740 cm.",
-    "outro": "\u00a1Divi\u00e9rtete descubriendo esta (<i>muy extra\u00f1a</i>) <loveHighlight>carta de amor</loveHighlight> a una chica que se fue para siempre, pero nunca ser\u00e1 olvidada!",
+    "outro": "\u00a1Divi\u00e9rtete descubriendo esta (<i>muy extra\u00f1a</i>) <loveHighlight>carta de amor</loveHighlight> a alguien que se fue para siempre, pero nunca ser\u00e1 olvidado!",
     "artist": "EL ARTISTA"
   }
 }

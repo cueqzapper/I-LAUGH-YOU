@@ -73,7 +73,7 @@
     "body1": "Das Bild ist ein Selbstportr\u00e4t des K\u00fcnstlers und wird in <span>{{total}} verschiedenen St\u00fccken</span> verkauft. Jedes St\u00fcck kann nur einmal verkauft werden. Das erste St\u00fcck ist am g\u00fcnstigsten (<b_cap>{{firstPrice}}</b_cap>). Der Preis steigt exponentiell, das letzte St\u00fcck kostet <b_cap>{{lastPrice}}</b_cap>.",
     "body2": "Durch dieses System m\u00f6chte das Projekt zeigen, wie sich der <u>Preis von Kunst mit der Beliebtheit entwickelt</u>. Wahrscheinlich werden die ersten St\u00fccke, die am <capHighlight>g\u00fcnstigsten</capHighlight> sind, die <artHighlight>sch\u00f6nsten/interessantesten</artHighlight> sein. Aber je popul\u00e4rer das Projekt wird, desto prestigetr\u00e4chtiger wird es, ein St\u00fcck des K\u00fcnstlers zu besitzen \u2014 und so sind die Leute auch bereit, viel Geld zu bezahlen.",
     "body3": "Jedes St\u00fcck wird Dir nach Hause geliefert. Es misst 30x40cm.",
-    "outro": "Viel Spass beim Entdecken dieses (<i>sehr seltsamen</i>) <loveHighlight>Liebesbriefs</loveHighlight> an ein M\u00e4dchen, das f\u00fcr immer fort ist, aber nie vergessen wird!",
+    "outro": "Viel Spass beim Entdecken dieses (<i>sehr seltsamen</i>) <loveHighlight>Liebesbriefs</loveHighlight> an jemanden, der f\u00fcr immer fort ist, aber nie vergessen wird!",
     "artist": "DER K\u00dcNSTLER"
   }
 }

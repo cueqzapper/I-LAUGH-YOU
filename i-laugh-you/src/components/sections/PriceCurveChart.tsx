@@ -81,6 +81,48 @@ export default function PriceCurveChart({
       .attr("viewBox", `0 0 ${width} ${height}`)
       .attr("preserveAspectRatio", "xMidYMid meet");
 
+    // --- SVG Defs: gradients & filters ---
+    const defs = root.append("defs");
+
+    // Area fill gradient (pink → transparent going down)
+    const areaGrad = defs.append("linearGradient")
+      .attr("id", "area-fill")
+      .attr("x1", "0").attr("y1", "0")
+      .attr("x2", "0").attr("y2", "1");
+    areaGrad.append("stop").attr("offset", "0%").attr("stop-color", "rgba(255, 0, 105, 0.4)");
+    areaGrad.append("stop").attr("offset", "50%").attr("stop-color", "rgba(255, 0, 105, 0.12)");
+    areaGrad.append("stop").attr("offset", "100%").attr("stop-color", "rgba(255, 0, 105, 0)");
+
+    // Line stroke gradient (warm pink → hot pink along the curve)
+    const lineGrad = defs.append("linearGradient")
+      .attr("id", "line-stroke")
+      .attr("x1", "0").attr("y1", "1")
+      .attr("x2", "1").attr("y2", "0");
+    lineGrad.append("stop").attr("offset", "0%").attr("stop-color", "#ff6b9d");
+    lineGrad.append("stop").attr("offset", "100%").attr("stop-color", "#ff0069");
+
+    // Glow filter for the line (two-layer: soft wide + tight bright)
+    const glow = defs.append("filter")
+      .attr("id", "line-glow")
+      .attr("x", "-25%").attr("y", "-25%")
+      .attr("width", "150%").attr("height", "150%");
+    glow.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "8").attr("result", "blur-wide");
+    glow.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "3").attr("result", "blur-tight");
+    const merge = glow.append("feMerge");
+    merge.append("feMergeNode").attr("in", "blur-wide");
+    merge.append("feMergeNode").attr("in", "blur-tight");
+    merge.append("feMergeNode").attr("in", "SourceGraphic");
+
+    // Dot glow filter
+    const dotGlow = defs.append("filter")
+      .attr("id", "dot-glow")
+      .attr("x", "-100%").attr("y", "-100%")
+      .attr("width", "300%").attr("height", "300%");
+    dotGlow.append("feGaussianBlur").attr("stdDeviation", "6").attr("result", "blur");
+    const dotMerge = dotGlow.append("feMerge");
+    dotMerge.append("feMergeNode").attr("in", "blur");
+    dotMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
     const g = root
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
@@ -89,7 +131,7 @@ export default function PriceCurveChart({
     const xScale = d3.scaleLinear().domain([0, LAST_IMAGE]).range([0, innerWidth]);
     const yScale = d3.scaleLinear().domain([0, 850]).range([innerHeight, 0]);
 
-    // Grid lines
+    // Grid lines (subtle)
     g.append("g")
       .attr("class", "grid-y")
       .selectAll("line")
@@ -100,8 +142,9 @@ export default function PriceCurveChart({
       .attr("x2", innerWidth)
       .attr("y1", (d) => yScale(d))
       .attr("y2", (d) => yScale(d))
-      .attr("stroke", "rgba(255,255,255,0.2)")
-      .attr("stroke-width", 0.5);
+      .attr("stroke", "rgba(255,255,255,0.08)")
+      .attr("stroke-width", 0.5)
+      .attr("stroke-dasharray", "3,5");
 
     g.append("g")
       .attr("class", "grid-x")
@@ -113,8 +156,9 @@ export default function PriceCurveChart({
       .attr("x2", (d) => xScale(d))
       .attr("y1", 0)
       .attr("y2", innerHeight)
-      .attr("stroke", "rgba(255,255,255,0.2)")
-      .attr("stroke-width", 0.5);
+      .attr("stroke", "rgba(255,255,255,0.08)")
+      .attr("stroke-width", 0.5)
+      .attr("stroke-dasharray", "3,5");
 
     // X axis
     const xAxis = d3
@@ -126,15 +170,15 @@ export default function PriceCurveChart({
       .attr("transform", `translate(0,${innerHeight})`)
       .call(xAxis)
       .call((sel) => {
-        sel.selectAll("line, path").attr("stroke", "rgba(255,255,255,0.4)");
-        sel.selectAll("text").attr("fill", "white").attr("font-size", "12px");
+        sel.selectAll("line, path").attr("stroke", "rgba(255,255,255,0.25)");
+        sel.selectAll("text").attr("fill", "rgba(255,255,255,0.7)").attr("font-size", "12px");
       });
 
     // X axis label
     g.append("text")
       .attr("x", innerWidth / 2)
       .attr("y", innerHeight + 42)
-      .attr("fill", "white")
+      .attr("fill", "rgba(255,255,255,0.7)")
       .attr("text-anchor", "middle")
       .attr("font-size", "14px")
       .text(t("chart.xAxis"));
@@ -145,8 +189,8 @@ export default function PriceCurveChart({
     g.append("g")
       .call(yAxis)
       .call((sel) => {
-        sel.selectAll("line, path").attr("stroke", "rgba(255,255,255,0.4)");
-        sel.selectAll("text").attr("fill", "white").attr("font-size", "12px");
+        sel.selectAll("line, path").attr("stroke", "rgba(255,255,255,0.25)");
+        sel.selectAll("text").attr("fill", "rgba(255,255,255,0.7)").attr("font-size", "12px");
       });
 
     // Y axis label
@@ -154,26 +198,44 @@ export default function PriceCurveChart({
       .attr("transform", "rotate(-90)")
       .attr("x", -innerHeight / 2)
       .attr("y", -50)
-      .attr("fill", "white")
+      .attr("fill", "rgba(255,255,255,0.7)")
       .attr("text-anchor", "middle")
       .attr("font-size", "14px")
       .text(t("chart.yAxis"));
 
-    // Line
+    // Line generator
     const line = d3
       .line<{ x: number; y: number }>()
       .x((d) => xScale(d.x))
       .y((d) => yScale(d.y))
       .curve(d3.curveMonotoneX);
 
+    // Area generator (fill under curve)
+    const area = d3
+      .area<{ x: number; y: number }>()
+      .x((d) => xScale(d.x))
+      .y0(innerHeight)
+      .y1((d) => yScale(d.y))
+      .curve(d3.curveMonotoneX);
+
+    // --- Gradient area fill under the curve ---
+    const areaPath = g.append("path")
+      .datum(data)
+      .attr("fill", "url(#area-fill)")
+      .attr("d", area);
+
+    // --- The curve line with glow ---
     const path = g.append("path")
       .datum(data)
       .attr("fill", "none")
-      .attr("stroke", "rgba(255, 0, 105, 1)")
-      .attr("stroke-width", 2.5)
+      .attr("stroke", "url(#line-stroke)")
+      .attr("stroke-width", 3)
+      .attr("stroke-linecap", "round")
+      .attr("stroke-linejoin", "round")
+      .attr("filter", "url(#line-glow)")
       .attr("d", line);
 
-    // Animate the line drawing when visible
+    // Animate the line drawing + area reveal when visible
     const pathNode = path.node();
     if (pathNode && isVisible) {
       const totalLength = pathNode.getTotalLength();
@@ -184,25 +246,49 @@ export default function PriceCurveChart({
         .duration(2000)
         .ease(d3.easeQuadOut)
         .attr("stroke-dashoffset", 0);
+
+      // Clip-reveal the area in sync with the line
+      const clipId = "area-clip";
+      defs.append("clipPath").attr("id", clipId)
+        .append("rect")
+        .attr("x", 0).attr("y", 0)
+        .attr("width", 0).attr("height", innerHeight)
+        .transition()
+        .duration(2000)
+        .ease(d3.easeQuadOut)
+        .attr("width", innerWidth);
+
+      areaPath.attr("clip-path", `url(#${clipId})`);
     } else if (pathNode && !isVisible) {
       // Hide line until animation triggers
       const totalLength = pathNode.getTotalLength();
       path
         .attr("stroke-dasharray", `${totalLength} ${totalLength}`)
         .attr("stroke-dashoffset", totalLength);
+      areaPath.style("opacity", 0);
     }
 
-    // Current position dot (yellow)
+    // Current position dot (yellow, with glow + pulse)
     const dotGroup = g.append("g").attr("class", "current-dot");
+
+    // Pulsing ring behind dot
+    const pulseRing = dotGroup
+      .append("circle")
+      .attr("cx", xScale(currentImage))
+      .attr("cy", yScale(currentPrice))
+      .attr("r", 8)
+      .attr("fill", "none")
+      .attr("stroke", "rgba(255, 255, 0, 0.5)")
+      .attr("stroke-width", 2)
+      .style("opacity", 0);
 
     const dot = dotGroup
       .append("circle")
       .attr("cx", xScale(currentImage))
       .attr("cy", yScale(currentPrice))
-      .attr("r", isVisible ? 0 : 8)
+      .attr("r", isVisible ? 0 : 7)
       .attr("fill", "rgba(255, 255, 0, 1)")
-      .attr("stroke", "rgba(255, 255, 0, 0.4)")
-      .attr("stroke-width", 3);
+      .attr("filter", "url(#dot-glow)");
 
     // Animate dot appearing after line draws
     if (isVisible) {
@@ -211,7 +297,22 @@ export default function PriceCurveChart({
         .delay(1800)
         .duration(400)
         .ease(d3.easeBackOut)
-        .attr("r", 8);
+        .attr("r", 7)
+        .on("end", () => {
+          // Start pulsing ring animation
+          const pulse = () => {
+            pulseRing
+              .style("opacity", 0.5)
+              .attr("r", 7)
+              .transition()
+              .duration(1800)
+              .ease(d3.easeQuadOut)
+              .attr("r", 20)
+              .style("opacity", 0)
+              .on("end", pulse);
+          };
+          pulse();
+        });
     }
 
     // Tooltip for current position
@@ -228,11 +329,11 @@ export default function PriceCurveChart({
       .append("rect")
       .attr("x", tooltipX)
       .attr("y", tooltipY - 18)
-      .attr("rx", 4)
-      .attr("ry", 4)
-      .attr("fill", "rgba(0,0,0,0.8)")
-      .attr("stroke", "rgba(255,255,255,0.3)")
-      .attr("stroke-width", 0.5);
+      .attr("rx", 6)
+      .attr("ry", 6)
+      .attr("fill", "rgba(0,0,0,0.75)")
+      .attr("stroke", "rgba(255,255,255,0.15)")
+      .attr("stroke-width", 1);
 
     const tooltipText1 = tooltipG
       .append("text")
@@ -247,7 +348,7 @@ export default function PriceCurveChart({
       .append("text")
       .attr("x", tooltipX + 8)
       .attr("y", tooltipY + 12)
-      .attr("fill", "white")
+      .attr("fill", "rgba(255,255,255,0.8)")
       .attr("font-size", "11px")
       .text(t("chart.priceLabel", { price: formatPrice(currentPrice, currency) }));
 
@@ -274,7 +375,7 @@ export default function PriceCurveChart({
     // Interactive hover tooltip
     const hoverLine = g
       .append("line")
-      .attr("stroke", "rgba(255,255,255,0.3)")
+      .attr("stroke", "rgba(255,255,255,0.2)")
       .attr("stroke-width", 1)
       .attr("stroke-dasharray", "4,4")
       .attr("y1", 0)
@@ -287,17 +388,18 @@ export default function PriceCurveChart({
       .attr("fill", "rgba(255, 0, 105, 1)")
       .attr("stroke", "white")
       .attr("stroke-width", 1.5)
+      .attr("filter", "url(#dot-glow)")
       .style("display", "none");
 
     const hoverTooltipG = g.append("g").style("display", "none");
 
     const hoverRect = hoverTooltipG
       .append("rect")
-      .attr("rx", 4)
-      .attr("ry", 4)
-      .attr("fill", "rgba(0,0,0,0.85)")
-      .attr("stroke", "rgba(255,255,255,0.3)")
-      .attr("stroke-width", 0.5);
+      .attr("rx", 6)
+      .attr("ry", 6)
+      .attr("fill", "rgba(0,0,0,0.8)")
+      .attr("stroke", "rgba(255,255,255,0.15)")
+      .attr("stroke-width", 1);
 
     const hoverTextLine1 = hoverTooltipG
       .append("text")
@@ -307,7 +409,7 @@ export default function PriceCurveChart({
 
     const hoverTextLine2 = hoverTooltipG
       .append("text")
-      .attr("fill", "white")
+      .attr("fill", "rgba(255,255,255,0.8)")
       .attr("font-size", "11px");
 
     // Overlay rect for mouse events

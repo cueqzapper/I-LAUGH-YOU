@@ -1,0 +1,23 @@
+services:
+  ily-app:
+    image: ${ILY_IMAGE:-ilaughyou/app:latest}
+    container_name: i-laugh-you
+    restart: unless-stopped
+    expose:
+      - "3000"
+    env_file:
+      - .env.production
+    volumes:
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=production
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: ily-cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    env_file:
+      - .env.production
+    depends_on:
+      - ily-app

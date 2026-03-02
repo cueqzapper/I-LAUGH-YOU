@@ -17,20 +17,41 @@ export default function MobileScrollNav({
     (direction: -1 | 1) => {
       if (isSnapping.current) return;
 
-      const sections = document.querySelectorAll("#fullpage .section");
+      const sections = document.querySelectorAll<HTMLElement>("#fullpage .section");
       const totalSections = sections.length;
-      const sectionHeight = window.innerHeight;
       const scrollTop = window.scrollY;
-      const cur = Math.round(scrollTop / sectionHeight);
+
+      // Find current section by actual DOM offset (robust on mobile)
+      let cur = 0;
+      for (let i = totalSections - 1; i >= 0; i--) {
+        if (scrollTop >= sections[i].offsetTop - 5) {
+          cur = i;
+          break;
+        }
+      }
       const next = cur + direction;
 
-      if (next < 0 || next >= totalSections) return;
+      if (next < 0) return;
+
+      if (next >= totalSections) {
+        const fullpage = document.getElementById("fullpage");
+        if (!fullpage) return;
+        isSnapping.current = true;
+        window.scrollTo({
+          top: fullpage.offsetTop + fullpage.offsetHeight,
+          behavior: "smooth",
+        });
+        setTimeout(() => {
+          isSnapping.current = false;
+        }, 1000);
+        return;
+      }
 
       const nextInOsdZone = next === 5;
       const zoneWillChange = nextInOsdZone !== osdZoneRef.current;
 
       isSnapping.current = true;
-      const target = next * sectionHeight;
+      const target = sections[next].offsetTop;
       window.scrollTo({ top: target, behavior: "smooth" });
 
       if (zoneWillChange) {

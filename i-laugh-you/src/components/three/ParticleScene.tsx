@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo, useEffect } from "react";
+import { useRef, useMemo, useEffect, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import {
@@ -10,43 +10,57 @@ import {
   PIECE_ROWS,
 } from "@/lib/piece-config";
 
-const ROW_COUNT = PIECE_COLUMNS;
-const COL_COUNT = PIECE_ROWS;
-const TOTAL_PARTICLES = ROW_COUNT * COL_COUNT;
+// Desktop grid — full resolution
+const ROW_COUNT = PIECE_COLUMNS;        // 166
+const COL_COUNT = PIECE_ROWS;           // 146
+// Mobile grid — halved (4x fewer particles)
+const MOBILE_ROW_COUNT = Math.ceil(ROW_COUNT / 2);   // 83
+const MOBILE_COL_COUNT = Math.ceil(COL_COUNT / 2);   // 73
+
 const LEGACY_GRID_STEP_X = 0.75 * 1.5;
 const LEGACY_GRID_STEP_Y = 1.5;
-const GRID_STEP_X = LEGACY_GRID_STEP_X * (LEGACY_TILE_COLUMNS / ROW_COUNT);
-const GRID_STEP_Y = LEGACY_GRID_STEP_Y * (LEGACY_TILE_ROWS / COL_COUNT);
-const POINT_SIZE_SCALE = GRID_STEP_Y / LEGACY_GRID_STEP_Y;
-const MAX_CANVAS_DPR = 1.5;
+
 const BASE_POINT_SIZE_DESKTOP = 1.0;
 const BASE_POINT_SIZE_MOBILE = 0.6;
 
-function ParticleImage({ scrollRef }: { scrollRef: React.RefObject<number> }) {
+function computeGridParams(rowCount: number, colCount: number) {
+  const gridStepX = LEGACY_GRID_STEP_X * (LEGACY_TILE_COLUMNS / rowCount);
+  const gridStepY = LEGACY_GRID_STEP_Y * (LEGACY_TILE_ROWS / colCount);
+  const pointSizeScale = gridStepY / LEGACY_GRID_STEP_Y;
+  return { gridStepX, gridStepY, pointSizeScale, totalParticles: rowCount * colCount };
+}
+
+function ParticleImage({ scrollRef, isMobile }: { scrollRef: React.RefObject<number>; isMobile: boolean }) {
   const pointsRef = useRef<THREE.Points>(null);
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const { size } = useThree();
 
+  const rowCount = isMobile ? MOBILE_ROW_COUNT : ROW_COUNT;
+  const colCount = isMobile ? MOBILE_COL_COUNT : COL_COUNT;
+  const maxDpr = isMobile ? 1.0 : 1.5;
+
   // Build ALL static attribute data once — never touched again
-  const { dummyPos, whIndices, randPosArr, gridPosArr, randValArr, randomCenter, gridCenter } =
+  const { dummyPos, whIndices, randPosArr, gridPosArr, randValArr, randomCenter, gridCenter, gridParams } =
     useMemo(() => {
-      const dummy = new Float32Array(TOTAL_PARTICLES * 3); // placeholder for Three.js
-      const wh = new Float32Array(TOTAL_PARTICLES * 2);
-      const rPos = new Float32Array(TOTAL_PARTICLES * 3);
-      const gPos = new Float32Array(TOTAL_PARTICLES * 3);
-      const rVal = new Float32Array(TOTAL_PARTICLES);
+      const gp = computeGridParams(rowCount, colCount);
+      const n = gp.totalParticles;
+      const dummy = new Float32Array(n * 3); // placeholder for Three.js
+      const wh = new Float32Array(n * 2);
+      const rPos = new Float32Array(n * 3);
+      const gPos = new Float32Array(n * 3);
+      const rVal = new Float32Array(n);
 
       let rcx = 0, rcy = 0, rcz = 0;
       let idx = 0;
 
-      for (let x = 0; x < ROW_COUNT; x++) {
-        for (let y = 0; y < COL_COUNT; y++) {
+      for (let x = 0; x < rowCount; x++) {
+        for (let y = 0; y < colCount; y++) {
           wh[idx * 2] = x;
           wh[idx * 2 + 1] = y;
 
           // Keep assembled image size stable when tile count changes.
-          gPos[idx * 3] = x * GRID_STEP_X;
-          gPos[idx * 3 + 1] = y * GRID_STEP_Y;
+          gPos[idx * 3] = x * gp.gridStepX;
+          gPos[idx * 3 + 1] = y * gp.gridStepY;
           gPos[idx * 3 + 2] = 1.0;
 
           // Random starting positions — uniform rejection sampling in sphere r=400
@@ -68,7 +82,6 @@ function ParticleImage({ scrollRef }: { scrollRef: React.RefObject<number> }) {
         }
       }
 
-      const n = TOTAL_PARTICLES;
       return {
         dummyPos: dummy,
         whIndices: wh,
@@ -77,19 +90,21 @@ function ParticleImage({ scrollRef }: { scrollRef: React.RefObject<number> }) {
         randValArr: rVal,
         randomCenter: new THREE.Vector3(rcx / n, rcy / n, rcz / n),
         gridCenter: new THREE.Vector3(
-          ((ROW_COUNT - 1) * GRID_STEP_X) / 2,
-          ((COL_COUNT - 1) * GRID_STEP_Y) / 2,
+          ((rowCount - 1) * gp.gridStepX) / 2,
+          ((colCount - 1) * gp.gridStepY) / 2,
           1.0
         ),
+        gridParams: gp,
       };
-    }, []);
+    }, [rowCount, colCount]);
 
-  const texture = useMemo(() => new THREE.TextureLoader().load("/img/full2.jpg"), []);
+  const texturePath = isMobile ? "/img/full2-small.jpg" : "/img/full2.jpg";
+  const texture = useMemo(() => new THREE.TextureLoader().load(texturePath), [texturePath]);
 
   const uniforms = useMemo(
     () => ({
       uTexture: { value: texture },
-      uDivision: { value: new THREE.Vector2(ROW_COUNT, COL_COUNT) },
+      uDivision: { value: new THREE.Vector2(rowCount, colCount) },
       uPointSize: { value: 1.0 },
       uScale: { value: 540.0 },
       uScroll: { value: 0.0 },
@@ -97,7 +112,7 @@ function ParticleImage({ scrollRef }: { scrollRef: React.RefObject<number> }) {
       uClockSin: { value: 0.0 },
       uCenter: { value: new THREE.Vector3() },
     }),
-    [texture]
+    [texture, rowCount, colCount]
   );
 
   // ---- GPU vertex shader: ALL position math runs here in parallel ----
@@ -148,7 +163,29 @@ function ParticleImage({ scrollRef }: { scrollRef: React.RefObject<number> }) {
   `;
 
   // ---- Fragment shader: texture sampling + depth-based desaturation ----
-  const fragmentShader = `
+  // Mobile variant skips depth desaturation for ~15-20% fragment savings
+  const fragmentShader = isMobile
+    ? `
+    uniform sampler2D uTexture;
+    varying vec2 vSize;
+    varying vec2 vUv;
+
+    void main() {
+      vec2 pUv = gl_PointCoord;
+      pUv.y = 1.0 - pUv.y;
+      pUv.x = (pUv.x - 0.5) / 0.75 + 0.5;
+
+      if (pUv.x > 1.0 || pUv.x < 0.0) discard;
+
+      vec2 uv = vUv + vSize * pUv;
+      vec4 texColor = texture2D(uTexture, uv);
+
+      if (texColor.a < 0.1) discard;
+
+      gl_FragColor = vec4(texColor.rgb, 1.0);
+    }
+  `
+    : `
     uniform sampler2D uTexture;
     varying vec2 vSize;
     varying vec2 vUv;
@@ -169,10 +206,8 @@ function ParticleImage({ scrollRef }: { scrollRef: React.RefObject<number> }) {
       float lum = dot(texColor.rgb, vec3(0.299, 0.587, 0.114));
       vec3 color = mix(texColor.rgb, vec3(lum), depthFactor * 0.7);
 
-      // Alpha test — discard near-transparent fragments for correct depth sorting
       if (texColor.a < 0.1) discard;
 
-      // Keep particles opaque so z-buffer ordering remains stable.
       gl_FragColor = vec4(color, 1.0);
     }
   `;
@@ -193,20 +228,20 @@ function ParticleImage({ scrollRef }: { scrollRef: React.RefObject<number> }) {
     (u.uCenter.value as THREE.Vector3).lerpVectors(randomCenter, gridCenter, s);
 
     // Viewport-dependent uniforms
-    const pr = Math.min(window.devicePixelRatio || 1, MAX_CANVAS_DPR);
+    const pr = Math.min(window.devicePixelRatio || 1, maxDpr);
     u.uScale.value = size.height * pr * 0.5;
     const basePointSize = size.width > 768 ? BASE_POINT_SIZE_DESKTOP : BASE_POINT_SIZE_MOBILE;
-    u.uPointSize.value = basePointSize * POINT_SIZE_SCALE;
+    u.uPointSize.value = basePointSize * gridParams.pointSizeScale;
   });
 
   return (
     <points ref={pointsRef} frustumCulled={false}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[dummyPos, 3]} count={TOTAL_PARTICLES} />
-        <bufferAttribute attach="attributes-aRandomPos" args={[randPosArr, 3]} count={TOTAL_PARTICLES} />
-        <bufferAttribute attach="attributes-aGridPos" args={[gridPosArr, 3]} count={TOTAL_PARTICLES} />
-        <bufferAttribute attach="attributes-aRandomVal" args={[randValArr, 1]} count={TOTAL_PARTICLES} />
-        <bufferAttribute attach="attributes-whIndex" args={[whIndices, 2]} count={TOTAL_PARTICLES} />
+        <bufferAttribute attach="attributes-position" args={[dummyPos, 3]} count={gridParams.totalParticles} />
+        <bufferAttribute attach="attributes-aRandomPos" args={[randPosArr, 3]} count={gridParams.totalParticles} />
+        <bufferAttribute attach="attributes-aGridPos" args={[gridPosArr, 3]} count={gridParams.totalParticles} />
+        <bufferAttribute attach="attributes-aRandomVal" args={[randValArr, 1]} count={gridParams.totalParticles} />
+        <bufferAttribute attach="attributes-whIndex" args={[whIndices, 2]} count={gridParams.totalParticles} />
       </bufferGeometry>
       <shaderMaterial
         ref={shaderMaterialRef}
@@ -244,12 +279,12 @@ function ClearRenderer() {
   return null;
 }
 
-function Scene({ scrollRef }: { scrollRef: React.RefObject<number> }) {
+function Scene({ scrollRef, isMobile }: { scrollRef: React.RefObject<number>; isMobile: boolean }) {
   return (
     <>
       <ClearRenderer />
       <CameraSetup />
-      <ParticleImage scrollRef={scrollRef} />
+      <ParticleImage scrollRef={scrollRef} isMobile={isMobile} />
     </>
   );
 }
@@ -263,6 +298,14 @@ export default function ParticleScene({
   scrollRef,
   visible,
 }: ParticleSceneProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth <= 768);
+  }, []);
+
+  const maxDpr: [number, number] = isMobile ? [1, 1.0] : [1, 1.5];
+
   return (
     <div
       id="particleImage"
@@ -271,17 +314,17 @@ export default function ParticleScene({
         top: 0,
         left: 0,
         width: "100vw",
-        height: "100vh",
+        height: "100dvh",
         pointerEvents: "none",
       }}
     >
       <Canvas
-        dpr={[1, MAX_CANVAS_DPR]}
+        dpr={maxDpr}
         gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
         style={{ background: "transparent" }}
         frameloop={visible ? "always" : "never"}
       >
-        <Scene scrollRef={scrollRef} />
+        <Scene scrollRef={scrollRef} isMobile={isMobile} />
       </Canvas>
     </div>
   );

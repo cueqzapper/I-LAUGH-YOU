@@ -134,10 +134,14 @@ interface ArticleOutput {
   excerpt: string;
   content_html: string;
   tags: string[];
-  image_prompt_hero: string;
-  image_prompt_inline: string;
-  hero_alt: string;
-  inline_alt: string;
+  image_prompt_cover: string;
+  cover_alt: string;
+  image_prompt_content_1: string;
+  content_1_alt: string;
+  image_prompt_content_2: string;
+  content_2_alt: string;
+  image_prompt_content_3: string;
+  content_3_alt: string;
 }
 
 async function writeArticle(
@@ -190,10 +194,10 @@ TECHNISCHE ANFORDERUNGEN (STRIKTE JSON-FORMATIERUNG):
 - KEINE markdown code blocks
 - Alle Zeilenumbrüche in Strings als \\n kodieren
 
-BILD-PROMPTS (DU ERSTELLST ZWEI SEPARATE BILD-PROMPTS — Hero UND Inline):
-Dies ist ein radikal-künstlerisches Projekt. Die Bilder müssen unter die Haut gehen. Jedes Bild soll in einem ANDEREN Kunststil erstellt werden — wähle intelligent den Stil, der am besten zum jeweiligen Artikel-Thema passt.
+BILD-PROMPTS (DU ERSTELLST VIER SEPARATE BILD-PROMPTS — 1 Cover + 3 Content):
+Dies ist ein radikal-künstlerisches Projekt. Die Bilder müssen unter die Haut gehen. Alle VIER Bilder MÜSSEN in VERSCHIEDENEN Kunststilen erstellt werden — wähle intelligent die Stile, die am besten zum jeweiligen Aspekt passen.
 
-MÖGLICHE KUNSTSTILE (wähle EINEN pro Bild, nie denselben für Hero und Inline):
+MÖGLICHE KUNSTSTILE (wähle VIER VERSCHIEDENE — jeden Stil nur EINMAL verwenden):
 - Expressionismus à la Kandinsky: abstrakte Formen, explosiv, geometrisch-chaotisch
 - Post-Impressionismus à la Van Gogh: wirbelnde Texturen, dicke Pinselstriche, emotionale Farbintensität
 - Kubismus à la Picasso: fragmentierte Perspektiven, zerlegte Formen, multiple Blickwinkel gleichzeitig
@@ -224,8 +228,12 @@ REGELN FÜR BILD-PROMPTS:
 - Nichts Explizites, aber alles suggestiv und emotional aufgeladen
 - Nur positive Formulierungen, keine Verneinungen
 - Keine Texte, Wörter oder Buchstaben im Bild
-- Hero-Bild: Fängt die ESSENZ des Artikels ein — das emotionale Zentrum, die Kernspannung
-- Inline-Bild: Zeigt einen ANDEREN ASPEKT des Themas — eine Gegenposition, ein Detail, eine Metapher`;
+
+DIE VIER BILDER:
+1. COVER-BILD (image_prompt_cover): Ein elegantes, kunstvolles Bild, das die ESSENZ des Artikels "zwischen den Zeilen" einfängt — klug, suggestiv, NICHT wörtlich. Ein eigenständiges Kunstwerk, das neugierig macht, ohne den Artikel zu verraten. Es wird NICHT im Artikeltext angezeigt, sondern als Titelbild und Vorschau.
+2. CONTENT-BILD 1 (image_prompt_content_1): Bezieht sich auf den ERSTEN Abschnitt des Artikels — den Einstieg, die These, den Aufhänger.
+3. CONTENT-BILD 2 (image_prompt_content_2): Bezieht sich auf den MITTLEREN Teil — die Vertiefung, ein Gegenargument, ein zentrales Beispiel.
+4. CONTENT-BILD 3 (image_prompt_content_3): Bezieht sich auf den LETZTEN Abschnitt — das Fazit, die Pointe, den Ausblick.`;
 
   const userPrompt = `THEMA: ${topic.titleDe}
 KATEGORIE: ${CATEGORY_LABELS[topic.category]}
@@ -244,10 +252,14 @@ Gib AUSSCHLIESSLICH folgendes JSON-Objekt zurück:
   "excerpt": "Kurze Zusammenfassung in 1-2 Sätzen (max 200 Zeichen)",
   "content_html": "Der vollständige Artikel als HTML-String (h2, h3, p, ul, ol, li, strong, em, blockquote)",
   "tags": ["Tag1", "Tag2", "Tag3"],
-  "image_prompt_hero": "Detailed English art prompt for hero image — begin with art style, then scene description",
-  "image_prompt_inline": "Detailed English art prompt for inline image — DIFFERENT art style than hero, different aspect of the topic",
-  "hero_alt": "English alt text for hero image",
-  "inline_alt": "English alt text for inline image"
+  "image_prompt_cover": "Elegant, artsy English prompt for cover image — captures article essence between the lines, standalone artwork, begin with art style",
+  "cover_alt": "English alt text for cover image",
+  "image_prompt_content_1": "English art prompt for content image 1 — relates to first section, DIFFERENT art style than cover, begin with art style",
+  "content_1_alt": "English alt text for content image 1",
+  "image_prompt_content_2": "English art prompt for content image 2 — relates to middle section, DIFFERENT art style than cover and content 1, begin with art style",
+  "content_2_alt": "English alt text for content image 2",
+  "image_prompt_content_3": "English art prompt for content image 3 — relates to last section, DIFFERENT art style than all others, begin with art style",
+  "content_3_alt": "English alt text for content image 3"
 }`;
 
   const raw = await callOpenRouter(
@@ -284,10 +296,15 @@ Gib AUSSCHLIESSLICH folgendes JSON-Objekt zurück:
     article_html: "content_html",
     body: "content_html",
     inhalt: "content_html",
-    image_prompt_flux: "image_prompt_hero",
     zusammenfassung: "excerpt",
     summary: "excerpt",
     schlagworte: "tags",
+    // Backward compat: old 2-image field names → new 4-image fields
+    image_prompt_hero: "image_prompt_cover",
+    image_prompt_flux: "image_prompt_cover",
+    hero_alt: "cover_alt",
+    image_prompt_inline: "image_prompt_content_1",
+    inline_alt: "content_1_alt",
   };
 
   for (const [variant, canonical] of Object.entries(fieldMap)) {
@@ -362,23 +379,44 @@ function evaluateQuality(title: string, html: string): QualityReport {
   return { isAcceptable: issues.length === 0, issues, wordCount, headingCount, paragraphCount };
 }
 
-function postProcess(article: ArticleOutput): { html: string; title: string; excerpt: string; tags: string[]; heroPrompt: string; inlinePrompt: string; heroAlt: string; inlineAlt: string } {
+interface PostProcessed {
+  html: string;
+  title: string;
+  excerpt: string;
+  tags: string[];
+  coverPrompt: string;
+  coverAlt: string;
+  contentPrompts: { prompt: string; alt: string }[];
+}
+
+function postProcess(article: ArticleOutput): PostProcessed {
   let html = article.content_html;
   html = stripLinks(html);
   html = stripDisallowedTags(html);
 
-  const heroPrompt = article.image_prompt_hero ? cleanseImagePrompt(article.image_prompt_hero) : "";
-  const inlinePrompt = article.image_prompt_inline ? cleanseImagePrompt(article.image_prompt_inline) : "";
+  const coverPrompt = article.image_prompt_cover ? cleanseImagePrompt(article.image_prompt_cover) : "";
+  const coverAlt = article.cover_alt ?? "";
+
+  const contentPrompts: { prompt: string; alt: string }[] = [];
+  const contentFields = [
+    { prompt: article.image_prompt_content_1, alt: article.content_1_alt },
+    { prompt: article.image_prompt_content_2, alt: article.content_2_alt },
+    { prompt: article.image_prompt_content_3, alt: article.content_3_alt },
+  ];
+  for (const field of contentFields) {
+    if (field.prompt) {
+      contentPrompts.push({ prompt: cleanseImagePrompt(field.prompt), alt: field.alt ?? "" });
+    }
+  }
 
   return {
     html,
     title: article.title,
     excerpt: (article.excerpt ?? "").slice(0, 250),
     tags: (article.tags ?? []).slice(0, 6),
-    heroPrompt,
-    inlinePrompt,
-    heroAlt: article.hero_alt ?? "",
-    inlineAlt: article.inline_alt ?? "",
+    coverPrompt,
+    coverAlt,
+    contentPrompts,
   };
 }
 
@@ -526,55 +564,95 @@ export async function generateBlogArticle(): Promise<GenerateArticleResult> {
   const slug = slugify(processed.title);
   const wordCount = qualityReport.wordCount;
 
-  // Step D: Generate images via ComfyUI
-  console.log("[blog-generator] Step D: Generating images...");
+  // Step D: Generate all 4 images via ComfyUI in parallel
+  console.log("[blog-generator] Step D: Generating 4 images in parallel...");
   const now = new Date();
-  const imageResults: { path: string; prompt: string; alt: string }[] = [];
 
-  // Hero image (LLM-generated prompt, unique art style per article)
-  if (processed.heroPrompt) {
-    const heroBuffer = await generateImage(processed.heroPrompt);
-    if (heroBuffer) {
-      const webPath = saveImage(heroBuffer, now, `${slug}-hero.png`);
-      imageResults.push({ path: webPath, prompt: processed.heroPrompt, alt: processed.heroAlt || processed.title });
-    }
+  // Build generation tasks: cover + up to 3 content images
+  const genTasks: { key: string; prompt: string; alt: string; filename: string }[] = [];
+
+  if (processed.coverPrompt) {
+    genTasks.push({
+      key: "cover",
+      prompt: processed.coverPrompt,
+      alt: processed.coverAlt || processed.title,
+      filename: `${slug}-cover.png`,
+    });
   }
 
-  // Inline image (LLM-generated prompt, different art style than hero)
-  if (processed.inlinePrompt) {
-    const inlineBuffer = await generateImage(processed.inlinePrompt);
-    if (inlineBuffer) {
-      const webPath = saveImage(inlineBuffer, now, `${slug}-inline.png`);
-      imageResults.push({ path: webPath, prompt: processed.inlinePrompt, alt: processed.inlineAlt || `${processed.title} — Illustration` });
-    }
+  for (let i = 0; i < processed.contentPrompts.length; i++) {
+    const cp = processed.contentPrompts[i];
+    genTasks.push({
+      key: `content-${i + 1}`,
+      prompt: cp.prompt,
+      alt: cp.alt || `${processed.title} — Illustration ${i + 1}`,
+      filename: `${slug}-content-${i + 1}.png`,
+    });
   }
 
-  // Inject images into content
-  let finalContent = processed.html;
-  if (imageResults.length > 0) {
-    // Insert hero image after first paragraph or heading
-    const firstBreakMatch = finalContent.match(/<\/(?:p|h[2-4])>/i);
-    if (firstBreakMatch && firstBreakMatch.index !== undefined) {
-      const insertPos = firstBreakMatch.index + firstBreakMatch[0].length;
-      const imgTag = `<figure class="blog-article-figure"><img src="${imageResults[0].path}" alt="${imageResults[0].alt}" loading="lazy" /><figcaption>${CATEGORY_LABELS[topic.category]}</figcaption></figure>`;
-      finalContent = finalContent.slice(0, insertPos) + imgTag + finalContent.slice(insertPos);
-    }
-
-    // Insert second image before last heading
-    if (imageResults.length > 1) {
-      const lastH2 = finalContent.lastIndexOf("<h2");
-      const lastH3 = finalContent.lastIndexOf("<h3");
-      const lastHeadingPos = Math.max(lastH2, lastH3);
-      if (lastHeadingPos > 0) {
-        const imgTag = `<figure class="blog-article-figure"><img src="${imageResults[1].path}" alt="${imageResults[1].alt}" loading="lazy" /><figcaption>${processed.tags[0] ?? CATEGORY_LABELS[topic.category]}</figcaption></figure>`;
-        finalContent = finalContent.slice(0, lastHeadingPos) + imgTag + finalContent.slice(lastHeadingPos);
+  // Generate all images in parallel
+  const genResults = await Promise.all(
+    genTasks.map(async (task) => {
+      console.log(`[blog-generator] Generating ${task.key} image...`);
+      const buffer = await generateImage(task.prompt);
+      if (buffer) {
+        const webPath = saveImage(buffer, now, task.filename);
+        return { ...task, path: webPath };
       }
+      console.warn(`[blog-generator] ${task.key} image generation failed, skipping`);
+      return null;
+    })
+  );
+
+  const coverResult = genResults.find((r) => r?.key === "cover") ?? null;
+  const contentResults = genResults.filter((r): r is NonNullable<typeof r> => r !== null && r.key.startsWith("content-"));
+
+  console.log(`[blog-generator] Images generated: cover=${coverResult ? 1 : 0}, content=${contentResults.length}`);
+
+  // Inject content images into article body at ~25%, ~50%, ~75% of paragraphs
+  let finalContent = processed.html;
+  if (contentResults.length > 0) {
+    // Find all paragraph closing tags as injection points
+    const closingTagPattern = /<\/p>/gi;
+    const positions: number[] = [];
+    let match: RegExpExecArray | null;
+    while ((match = closingTagPattern.exec(finalContent)) !== null) {
+      positions.push(match.index + match[0].length);
+    }
+
+    if (positions.length >= 4 && contentResults.length >= 1) {
+      // Distribute at 25%, 50%, 75% of paragraphs
+      const insertionIndices = [
+        Math.floor(positions.length * 0.25),
+        Math.floor(positions.length * 0.5),
+        Math.floor(positions.length * 0.75),
+      ].slice(0, contentResults.length);
+
+      // Insert in reverse order to preserve string positions
+      const captions = [
+        CATEGORY_LABELS[topic.category],
+        processed.tags[0] ?? CATEGORY_LABELS[topic.category],
+        processed.tags[1] ?? CATEGORY_LABELS[topic.category],
+      ];
+
+      for (let i = insertionIndices.length - 1; i >= 0; i--) {
+        const cr = contentResults[i];
+        const insertPos = positions[insertionIndices[i]];
+        const imgTag = `<figure class="blog-article-figure"><img src="${cr.path}" alt="${cr.alt}" loading="lazy" /><figcaption>${captions[i]}</figcaption></figure>`;
+        finalContent = finalContent.slice(0, insertPos) + imgTag + finalContent.slice(insertPos);
+      }
+    } else if (positions.length > 0 && contentResults.length >= 1) {
+      // Short article fallback: insert first content image after first paragraph
+      const cr = contentResults[0];
+      const insertPos = positions[0];
+      const imgTag = `<figure class="blog-article-figure"><img src="${cr.path}" alt="${cr.alt}" loading="lazy" /><figcaption>${CATEGORY_LABELS[topic.category]}</figcaption></figure>`;
+      finalContent = finalContent.slice(0, insertPos) + imgTag + finalContent.slice(insertPos);
     }
   }
 
   // Step E: Publish to SQLite
   console.log("[blog-generator] Step E: Publishing...");
-  const heroImage = imageResults[0]?.path ?? null;
+  const heroImage = coverResult?.path ?? null;
 
   const savedArticle = insertBlogArticle({
     slug,
@@ -588,19 +666,33 @@ export async function generateBlogArticle(): Promise<GenerateArticleResult> {
     wordCount,
   });
 
-  for (let i = 0; i < imageResults.length; i++) {
+  // Position 0 = cover, 1-3 = content images
+  if (coverResult) {
     insertBlogImage({
       articleId: savedArticle.id,
-      filePath: imageResults[i].path,
-      altText: imageResults[i].alt,
-      prompt: imageResults[i].prompt,
-      position: i,
+      filePath: coverResult.path,
+      altText: coverResult.alt,
+      prompt: coverResult.prompt,
+      position: 0,
     });
   }
 
+  for (let i = 0; i < contentResults.length; i++) {
+    const cr = contentResults[i];
+    insertBlogImage({
+      articleId: savedArticle.id,
+      filePath: cr.path,
+      altText: cr.alt,
+      prompt: cr.prompt,
+      position: i + 1,
+    });
+  }
+
+  const totalImages = (coverResult ? 1 : 0) + contentResults.length;
+
   console.log(
-    `[blog-generator] Published: "${savedArticle.title}" (${wordCount} words, ${imageResults.length} images)`
+    `[blog-generator] Published: "${savedArticle.title}" (${wordCount} words, ${totalImages} images)`
   );
 
-  return { article: savedArticle, imageCount: imageResults.length, qualityReport };
+  return { article: savedArticle, imageCount: totalImages, qualityReport };
 }
