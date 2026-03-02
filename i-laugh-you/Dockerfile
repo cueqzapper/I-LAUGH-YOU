@@ -16,8 +16,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Create empty data dir so SQLite can init during build (real DB is volume-mounted at runtime)
-RUN mkdir -p /app/data
+# Pre-create SQLite DB with WAL mode so parallel build workers don't race on init
+RUN mkdir -p /app/data && \
+    node -e "const D=require('better-sqlite3');const d=new D('/app/data/ily.sqlite',{timeout:10000});d.pragma('journal_mode=WAL');d.pragma('busy_timeout=10000');d.close()"
 
 # Build args for NEXT_PUBLIC_ env vars (baked into client bundle)
 ARG NEXT_PUBLIC_FIREBASE_API_KEY

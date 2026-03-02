@@ -324,9 +324,9 @@ function deleteLegacySeededSales(database: SqliteDatabase) {
 function createDatabase() {
   ensureDatabaseDirectory();
 
-  const database = new Database(SQLITE_FILE);
+  const database = new Database(SQLITE_FILE, { timeout: 10000 });
   database.pragma("journal_mode = WAL");
-  database.pragma("busy_timeout = 5000");
+  database.pragma("busy_timeout = 10000");
   database.pragma("foreign_keys = ON");
 
   initializeSchema(database);
