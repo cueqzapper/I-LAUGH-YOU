@@ -214,6 +214,18 @@
   margin-bottom: 32px;
 }
 
+.blog-article-content .blog-inline-image,
+.blog-article-content img.blog-inline-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 520px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 40px 0;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
 .blog-article-meta {
   display: flex;
   gap: 16px;

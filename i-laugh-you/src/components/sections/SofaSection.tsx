@@ -1,15 +1,13 @@
 "use client";
 
-import { useState, useCallback, useRef, useLayoutEffect } from "react";
-import { useTranslation, Trans } from "react-i18next";
+import { useMemo, useRef, useState, useLayoutEffect } from "react";
+import { useTranslation } from "react-i18next";
 import PieceThumbnail from "@/components/PieceThumbnail";
 import type { Rgb } from "@/lib/tile-utils";
-import type { SofaPlacements } from "@/hooks/useFavorites";
+import { pickClosestImageIds } from "@/lib/sofa-color-match";
 import "./SofaSection.css";
 
 const THUMB_ZOOM = 9;
-const THUMB_WIDTH = 60;
-const THUMB_HEIGHT = 80;
 const SOFA_THUMB_WIDTH = 180;
 const SOFA_THUMB_HEIGHT = 240;
 
@@ -46,7 +44,7 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * Math.max(0, Math.min(1, t));
 }
 
-function computeLayout(W: number, H: number, barH: number): SofaLayout {
+function computeLayout(W: number, H: number): SofaLayout {
   /* Horizon — wall/floor junction (higher on mobile so floor is larger) */
   const ar = W / H;
   const horizonY = H * (ar < 0.8 ? 0.70 : 0.77);
@@ -64,15 +62,14 @@ function computeLayout(W: number, H: number, barH: number): SofaLayout {
 
   const sofaW = W * pct;
   const sofaH = sofaW / SOFA_ASPECT;
-  /* Sofa sits on floor — feet land at the horizon line.
-     Overlay image: solid content ends at ~83% of height (row 315/380),
-     anti-aliased edge fades to ~85%. Using 0.83 places the solid foot
-     bottom exactly on the horizon with AA pixels slightly below. */
+  /* Sofa sits on floor — feet land at the horizon line. */
   const sofaTop = horizonY - sofaH * 0.70;
   const sofaLeft = (W - sofaW) / 2;
 
-  /* Paintings — fill wall space between love-bar and sofa */
-  const wallTop = barH + 8;
+  /* Paintings — fill wall space between top of scene and sofa.
+     With the love-bar gone, paintings can claim the full upper wall area
+     (small top inset for breathing room). */
+  const wallTop = 8;
   const gapFromSofa = Math.max(6, H * 0.012);
   const availH = Math.max(40, sofaTop - wallTop - gapFromSofa);
 
@@ -121,26 +118,15 @@ function computeLayout(W: number, H: number, barH: number): SofaLayout {
 /* ── Component ─────────────────────────────────────── */
 
 interface SofaSectionProps {
-  likedIds: Set<number>;
-  sofaPlacements: SofaPlacements;
-  onSofaPlacement: (slot: number, imageId: number | null) => void;
   palettesByImageId: Map<number, Rgb[]>;
 }
 
-export default function SofaSection({
-  likedIds,
-  sofaPlacements,
-  onSofaPlacement,
-  palettesByImageId,
-}: SofaSectionProps) {
+export default function SofaSection({ palettesByImageId }: SofaSectionProps) {
   const { t } = useTranslation("home");
-  const [draggingId, setDraggingId] = useState<number | null>(null);
-  const [dragOverSlot, setDragOverSlot] = useState<number | null>(null);
   const [sofaColor, setSofaColor] = useState<string>(SOFA_COLORS[0]);
   const [layout, setLayout] = useState<SofaLayout | null>(null);
 
   const sceneRef = useRef<HTMLDivElement>(null);
-  const loveBarRef = useRef<HTMLDivElement>(null);
 
   /* Responsive layout — recomputes on every resize */
   useLayoutEffect(() => {
@@ -151,8 +137,7 @@ export default function SofaSection({
       const W = scene.clientWidth;
       const H = scene.clientHeight;
       if (W === 0 || H === 0) return;
-      const barH = loveBarRef.current?.offsetHeight ?? 80;
-      const l = computeLayout(W, H, barH);
+      const l = computeLayout(W, H);
       setLayout(l);
       scene.style.setProperty("--horizon", `${l.horizonY}px`);
       scene.style.setProperty("--frame-w", `${l.frameW}px`);
@@ -164,59 +149,20 @@ export default function SofaSection({
     return () => ro.disconnect();
   }, []);
 
-  const placedIds = new Set(
-    sofaPlacements.filter((id): id is number => id !== null)
+  /* Auto-pick the 3 paintings whose dominant palette color is closest to
+     the current sofa color. Recomputes whenever sofa color or palette map
+     changes. Returns [] until palettes have been loaded. */
+  const matchedImageIds = useMemo(
+    () => pickClosestImageIds(sofaColor, palettesByImageId, 3),
+    [sofaColor, palettesByImageId]
   );
 
-  const handleDragStart = useCallback(
-    (e: React.DragEvent, imageId: number) => {
-      e.dataTransfer.setData("text/plain", String(imageId));
-      e.dataTransfer.effectAllowed = "move";
-      setDraggingId(imageId);
-    },
-    []
-  );
-
-  const handleDragEnd = useCallback(() => setDraggingId(null), []);
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-  }, []);
-
-  const handleDragEnter = useCallback((_e: React.DragEvent, slot: number) => {
-    setDragOverSlot(slot);
-  }, []);
-
-  const handleDragLeave = useCallback(
-    (e: React.DragEvent, slot: number) => {
-      const related = e.relatedTarget as Node | null;
-      const current = e.currentTarget as Node;
-      if (related && current.contains(related)) return;
-      if (dragOverSlot === slot) setDragOverSlot(null);
-    },
-    [dragOverSlot]
-  );
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent, slot: number) => {
-      e.preventDefault();
-      setDragOverSlot(null);
-      const imageId = Number(e.dataTransfer.getData("text/plain"));
-      if (!Number.isFinite(imageId) || imageId < 1) return;
-      onSofaPlacement(slot, imageId);
-    },
-    [onSofaPlacement]
-  );
-
-  const handleSlotClick = useCallback(
-    (slot: number) => {
-      if (sofaPlacements[slot] !== null) onSofaPlacement(slot, null);
-    },
-    [sofaPlacements, onSofaPlacement]
-  );
-
-  const likedArray = Array.from(likedIds);
+  /* Always render exactly 3 slots, even before palettes are available. */
+  const paintingSlots: Array<number | null> = [
+    matchedImageIds[0] ?? null,
+    matchedImageIds[1] ?? null,
+    matchedImageIds[2] ?? null,
+  ];
 
   return (
     <div className="section" id="sofa-wrapper">
@@ -235,45 +181,7 @@ export default function SofaSection({
         {/* Gradient overlay */}
         <div id="sofa-gradient-overlay" />
 
-        <div id="loveBarWrapper" ref={loveBarRef}>
-          <div id="loveBar">
-            {likedArray.length === 0 ? (
-              <p>
-                <Trans
-                  i18nKey="sofa.text"
-                  ns="home"
-                  components={{
-                    heartIcon: <span className="icon icon-heart-love" />,
-                  }}
-                />
-              </p>
-            ) : (
-              <div id="loveBar-thumbnails">
-                {likedArray.map((imageId) => (
-                  <div
-                    key={imageId}
-                    className={`lovebar-thumb${
-                      placedIds.has(imageId) ? " placed" : ""
-                    }${draggingId === imageId ? " dragging" : ""}`}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, imageId)}
-                    onDragEnd={handleDragEnd}
-                  >
-                    <PieceThumbnail
-                      imageId={imageId}
-                      zoom={THUMB_ZOOM}
-                      width={THUMB_WIDTH}
-                      height={THUMB_HEIGHT}
-                      palettesByImageId={palettesByImageId}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Paintings — JS-positioned */}
+        {/* Paintings — JS-positioned, palette-matched to sofa color */}
         {layout && (
           <div
             id="sofaImages"
@@ -283,21 +191,15 @@ export default function SofaSection({
               gap: layout.gap,
             }}
           >
-            {sofaPlacements.map((placedId, slot) => (
+            {paintingSlots.map((placedId, slot) => (
               <div
                 key={slot}
-                className={`sofaImage${
-                  placedId !== null ? " imagePlaced" : ""
-                }${dragOverSlot === slot ? " ui-state-hover" : ""}`}
+                className={`sofaImage${placedId !== null ? " imagePlaced" : ""}`}
                 style={{ width: layout.imgW, height: layout.imgH }}
-                onDragOver={handleDragOver}
-                onDragEnter={(e) => handleDragEnter(e, slot)}
-                onDragLeave={(e) => handleDragLeave(e, slot)}
-                onDrop={(e) => handleDrop(e, slot)}
-                onClick={() => handleSlotClick(slot)}
               >
                 {placedId !== null && (
                   <PieceThumbnail
+                    key={placedId}
                     imageId={placedId}
                     zoom={THUMB_ZOOM}
                     width={SOFA_THUMB_WIDTH}

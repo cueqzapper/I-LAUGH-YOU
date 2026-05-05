@@ -51,7 +51,8 @@ COPY --from=builder /app/public ./public
 RUN mkdir -p /app/.next/cache && chown nextjs:nodejs /app/.next/cache
 
 # SQLite data directory — mount a volume here
-RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
+# Also holds blog-images/ (persistent user-generated content across rebuilds)
+RUN mkdir -p /app/data/blog-images && chown -R nextjs:nodejs /app/data
 
 USER nextjs
 EXPOSE 3000

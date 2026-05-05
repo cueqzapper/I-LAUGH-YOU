@@ -1,4 +1,5 @@
 {
+  "seoTagline": "24.236 l\u00e1minas num\u00e9ricas \u00fanicas del autorretrato m\u00e1s grande de la historia del arte. Pose\u00e9 un fragmento de una pintura al \u00f3leo hecha a mano.",
   "intro": {
     "gallery": "En la Galer\u00eda",
     "headline": "\u00a1Barato hoy, invaluable ma\u00f1ana!",
@@ -75,5 +76,23 @@
     "body3": "Cada pieza se env\u00eda a tu casa. Mide 30\u00d740 cm.",
     "outro": "\u00a1Divi\u00e9rtete descubriendo esta (<i>muy extra\u00f1a</i>) <loveHighlight>carta de amor</loveHighlight> a alguien que se fue para siempre, pero nunca ser\u00e1 olvidado!",
     "artist": "EL ARTISTA"
+  },
+  "production": {
+    "title": "Pintado. Dividido. Tuyo.",
+    "subline": "Un autorretrato, dividido en {{total}} piezas \u00fanicas \u2014 precio de {{firstPrice}} a {{lastPrice}}, sube con cada pieza vendida.",
+    "step1Title": "Pintado",
+    "step1Text": "Un cuadro. \u00d3leo sobre lienzo. A mano.",
+    "step2Title": "Dividido",
+    "step2Text": "En {{total}} piezas \u00fanicas. P\u00edxel a p\u00edxel. Ninguna igual.",
+    "step3Title": "Tuyo",
+    "step3Text": "Enmarcado, enviado, vendido una vez. Irrevocablemente tuyo.",
+    "specsTitle": "Calidad de galer\u00eda.",
+    "specsSubtitle": "Hecha para la pared donde la vas a colgar.",
+    "spec1": "Papel fotogr\u00e1fico premium luster, sin \u00e1cido",
+    "spec2": "Marco de madera maciza \u2014 negro o blanco",
+    "spec3": "Acr\u00edlico irrompible en lugar de vidrio fr\u00e1gil",
+    "spec4": "Enganche montado \u2014 directo a la pared",
+    "cta": "Encuentra tu pieza",
+    "mockupCaption": "Pieza #{{id}} \u2014 as\u00ed colgar\u00e1 pronto en tu casa."
   }
 }

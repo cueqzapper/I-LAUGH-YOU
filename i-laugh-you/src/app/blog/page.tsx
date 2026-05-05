@@ -1,7 +1,15 @@
 import Link from "next/link";
+import Script from "next/script";
 import { listBlogArticles, getBlogArticleTranslation } from "@/lib/sqlite";
 import { CATEGORY_LABELS, type BlogCategory } from "@/lib/blog-topics";
 import type { Metadata } from "next";
+import {
+  SITE_URL,
+  DEFAULT_OG_IMAGE,
+  buildHreflangAlternates,
+  breadcrumbJsonLd,
+  jsonLdString,
+} from "@/lib/seo";
 import "./blog.css";
 
 const SUPPORTED_LANGS = ["de", "en", "es", "fr"] as const;
@@ -53,14 +61,27 @@ const DATE_LOCALES: Record<SupportedLang, string> = {
   fr: "fr-FR",
 };
 
+const BLOG_TITLE = "Blog — Art, capitalism & scarcity pricing in art";
+const BLOG_DESCRIPTION =
+  "Essays on the art market, scarcity pricing, collectible numbered prints, and the I LAUGH YOU project — a hand-painted self-portrait split into 24,236 pieces.";
+
 export const metadata: Metadata = {
-  title: "Blog — I LAUGH YOU",
-  description:
-    "Artikel über Kunst, Kapitalismus und das größte Selbstporträt der Kunstgeschichte.",
+  title: BLOG_TITLE,
+  description: BLOG_DESCRIPTION,
+  alternates: buildHreflangAlternates("/blog"),
   openGraph: {
-    title: "Blog — I LAUGH YOU",
-    description:
-      "Artikel über Kunst, Kapitalismus und das größte Selbstporträt der Kunstgeschichte.",
+    type: "website",
+    url: `${SITE_URL}/blog`,
+    siteName: "I LAUGH YOU",
+    title: BLOG_TITLE,
+    description: BLOG_DESCRIPTION,
+    images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: BLOG_TITLE,
+    description: BLOG_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 
@@ -119,8 +140,19 @@ export default async function BlogListingPage({
     return lang === "de" ? `/blog/${slug}` : `/blog/${slug}?lang=${lang}`;
   }
 
+  const breadcrumb = breadcrumbJsonLd([
+    { name: "Home", url: "/" },
+    { name: "Blog", url: "/blog" },
+  ]);
+
   return (
     <div id="blog-page">
+      <Script
+        id="blog-breadcrumb-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: jsonLdString(breadcrumb) }}
+      />
       <header className="blog-header">
         <Link href="/" className="blog-home-link">
           &larr; I LAUGH YOU

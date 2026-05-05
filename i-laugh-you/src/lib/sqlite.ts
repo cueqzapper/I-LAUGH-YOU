@@ -942,6 +942,14 @@ export function getPieceSiteByImageId(imageId: number) {
   return site ?? null;
 }
 
+export function getPieceCredentialByImageId(imageId: number) {
+  assertValidImageId(imageId);
+  const credential = selectPieceCredentialByImageStatement.get(imageId) as
+    | { image_id: number; admin_visible_password: string; issued_at: string }
+    | undefined;
+  return credential ?? null;
+}
+
 export function verifyPieceSitePassword(imageId: number, password: string) {
   assertValidImageId(imageId);
 
@@ -1747,6 +1755,7 @@ const updateOrderStatusStatement = db.prepare(`
   UPDATE orders
   SET status = @status,
       stripe_payment_intent_id = COALESCE(@stripe_payment_intent_id, stripe_payment_intent_id),
+      buyer_email = COALESCE(NULLIF(@buyer_email, ''), buyer_email),
       buyer_name = COALESCE(@buyer_name, buyer_name),
       shipping_name = COALESCE(@shipping_name, shipping_name),
       shipping_address1 = COALESCE(@shipping_address1, shipping_address1),
@@ -1829,6 +1838,7 @@ export function updateOrderStatus(input: {
   id: number;
   status: string;
   stripePaymentIntentId?: string | null;
+  buyerEmail?: string | null;
   buyerName?: string | null;
   shippingName?: string | null;
   shippingAddress1?: string | null;
@@ -1843,6 +1853,7 @@ export function updateOrderStatus(input: {
     id: input.id,
     status: input.status,
     stripe_payment_intent_id: input.stripePaymentIntentId ?? null,
+    buyer_email: input.buyerEmail ?? null,
     buyer_name: input.buyerName ?? null,
     shipping_name: input.shippingName ?? null,
     shipping_address1: input.shippingAddress1 ?? null,
@@ -1951,6 +1962,7 @@ const fulfillOrderTransactionInner = db.transaction((input: {
         ? "conflict"
         : "paid",
     stripe_payment_intent_id: input.stripePaymentIntentId ?? null,
+    buyer_email: input.buyerEmail,
     buyer_name: input.buyerName,
     shipping_name: input.shippingName ?? null,
     shipping_address1: input.shippingAddress1 ?? null,

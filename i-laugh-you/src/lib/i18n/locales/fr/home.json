@@ -1,10 +1,11 @@
 {
+  "seoTagline": "24 236 tirages num\u00e9rot\u00e9s uniques du plus grand autoportrait de l'histoire de l'art. Poss\u00e9dez un fragment d'une peinture \u00e0 l'huile peinte \u00e0 la main.",
   "intro": {
     "gallery": "Dans la Galerie",
     "headline": "Pas cher aujourd'hui, inestimable demain !",
     "subline": "Unique pour toujours : Choisis ton morceau du plus grand autoportrait de l'histoire de l'art !",
     "loading": "Chargement...",
-    "start": "Découvre le Chef-d'œuvre"
+    "start": "D\u00e9couvre le Chef-d'\u0153uvre"
   },
   "usp1": {
     "title": "L\u00e0 o\u00f9 tout a commenc\u00e9",
@@ -75,5 +76,23 @@
     "body3": "Chaque pi\u00e8ce est livr\u00e9e chez toi. Elle mesure 30\u00d740 cm.",
     "outro": "Amuse-toi \u00e0 d\u00e9couvrir cette (<i>tr\u00e8s \u00e9trange</i>) <loveHighlight>lettre d'amour</loveHighlight> \u00e0 quelqu'un qui est parti pour toujours, mais jamais oubli\u00e9 !",
     "artist": "L'ARTISTE"
+  },
+  "production": {
+    "title": "Peint. Divis\u00e9. \u00c0 toi.",
+    "subline": "Un autoportrait, divis\u00e9 en {{total}} pi\u00e8ces uniques \u2014 prix de {{firstPrice}} \u00e0 {{lastPrice}}, monte \u00e0 chaque pi\u00e8ce vendue.",
+    "step1Title": "Peint",
+    "step1Text": "Un tableau. Huile sur toile. \u00c0 la main.",
+    "step2Title": "Divis\u00e9",
+    "step2Text": "En {{total}} pi\u00e8ces uniques. Au pixel pr\u00e8s. Aucune identique.",
+    "step3Title": "\u00c0 toi",
+    "step3Text": "Encadr\u00e9, livr\u00e9, vendu une seule fois. Irr\u00e9vocablement \u00e0 toi.",
+    "specsTitle": "Qualit\u00e9 galerie.",
+    "specsSubtitle": "Faite pour le mur sur lequel tu vas l'accrocher.",
+    "spec1": "Papier photo premium luster, sans acide",
+    "spec2": "Cadre bois massif \u2014 noir ou blanc",
+    "spec3": "Verre acrylique incassable, pas de verre fragile",
+    "spec4": "Attache d\u00e9j\u00e0 pos\u00e9e \u2014 directement au mur",
+    "cta": "Trouve ta pi\u00e8ce",
+    "mockupCaption": "Pi\u00e8ce #{{id}} \u2014 voil\u00e0 comment elle sera bient\u00f4t chez toi."
   }
 }

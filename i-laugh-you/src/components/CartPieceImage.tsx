@@ -67,6 +67,17 @@ export default function CartPieceImage({ imageId, displayWidth, zoom = 10 }: Car
                       loading="lazy"
                       decoding="async"
                       style={{ display: "inline-block", verticalAlign: "top" }}
+                      onError={(e) => {
+                        const img = e.currentTarget;
+                        if (!img.dataset.retried) {
+                          img.dataset.retried = "1";
+                          setTimeout(() => { img.src = src; }, 1000);
+                        } else {
+                          img.style.background = "linear-gradient(135deg, #555 0%, #888 100%)";
+                          img.style.opacity = "0.3";
+                          img.removeAttribute("src");
+                        }
+                      }}
                     />
                   ))}
                 </div>

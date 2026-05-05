@@ -15,7 +15,7 @@
     "quantity": "Quantity",
     "subtotal": "Total",
     "pieceLabel": "Piece #{{id}}",
-    "uniqueNote": "1 of 1 — unique forever",
+    "uniqueNote": "1 of 1 \u2014 unique forever",
     "framedPoster": "Premium Framed Poster 12\u00d716\"",
     "frame": "Frame",
     "shippingNote": "Free worldwide shipping included",
@@ -23,8 +23,7 @@
   },
   "frameColor": {
     "white": "White",
-    "black": "Black",
-    "natural": "Natural Wood"
+    "black": "Black"
   },
   "checkout": {
     "proceed": "Proceed to Checkout",
@@ -38,7 +37,105 @@
     "orderNumber": "Order #{{id}}",
     "pieces": "Pieces purchased",
     "frame": "frame",
+    "framedInBlack": "Black frame",
+    "framedInWhite": "White frame",
+    "itemBreakdown": "{{count}} × {{price}} {{currency}}",
     "emailSent": "A confirmation email with your order details has been sent.",
-    "backToGallery": "Back to Gallery"
+    "emailSentTo": "Sent to {{email}}",
+    "backToGallery": "Back to Gallery",
+    "errorTitle": "Oops",
+    "artHistoryTagline": "You now own a piece of art history."
+  },
+  "toast": {
+    "added": "Added to cart",
+    "removed": "Removed from cart",
+    "viewCart": "View Cart"
+  },
+  "delivery": {
+    "title": "Your one-of-one. Nowhere else on Earth.",
+    "subtitle": "How it reaches your wall.",
+    "mockupCaption": "This is how it will hang in your home.",
+    "unique": "Printed once, sold once",
+    "uniqueSub": "Nobody else on Earth gets your piece",
+    "frame": "Premium solid-wood frame",
+    "frameSub": "Gallery photo paper, shatterproof acrylic, 30\u00d740 cm",
+    "shipping": "Free to your door",
+    "shippingSub": "Worldwide \u2014 no shipping fee",
+    "time": "7\u201310 days on your wall",
+    "timeSub": "Printed to order, just for you",
+    "priceTensionHead": "Today is the cheapest it will ever be.",
+    "priceTension": "Every piece gets more expensive with every sale.",
+    "priceTensionStrong": "The last one costs 777.\u2013",
+    "priceTensionSub": "Right now is the lowest price this piece will ever have."
+  },
+  "email": {
+    "subject": "Thank you \u2014 Order #{{orderId}}",
+    "heroTitle": "Thank you, {{name}}",
+    "heroSubtitle": "Your order is confirmed \u2014 a piece of the world's largest self-portrait is on its way to you.",
+    "orderLabel": "Order #",
+    "piecesHeading": "Your pieces",
+    "pieceLabel": "Piece #{{id}}",
+    "frameLabel": "Frame",
+    "framedInBlack": "Black frame",
+    "framedInWhite": "White frame",
+    "totalLabel": "Total",
+    "productDescription": "Premium Luster Photo Paper Framed Poster (12\u00d716\")",
+    "shippingInfo": "Each piece will be printed and shipped to your address.",
+    "accessHeading": "Your Piece Pages Are Ready",
+    "accessIntro": "Each piece has its own page that you can customize. Log in with the password below to make it yours.",
+    "passwordColumnPiece": "Piece",
+    "passwordColumnPassword": "Password",
+    "emailSafeReminder": "Keep this email safe \u2014 you'll need the password to customize your piece page.",
+    "trackingNotice": "You'll receive tracking information once your order ships.",
+    "artHistoryNote": "Each piece is a unique fragment of the world's largest self-portrait. You now own a piece of art history.",
+    "footerTagline": "Made with love and laughter in Switzerland",
+    "shipping": {
+      "subject": "Your piece #{{imageId}} has shipped!",
+      "heroTitle": "On its way, {{name}}",
+      "heroSubtitle": "Your piece is packed and travelling to you.",
+      "intro": "Great news \u2014 piece #{{imageId}} from order #{{orderId}} has left the print shop.",
+      "trackHeading": "Track your package",
+      "trackButton": "Track Shipment",
+      "trackingNumberLabel": "Tracking number",
+      "trackingPending": "Tracking details will be available shortly.",
+      "closing": "A unique piece of the world's largest self-portrait is coming to you."
+    }
+  },
+  "piece": {
+    "status": {
+      "sold": "Sold",
+      "available": "Available"
+    },
+    "specs": "30 × 40 cm · Canvas Print · Edition 1 of 1",
+    "editionOf": "of {{formattedCount}} pieces",
+    "meta": {
+      "position": "Position",
+      "positionValue": "Row {{row}}, Column {{column}}",
+      "slug": "Slug",
+      "status": "Status"
+    },
+    "linkDefault": "View More",
+    "backToGallery": "Back to Gallery",
+    "edit": {
+      "heading": "Edit Your Piece",
+      "subtitle": "Customize your piece's title, description, and link. The URL slug updates automatically.",
+      "titleLabel": "Title",
+      "descriptionLabel": "Description",
+      "linkUrlLabel": "Link URL",
+      "linkLabelLabel": "Link Label (optional)",
+      "save": "Save Changes",
+      "logout": "Logout",
+      "errorMissing": "Please complete all required fields and use a valid URL.",
+      "successUpdated": "Piece page updated successfully.",
+      "successLogout": "You have been logged out from owner editing."
+    },
+    "login": {
+      "heading": "Owner Access",
+      "subtitle": "Enter your password to edit this piece's details.",
+      "passwordLabel": "Password",
+      "submit": "Login to Edit",
+      "wrongPassword": "Wrong password. Please try again.",
+      "required": "Owner login is required to edit this piece page."
+    }
   }
 }

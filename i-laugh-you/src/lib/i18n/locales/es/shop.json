@@ -2,22 +2,28 @@
   "cart": {
     "title": "Tu Carrito",
     "empty": "Tu carrito est\u00e1 vac\u00edo.",
+    "emptySubtitle": "Descubre piezas \u00fanicas de la obra colaborativa m\u00e1s grande del mundo.",
     "continueShopping": "Seguir comprando",
     "itemCount": "{{count}} pieza(s)",
     "currency": "Moneda",
-    "applyAllFrames": "Aplicar marco a todas",
+    "applyAllFrames": "Marco para todas",
     "applyAll": "Aplicar",
     "remove": "Eliminar",
     "soldBadge": "VENDIDA",
     "soldWarning": "{{count}} art\u00edculo(s) en tu carrito han sido vendidos por otra persona y ser\u00e1n excluidos del pago.",
     "unitPrice": "Precio por pieza",
     "quantity": "Cantidad",
-    "subtotal": "Total"
+    "subtotal": "Total",
+    "pieceLabel": "Pieza #{{id}}",
+    "uniqueNote": "1 de 1 \u2014 \u00fanico para siempre",
+    "framedPoster": "P\u00f3ster Enmarcado Premium 12\u00d716\"",
+    "frame": "Marco",
+    "shippingNote": "Env\u00edo mundial gratuito incluido",
+    "orderSummary": "Resumen del pedido"
   },
   "frameColor": {
     "white": "Blanco",
-    "black": "Negro",
-    "natural": "Madera natural"
+    "black": "Negro"
   },
   "checkout": {
     "proceed": "Proceder al pago",
@@ -31,7 +37,105 @@
     "orderNumber": "Pedido #{{id}}",
     "pieces": "Piezas compradas",
     "frame": "marco",
+    "framedInBlack": "Marco negro",
+    "framedInWhite": "Marco blanco",
+    "itemBreakdown": "{{count}} \u00d7 {{price}} {{currency}}",
     "emailSent": "Se ha enviado un correo de confirmaci\u00f3n con los detalles de tu pedido.",
-    "backToGallery": "Volver a la Galer\u00eda"
+    "emailSentTo": "Enviado a {{email}}",
+    "backToGallery": "Volver a la Galer\u00eda",
+    "errorTitle": "Vaya",
+    "artHistoryTagline": "Ahora posees una parte de la historia del arte."
+  },
+  "toast": {
+    "added": "Agregado al carrito",
+    "removed": "Eliminado del carrito",
+    "viewCart": "Ver carrito"
+  },
+  "delivery": {
+    "title": "Tu \u00fanica pieza. No existe otra.",
+    "subtitle": "As\u00ed llega a tu pared.",
+    "mockupCaption": "As\u00ed colgar\u00e1 pronto en tu casa.",
+    "unique": "Impresa una vez, vendida una vez",
+    "uniqueSub": "Nadie m\u00e1s en el mundo tendr\u00e1 tu pieza",
+    "frame": "Marco premium de madera maciza",
+    "frameSub": "Papel fotogr\u00e1fico de galer\u00eda, acr\u00edlico irrompible, 30\u00d740 cm",
+    "shipping": "Gratis hasta tu puerta",
+    "shippingSub": "Env\u00edo mundial sin coste",
+    "time": "7\u201310 d\u00edas en tu pared",
+    "timeSub": "Impresa bajo pedido, solo para ti",
+    "priceTensionHead": "Hoy es el precio m\u00e1s bajo.",
+    "priceTension": "Cada pieza sube de precio con cada venta.",
+    "priceTensionStrong": "La \u00faltima cuesta 777.\u2013",
+    "priceTensionSub": "Ahora mismo es el precio m\u00e1s bajo que tendr\u00e1 esta pieza."
+  },
+  "email": {
+    "subject": "Gracias \u2014 Pedido #{{orderId}}",
+    "heroTitle": "Gracias, {{name}}",
+    "heroSubtitle": "Tu pedido est\u00e1 confirmado \u2014 una pieza del mayor autorretrato del mundo va camino a ti.",
+    "orderLabel": "Pedido #",
+    "piecesHeading": "Tus piezas",
+    "pieceLabel": "Pieza #{{id}}",
+    "frameLabel": "Marco",
+    "framedInBlack": "Marco negro",
+    "framedInWhite": "Marco blanco",
+    "totalLabel": "Total",
+    "productDescription": "P\u00f3ster Enmarcado de Papel Fotogr\u00e1fico Premium Luster (12\u00d716\")",
+    "shippingInfo": "Cada pieza se imprimir\u00e1 y se enviar\u00e1 a tu direcci\u00f3n.",
+    "accessHeading": "Tus p\u00e1ginas de pieza est\u00e1n listas",
+    "accessIntro": "Cada pieza tiene su propia p\u00e1gina que puedes personalizar. Inicia sesi\u00f3n con la contrase\u00f1a de abajo para hacerla tuya.",
+    "passwordColumnPiece": "Pieza",
+    "passwordColumnPassword": "Contrase\u00f1a",
+    "emailSafeReminder": "Guarda este correo \u2014 necesitar\u00e1s la contrase\u00f1a para personalizar la p\u00e1gina de tu pieza.",
+    "trackingNotice": "Recibir\u00e1s la informaci\u00f3n de seguimiento cuando tu pedido se env\u00ede.",
+    "artHistoryNote": "Cada pieza es un fragmento \u00fanico del mayor autorretrato del mundo. Ahora posees una parte de la historia del arte.",
+    "footerTagline": "Hecho con amor y risas en Suiza",
+    "shipping": {
+      "subject": "\u00a1Tu pieza #{{imageId}} ha sido enviada!",
+      "heroTitle": "En camino hacia ti, {{name}}",
+      "heroSubtitle": "Tu pieza est\u00e1 empaquetada y viaja hacia ti.",
+      "intro": "Buenas noticias \u2014 la pieza #{{imageId}} del pedido #{{orderId}} ha salido de la imprenta.",
+      "trackHeading": "Sigue tu paquete",
+      "trackButton": "Seguir env\u00edo",
+      "trackingNumberLabel": "N\u00famero de seguimiento",
+      "trackingPending": "Los detalles de seguimiento estar\u00e1n disponibles en breve.",
+      "closing": "Una pieza \u00fanica del mayor autorretrato del mundo va hacia ti."
+    }
+  },
+  "piece": {
+    "status": {
+      "sold": "Vendida",
+      "available": "Disponible"
+    },
+    "specs": "30 \u00d7 40 cm \u00b7 Impresi\u00f3n en lienzo \u00b7 Edici\u00f3n 1 de 1",
+    "editionOf": "de {{formattedCount}} piezas",
+    "meta": {
+      "position": "Posici\u00f3n",
+      "positionValue": "Fila {{row}}, Columna {{column}}",
+      "slug": "Slug",
+      "status": "Estado"
+    },
+    "linkDefault": "Ver m\u00e1s",
+    "backToGallery": "Volver a la Galer\u00eda",
+    "edit": {
+      "heading": "Edita tu pieza",
+      "subtitle": "Personaliza el t\u00edtulo, la descripci\u00f3n y el enlace de tu pieza. El slug de la URL se actualiza autom\u00e1ticamente.",
+      "titleLabel": "T\u00edtulo",
+      "descriptionLabel": "Descripci\u00f3n",
+      "linkUrlLabel": "URL del enlace",
+      "linkLabelLabel": "Texto del enlace (opcional)",
+      "save": "Guardar cambios",
+      "logout": "Cerrar sesi\u00f3n",
+      "errorMissing": "Por favor completa todos los campos obligatorios y usa una URL v\u00e1lida.",
+      "successUpdated": "P\u00e1gina de la pieza actualizada con \u00e9xito.",
+      "successLogout": "Has cerrado la sesi\u00f3n de edici\u00f3n."
+    },
+    "login": {
+      "heading": "Acceso del propietario",
+      "subtitle": "Introduce tu contrase\u00f1a para editar los detalles de esta pieza.",
+      "passwordLabel": "Contrase\u00f1a",
+      "submit": "Iniciar sesi\u00f3n para editar",
+      "wrongPassword": "Contrase\u00f1a incorrecta. Int\u00e9ntalo de nuevo.",
+      "required": "Se requiere iniciar sesi\u00f3n como propietario para editar esta p\u00e1gina."
+    }
   }
 }

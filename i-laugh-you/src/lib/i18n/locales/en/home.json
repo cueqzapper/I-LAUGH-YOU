@@ -1,4 +1,5 @@
 {
+  "seoTagline": "24,236 unique numbered art prints of the largest self-portrait in art history. Own a fragment of one hand-painted oil painting.",
   "intro": {
     "gallery": "In the Gallery",
     "headline": "Cheap today, priceless tomorrow!",
@@ -75,5 +76,23 @@
     "body3": "Each piece will be delivered to your home. It measures 30\u00d740 cm.",
     "outro": "Have fun discovering this (<i>very strange</i>) <loveHighlight>love letter</loveHighlight> to someone who is gone forever but will never be forgotten!",
     "artist": "THE ARTIST"
+  },
+  "production": {
+    "title": "Painted. Divided. Yours.",
+    "subline": "One self-portrait, split into {{total}} one-of-ones \u2014 price climbs from {{firstPrice}} to {{lastPrice}}, rising with every piece sold.",
+    "step1Title": "Painted",
+    "step1Text": "One painting. Oil on canvas. By hand.",
+    "step2Title": "Divided",
+    "step2Text": "Into {{total}} one-of-ones. Pixel-perfect. No two alike.",
+    "step3Title": "Yours",
+    "step3Text": "Framed, delivered, sold once. Irrevocably yours.",
+    "specsTitle": "Gallery quality.",
+    "specsSubtitle": "Built for the wall you'll hang it on.",
+    "spec1": "Premium luster photo paper, acid-free",
+    "spec2": "Solid-wood frame \u2014 black or white",
+    "spec3": "Shatterproof acrylic glass, not fragile glass",
+    "spec4": "Hanging hardware installed \u2014 straight to the wall",
+    "cta": "Find your piece",
+    "mockupCaption": "Piece #{{id}} \u2014 this is how it will hang in your home."
   }
 }

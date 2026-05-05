@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 
-export type FrameColor = "white" | "black" | "natural";
+export type FrameColor = "white" | "black";
 
 export interface CartItem {
   imageId: number;

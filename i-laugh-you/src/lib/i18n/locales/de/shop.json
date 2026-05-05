@@ -15,16 +15,15 @@
     "quantity": "Anzahl",
     "subtotal": "Gesamt",
     "pieceLabel": "St\u00fcck #{{id}}",
-    "uniqueNote": "1 von 1 — f\u00fcr immer einzigartig",
-    "framedPoster": "Premium Gerahmtes Poster 12\u00d716\"",
+    "uniqueNote": "1 von 1 \u2014 f\u00fcr immer einzigartig",
+    "framedPoster": "Premium-Poster mit Rahmen 12\u00d716\"",
     "frame": "Rahmen",
     "shippingNote": "Kostenloser weltweiter Versand inklusive",
     "orderSummary": "Bestell\u00fcbersicht"
   },
   "frameColor": {
     "white": "Weiss",
-    "black": "Schwarz",
-    "natural": "Naturholz"
+    "black": "Schwarz"
   },
   "checkout": {
     "proceed": "Zur Kasse",
@@ -38,7 +37,105 @@
     "orderNumber": "Bestellung #{{id}}",
     "pieces": "Gekaufte St\u00fccke",
     "frame": "Rahmen",
+    "framedInBlack": "Schwarzer Rahmen",
+    "framedInWhite": "Weisser Rahmen",
+    "itemBreakdown": "{{count}} \u00d7 {{price}} {{currency}}",
     "emailSent": "Eine Best\u00e4tigungs-E-Mail mit Deinen Bestelldetails wurde gesendet.",
-    "backToGallery": "Zur\u00fcck zur Galerie"
+    "emailSentTo": "Gesendet an {{email}}",
+    "backToGallery": "Zur\u00fcck zur Galerie",
+    "errorTitle": "Hoppla",
+    "artHistoryTagline": "Du besitzt jetzt einen Teil der Kunstgeschichte."
+  },
+  "toast": {
+    "added": "In den Warenkorb gelegt",
+    "removed": "Aus dem Warenkorb entfernt",
+    "viewCart": "Warenkorb"
+  },
+  "delivery": {
+    "title": "Dein Unikat. Nur einmal auf der Welt.",
+    "subtitle": "So kommt es zu dir nach Hause.",
+    "mockupCaption": "So h\u00e4ngt es bald bei dir.",
+    "unique": "Einmal gedruckt, einmal verkauft",
+    "uniqueSub": "Niemand sonst auf der Welt bekommt dein St\u00fcck",
+    "frame": "Premium Massivholzrahmen",
+    "frameSub": "Galerie-Fotopapier, bruchsicheres Acrylglas, 30\u00d740 cm",
+    "shipping": "Gratis zu dir",
+    "shippingSub": "Weltweit versandkostenfrei",
+    "time": "7\u201310 Tage an deiner Wand",
+    "timeSub": "F\u00fcr dich auf Bestellung gedruckt",
+    "priceTensionHead": "Jetzt ist der g\u00fcnstigste Moment.",
+    "priceTension": "Jedes Bild wird teurer, je mehr verkauft werden.",
+    "priceTensionStrong": "Der letzte kostet 777.\u2013",
+    "priceTensionSub": "Heute ist der g\u00fcnstigste Moment, den es je wieder geben wird."
+  },
+  "email": {
+    "subject": "Vielen Dank \u2014 Bestellung #{{orderId}}",
+    "heroTitle": "Vielen Dank, {{name}}",
+    "heroSubtitle": "Deine Bestellung ist best\u00e4tigt \u2014 ein St\u00fcck des gr\u00f6ssten Selbstportr\u00e4ts der Welt ist auf dem Weg zu Dir.",
+    "orderLabel": "Bestellung #",
+    "piecesHeading": "Deine St\u00fccke",
+    "pieceLabel": "St\u00fcck #{{id}}",
+    "frameLabel": "Rahmen",
+    "framedInBlack": "Schwarzer Rahmen",
+    "framedInWhite": "Weisser Rahmen",
+    "totalLabel": "Gesamt",
+    "productDescription": "Premium Luster Fotopapier Gerahmtes Poster (12\u00d716\")",
+    "shippingInfo": "Jedes St\u00fcck wird gedruckt und an Deine Adresse versendet.",
+    "accessHeading": "Deine St\u00fcck-Seiten sind bereit",
+    "accessIntro": "Jedes St\u00fcck hat seine eigene Seite, die Du anpassen kannst. Melde Dich mit dem Passwort unten an, um sie zu Deiner zu machen.",
+    "passwordColumnPiece": "St\u00fcck",
+    "passwordColumnPassword": "Passwort",
+    "emailSafeReminder": "Bewahre diese E-Mail gut auf \u2014 Du brauchst das Passwort, um Deine St\u00fcck-Seite anzupassen.",
+    "trackingNotice": "Du erh\u00e4ltst Trackinginformationen, sobald Deine Bestellung versandt wird.",
+    "artHistoryNote": "Jedes St\u00fcck ist ein einzigartiger Teil des gr\u00f6ssten Selbstportr\u00e4ts der Welt. Du besitzt jetzt ein St\u00fcck Kunstgeschichte.",
+    "footerTagline": "Mit Liebe und Lachen in der Schweiz gemacht",
+    "shipping": {
+      "subject": "Dein St\u00fcck #{{imageId}} ist unterwegs!",
+      "heroTitle": "Unterwegs zu Dir, {{name}}",
+      "heroSubtitle": "Dein St\u00fcck ist verpackt und reist zu Dir.",
+      "intro": "Gute Nachrichten \u2014 St\u00fcck #{{imageId}} aus Bestellung #{{orderId}} hat die Druckerei verlassen.",
+      "trackHeading": "Verfolge Dein Paket",
+      "trackButton": "Sendung verfolgen",
+      "trackingNumberLabel": "Sendungsnummer",
+      "trackingPending": "Tracking-Details sind in K\u00fcrze verf\u00fcgbar.",
+      "closing": "Ein einzigartiges St\u00fcck des gr\u00f6ssten Selbstportr\u00e4ts der Welt kommt zu Dir."
+    }
+  },
+  "piece": {
+    "status": {
+      "sold": "Verkauft",
+      "available": "Verf\u00fcgbar"
+    },
+    "specs": "30 \u00d7 40 cm \u00b7 Leinwanddruck \u00b7 Edition 1 von 1",
+    "editionOf": "von {{formattedCount}} St\u00fccken",
+    "meta": {
+      "position": "Position",
+      "positionValue": "Reihe {{row}}, Spalte {{column}}",
+      "slug": "Slug",
+      "status": "Status"
+    },
+    "linkDefault": "Mehr ansehen",
+    "backToGallery": "Zur\u00fcck zur Galerie",
+    "edit": {
+      "heading": "Dein St\u00fcck bearbeiten",
+      "subtitle": "Passe den Titel, die Beschreibung und den Link Deines St\u00fccks an. Der URL-Slug aktualisiert sich automatisch.",
+      "titleLabel": "Titel",
+      "descriptionLabel": "Beschreibung",
+      "linkUrlLabel": "Link-URL",
+      "linkLabelLabel": "Link-Bezeichnung (optional)",
+      "save": "\u00c4nderungen speichern",
+      "logout": "Abmelden",
+      "errorMissing": "Bitte f\u00fclle alle Pflichtfelder aus und verwende eine g\u00fcltige URL.",
+      "successUpdated": "St\u00fcck-Seite erfolgreich aktualisiert.",
+      "successLogout": "Du wurdest von der Bearbeitung abgemeldet."
+    },
+    "login": {
+      "heading": "Besitzer-Zugang",
+      "subtitle": "Gib Dein Passwort ein, um die Details dieses St\u00fccks zu bearbeiten.",
+      "passwordLabel": "Passwort",
+      "submit": "Anmelden zum Bearbeiten",
+      "wrongPassword": "Falsches Passwort. Bitte versuche es erneut.",
+      "required": "Zum Bearbeiten dieser St\u00fcck-Seite ist eine Besitzer-Anmeldung erforderlich."
+    }
   }
 }

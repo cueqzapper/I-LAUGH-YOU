@@ -8,7 +8,9 @@ export const runtime = "nodejs";
 
 const MAX_CART_ITEMS = 20;
 const VALID_CURRENCIES: Currency[] = ["CHF", "EUR", "USD"];
-const VALID_FRAME_COLORS = ["white", "black", "natural"];
+const VALID_FRAME_COLORS = ["white", "black"];
+const VALID_LOCALES = ["de", "en", "es", "fr"] as const;
+type EmailLocale = (typeof VALID_LOCALES)[number];
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://127.0.0.1:4321";
 
@@ -20,10 +22,19 @@ interface CheckoutItem {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { items, currency } = body as {
+    const { items, currency, locale: rawLocale } = body as {
       items: CheckoutItem[];
       currency: Currency;
+      locale?: string;
     };
+
+    // Validate locale — accept full code or language subtag, fall back to "en".
+    const shortLocale = typeof rawLocale === "string"
+      ? rawLocale.toLowerCase().split("-")[0]
+      : "";
+    const locale: EmailLocale = (VALID_LOCALES as readonly string[]).includes(shortLocale)
+      ? (shortLocale as EmailLocale)
+      : "en";
 
     // Validate currency
     if (!VALID_CURRENCIES.includes(currency)) {
@@ -113,7 +124,7 @@ export async function POST(request: NextRequest) {
               name: items.length === 1
                 ? `I LAUGH YOU — Piece #${imageIds[0]}`
                 : `I LAUGH YOU — ${items.length} Pieces`,
-              description: `Enhanced Matte Paper Framed Poster (12"×16")`,
+              description: `Premium Luster Photo Paper Framed Poster (12"×16")`,
             },
             unit_amount: stripeAmount,
           },
@@ -131,6 +142,7 @@ export async function POST(request: NextRequest) {
         frameColors: JSON.stringify(frameColors),
         currency,
         unitPrice: String(Math.floor(unitPrice)),
+        locale,
       },
       success_url: `${BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${BASE_URL}/cart`,

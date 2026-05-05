@@ -9,6 +9,10 @@
   "footer": {
     "madeWith": "Gemacht mit Liebe und Lachen in der Schweiz",
     "about": "\u00dcber uns",
-    "blog": "Blog"
+    "blog": "Blog",
+    "impressum": "Impressum",
+    "privacy": "Datenschutz",
+    "terms": "AGB",
+    "returns": "Widerruf & Retouren"
   }
 }

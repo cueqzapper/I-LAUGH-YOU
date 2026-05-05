@@ -1,16 +1,77 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import Image from "next/image";
+import {
+  SITE_URL,
+  DEFAULT_OG_IMAGE,
+  buildHreflangAlternates,
+  breadcrumbJsonLd,
+  jsonLdString,
+} from "@/lib/seo";
 import "./about.css";
 
+const ABOUT_TITLE = "About I LAUGH YOU — art × capitalism, 24,236 numbered pieces";
+const ABOUT_DESCRIPTION =
+  "The story behind I LAUGH YOU — an art project critiquing scarcity pricing and the art market by selling 24,236 numbered pieces of one hand-painted self-portrait. By DTSQR.";
+
 export const metadata: Metadata = {
-  title: "About — I LAUGH YOU!",
-  description:
-    "The story behind I LAUGH YOU! — an art project exploring the relationship between art and capitalism. By DTSQR.",
+  title: ABOUT_TITLE,
+  description: ABOUT_DESCRIPTION,
+  alternates: buildHreflangAlternates("/about"),
+  openGraph: {
+    type: "article",
+    url: `${SITE_URL}/about`,
+    siteName: "I LAUGH YOU",
+    title: ABOUT_TITLE,
+    description: ABOUT_DESCRIPTION,
+    images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: ABOUT_TITLE,
+    description: ABOUT_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
+  },
 };
 
 export default function AboutPage() {
+  const breadcrumb = breadcrumbJsonLd([
+    { name: "Home", url: "/" },
+    { name: "About", url: "/about" },
+  ]);
+  const aboutSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: ABOUT_TITLE,
+    description: ABOUT_DESCRIPTION,
+    url: `${SITE_URL}/about`,
+    mainEntity: {
+      "@type": "VisualArtwork",
+      name: "I LAUGH YOU — the largest self-portrait in art history",
+      artform: "Oil painting",
+      artMedium: "Oil on canvas",
+      creator: { "@type": "Person", name: "DTSQR" },
+      numberOfPages: 24236,
+      locationCreated: "Basel, Switzerland",
+      description:
+        "One hand-painted oil self-portrait divided into 24,236 unique numbered pieces, each sold once.",
+    },
+  };
+
   return (
     <div id="about-page">
+      <Script
+        id="about-breadcrumb-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: jsonLdString(breadcrumb) }}
+      />
+      <Script
+        id="about-aboutpage-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: jsonLdString(aboutSchema) }}
+      />
       {/* Hero */}
       <header id="about-hero">
         <a href="/" id="about-logo-link">
@@ -24,7 +85,7 @@ export default function AboutPage() {
         </a>
         <h1>Die Geschichte hinter dem Bild</h1>
         <p className="about-hero-sub">
-          Ein Kunstprojekt. Ein Selbstportr&auml;t. 6&rsquo;059 einzigartige
+          Ein Kunstprojekt. Ein Selbstportr&auml;t. 24&rsquo;236 einzigartige
           St&uuml;cke. Eine Liebeserkl&auml;rung an die Kunst &mdash; und an
           den Kapitalismus.
         </p>
@@ -81,7 +142,7 @@ export default function AboutPage() {
               <p>
                 Das fertige Werk wurde anschliessend in einem aufwendigen
                 Verfahren Stück f&uuml;r St&uuml;ck fotografiert &mdash;{" "}
-                <strong>6&rsquo;059 einzigartige Einzelbilder</strong>, jedes
+                <strong>24&rsquo;236 einzigartige Einzelbilder</strong>, jedes
                 ein Ausschnitt des Originals, jedes einmalig.
               </p>
             </div>
@@ -118,10 +179,10 @@ export default function AboutPage() {
               <h3>Der Preis steigt</h3>
               <p>
                 Das erste St&uuml;ck kostet{" "}
-                <strong className="capitalism-highlight">100 CHF</strong>. Mit
+                <strong className="capitalism-highlight">77 CHF</strong>. Mit
                 jedem Verkauf steigt der Preis exponentiell. Das letzte
                 St&uuml;ck wird{" "}
-                <strong className="capitalism-highlight">1&rsquo;000 CHF</strong>{" "}
+                <strong className="capitalism-highlight">777 CHF</strong>{" "}
                 kosten. Wer fr&uuml;h kauft, kauft g&uuml;nstig.
               </p>
             </div>
@@ -184,7 +245,7 @@ export default function AboutPage() {
               <h3>Jedes St&uuml;ck ist einzigartig</h3>
               <p>
                 Es gibt keine Kopien, keine Editionen, keine Reproduktionen.
-                Jedes der 6&rsquo;059 St&uuml;cke existiert genau einmal. Wenn
+                Jedes der 24&rsquo;236 St&uuml;cke existiert genau einmal. Wenn
                 es verkauft ist, ist es weg &mdash; f&uuml;r immer.
               </p>
             </div>
@@ -254,7 +315,7 @@ export default function AboutPage() {
                 <p>
                   Das fertige Gem&auml;lde wird St&uuml;ck f&uuml;r
                   St&uuml;ck in einem aufwendigen Verfahren fotografiert.
-                  6&rsquo;059 einzigartige Einzelbilder entstehen.
+                  24&rsquo;236 einzigartige Einzelbilder entstehen.
                 </p>
               </div>
             </div>
@@ -338,7 +399,7 @@ export default function AboutPage() {
             einem cleveren Konzept.
           </p>
           <p>
-            Jedes der 6&rsquo;059 St&uuml;cke tr&auml;gt diese Geschichte in
+            Jedes der 24&rsquo;236 St&uuml;cke tr&auml;gt diese Geschichte in
             sich. Wer ein St&uuml;ck kauft, kauft nicht nur Kunst &mdash;
             sondern ein Fragment einer Liebeserkl&auml;rung.
           </p>
@@ -351,7 +412,7 @@ export default function AboutPage() {
           <h2>In Zahlen</h2>
           <div className="about-stats">
             <div className="about-stat">
-              <span className="about-stat-number">6&rsquo;059</span>
+              <span className="about-stat-number">24&rsquo;236</span>
               <span className="about-stat-label">Einzigartige St&uuml;cke</span>
             </div>
             <div className="about-stat">
@@ -359,7 +420,7 @@ export default function AboutPage() {
               <span className="about-stat-label">&Ouml;lgem&auml;lde</span>
             </div>
             <div className="about-stat">
-              <span className="about-stat-number">100&ndash;1&rsquo;000</span>
+              <span className="about-stat-number">77&ndash;777</span>
               <span className="about-stat-label">CHF Preisspanne</span>
             </div>
             <div className="about-stat">

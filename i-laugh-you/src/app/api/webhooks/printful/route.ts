@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOrderItems, updateOrderItemPrintful } from "@/lib/sqlite";
+import { getOrderItems, getOrderById, updateOrderItemPrintful } from "@/lib/sqlite";
+import { sendShippingNotification } from "@/lib/resend";
 
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
+  // Validate webhook secret (Printful v1 has no built-in signing)
+  const secret = request.nextUrl.searchParams.get("secret");
+  if (
+    process.env.PRINTFUL_WEBHOOK_SECRET &&
+    secret !== process.env.PRINTFUL_WEBHOOK_SECRET
+  ) {
+    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
 
@@ -57,6 +67,32 @@ export async function POST(request: NextRequest) {
     console.log(
       `[Printful Webhook] Updated item ${matchingItem.id}: status=${data.order.status}`
     );
+
+    // Send shipping notification email when order ships
+    if (
+      (data.order.status === "shipped" || type === "package_shipped") &&
+      shipment
+    ) {
+      const order = getOrderById(orderId);
+      if (order?.buyer_email) {
+        try {
+          // TODO: The `orders` table has no `locale` column yet — a future
+          // migration should add one so we can send shipping emails in the
+          // buyer's language. Until then, default to English.
+          await sendShippingNotification({
+            buyerEmail: order.buyer_email,
+            buyerName: order.buyer_name || "Collector",
+            orderId,
+            imageId,
+            trackingUrl: shipment.tracking_url ?? null,
+            trackingNumber: shipment.tracking_number ?? null,
+            locale: "en",
+          });
+        } catch (emailErr) {
+          console.error("[Printful Webhook] Shipping email failed:", emailErr);
+        }
+      }
+    }
 
     return NextResponse.json({ received: true });
   } catch (err) {

@@ -1,11 +1,11 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import type { FrameColor } from "@/hooks/useCart";
 
-const FRAME_OPTIONS: { color: FrameColor; hex: string; label: string }[] = [
-  { color: "white", hex: "#FFFFFF", label: "White" },
-  { color: "black", hex: "#000000", label: "Black" },
-  { color: "natural", hex: "#C4A777", label: "Natural Wood" },
+const FRAME_OPTIONS: { color: FrameColor; hex: string }[] = [
+  { color: "white", hex: "#FFFFFF" },
+  { color: "black", hex: "#000000" },
 ];
 
 interface FrameColorPickerProps {
@@ -19,13 +19,14 @@ export default function FrameColorPicker({
   onChange,
   size = 28,
 }: FrameColorPickerProps) {
+  const { t } = useTranslation("shop");
   return (
     <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
       {FRAME_OPTIONS.map((option) => (
         <button
           key={option.color}
           type="button"
-          title={option.label}
+          title={t(`frameColor.${option.color}`)}
           onClick={() => onChange(option.color)}
           style={{
             width: `${size}px`,

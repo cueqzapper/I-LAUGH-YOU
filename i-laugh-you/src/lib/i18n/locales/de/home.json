@@ -1,4 +1,5 @@
 {
+  "seoTagline": "24.236 einzigartige nummerierte Kunstdrucke des gr\u00f6\u00dften Selbstportr\u00e4ts der Kunstgeschichte. Besitze ein St\u00fcck eines handgemalten \u00d6lgem\u00e4ldes.",
   "intro": {
     "gallery": "In der Galerie",
     "headline": "Heute g\u00fcnstig, morgen unbezahlbar!",
@@ -75,5 +76,23 @@
     "body3": "Jedes St\u00fcck wird Dir nach Hause geliefert. Es misst 30x40cm.",
     "outro": "Viel Spass beim Entdecken dieses (<i>sehr seltsamen</i>) <loveHighlight>Liebesbriefs</loveHighlight> an jemanden, der f\u00fcr immer fort ist, aber nie vergessen wird!",
     "artist": "DER K\u00dcNSTLER"
+  },
+  "production": {
+    "title": "Gemalt. Zerlegt. Deins.",
+    "subline": "Ein Selbstportrait, in {{total}} Unikate zerlegt \u2014 Preis von {{firstPrice}} auf {{lastPrice}}, steigt mit jedem verkauften St\u00fcck.",
+    "step1Title": "Gemalt",
+    "step1Text": "Ein Bild. \u00d6l auf Leinwand. Von Hand.",
+    "step2Title": "Zerlegt",
+    "step2Text": "In {{total}} Unikate. Pixelgenau. Keines gleich.",
+    "step3Title": "Deins",
+    "step3Text": "Gerahmt geliefert. Einmal verkauft. F\u00fcr immer nur deins.",
+    "specsTitle": "Galerie-Qualit\u00e4t.",
+    "specsSubtitle": "F\u00fcr die Wand gemacht, an der es h\u00e4ngen soll.",
+    "spec1": "Premium Luster-Fotopapier, s\u00e4urefrei",
+    "spec2": "Massivholzrahmen \u2014 schwarz oder weiss",
+    "spec3": "Bruchsicheres Acrylglas statt fragilem Echtglas",
+    "spec4": "Aufh\u00e4ngung montiert \u2014 direkt an die Wand",
+    "cta": "Finde dein St\u00fcck",
+    "mockupCaption": "St\u00fcck #{{id}} \u2014 so h\u00e4ngt es bald bei dir."
   }
 }

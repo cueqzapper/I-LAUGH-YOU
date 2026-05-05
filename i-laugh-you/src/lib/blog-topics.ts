@@ -490,6 +490,98 @@ export const BLOG_TOPICS: BlogTopic[] = [
     imagePrompt: "empty gallery with digital screens showing art to remote viewers",
     tags: ["Pandemie", "Digital", "Wandel"],
   },
+
+  // --- SEO long-tail (keyword-seeded, 2026 Q2) ---
+  {
+    key: "seo-warum-kunst-so-teuer",
+    category: "kunstmarkt",
+    titleDe: "Warum ist Kunst so teuer? Die ehrliche Antwort",
+    promptDe:
+      "Erkläre verständlich, warum ein Gemälde von Basquiat Millionen kostet und ein unbekannter Druck 77 Franken. Brich die Kostenstruktur eines Kunstwerks auf: Material, Zeit, Galeriemarge, Narrativ, Knappheit. Ziel: Keyword „warum ist Kunst so teuer\". Keine Mystifizierung, nur klare Ökonomie.",
+    imagePrompt: "price tag dangling from a masterpiece oil painting, gallery spotlight, minimalist composition",
+    tags: ["Kunstpreis", "Kunstmarkt", "Ökonomie"],
+  },
+  {
+    key: "seo-kunst-preise-entschluesselt",
+    category: "kunstmarkt",
+    titleDe: "Wie Galerien Kunstpreise festlegen — hinter den Kulissen",
+    promptDe:
+      "Erkläre den Preisfindungsprozess in Galerien: Primärmarkt, Sekundärmarkt, Galeriemarge, Künstlerhistorie, Ausstellungsbilanz. Keyword-Ziel: „Kunstpreis festlegen\", „Galerie Preisgestaltung\". Ehrlicher Ton, ohne Insider-Jargon.",
+    imagePrompt: "gallery staff discussing price list behind a closed door, spotlight on framed artwork",
+    tags: ["Kunstpreis", "Galerien", "Kunsthandel"],
+  },
+  {
+    key: "seo-bezahlbare-kunst-schweiz",
+    category: "demokratisierung",
+    titleDe: "Bezahlbare Kunst in der Schweiz — 7 Wege (und eine unbequeme Wahrheit)",
+    promptDe:
+      "Roundup-Artikel mit konkreten Tipps für bezahlbare Kunst in der Schweiz. Erwähne Kunstmessen für junge Künstler, Hochschulverkäufe, Online-Plattformen, Editionen. Ende mit selbstbewusster Erwähnung von I LAUGH YOU als Beispiel dynamischer Preispolitik. Keyword: „bezahlbare Kunst Schweiz\", „günstige Kunst kaufen\".",
+    imagePrompt: "small framed artworks on a wooden shelf in a Zurich apartment, afternoon light",
+    tags: ["Schweiz", "Kunstkauf", "Einstieg"],
+  },
+  {
+    key: "seo-masterworks-alternative",
+    category: "kunst-kapitalismus",
+    titleDe: "Fractional Art Ownership vs. ein echtes Stück besitzen",
+    promptDe:
+      "Vergleiche Masterworks-ähnliche Plattformen (anteilige Kunst-Investitionen über Blockchain/LLC) mit dem physischen Besitz eines einzelnen Fragments. Keyword: „fractional art ownership\", „Masterworks alternative\". Ehrliche Diskussion: Investment-Logik vs. Besitz-Logik. Positioniere I LAUGH YOU als physische Alternative.",
+    imagePrompt: "split screen: left a stock chart, right a framed art fragment on a wall",
+    tags: ["Fractional", "Investment", "Besitz"],
+  },
+  {
+    key: "seo-dynamic-pricing-kunst",
+    category: "kunstmarkt",
+    titleDe: "Dynamische Preise in der Kunst — die ehrliche Version",
+    promptDe:
+      "Erkläre Dynamic Pricing im Kunstmarkt. Vergleich mit Flugpreisen und Uber Surge Pricing. Wann ist es akzeptabel, wann manipulativ? Transparenz als Unterscheidungsmerkmal. Keyword: „dynamische Preise Kunst\", „dynamic pricing art market\".",
+    imagePrompt: "ascending price curve drawn in oil paint across a canvas, abstract",
+    tags: ["Dynamic Pricing", "Transparenz", "Kunstmarkt"],
+  },
+  {
+    key: "seo-color-picker-gallery",
+    category: "demokratisierung",
+    titleDe: "Die Color-Picker-Galerie: Kunst nach Hex-Code durchsuchen",
+    promptDe:
+      "Tool-Page-Style-Artikel, der die Color-Picker-Funktion auf i-laugh-you erklärt und demonstriert. Schritt-für-Schritt: Hex-Code → Fragment-Matches. Erklärung des Algorithmus auf hohem Level. Keyword: „Kunst nach Farbe\", „art by hex color\", „wall art by color palette\".",
+    imagePrompt: "hex color swatches floating above a grid of art fragments matching each color",
+    tags: ["Color", "Hex", "Tool"],
+  },
+  {
+    key: "seo-selbstportrait-konzeptkunst",
+    category: "kunstgeschichte",
+    titleDe: "Selbstporträt als Konzeptkunst — von Rembrandt bis heute",
+    promptDe:
+      "Kunsthistorische Linie durch Selbstporträt-Kunst: Dürer, Rembrandt, van Gogh, Sherman, Saville, Abramović. Wie hat sich das Selbstporträt vom Abbild zum Konzept entwickelt? Keyword: „Selbstporträt Konzeptkunst\", „Geschichte Selbstporträt\". Positioniere I LAUGH YOU als konsequente Weiterführung.",
+    imagePrompt: "timeline of iconic self-portraits from Rembrandt to contemporary, museum-style layout",
+    tags: ["Selbstporträt", "Kunstgeschichte", "Konzeptkunst"],
+  },
+  {
+    key: "seo-warum-77-und-777",
+    category: "das-projekt",
+    titleDe: "Warum 77 und 777? Die Mathematik hinter der Preisspanne",
+    promptDe:
+      "Erkläre die Wahl der Preisspanne 77 CHF → 777 CHF bei I LAUGH YOU. Numerologie, Psychologie, Zugänglichkeit, Statement. Konkrete Zahlenbeispiele: was kostet Teil 1000, 10000, 20000? Keyword-Ziel: „i laugh you Preise\", „Preiskurve Kunst\".",
+    imagePrompt: "two golden numbers 77 and 777 on a black canvas connected by a rising gradient line",
+    tags: ["Preise", "Mathematik", "Konzept"],
+  },
+  {
+    key: "seo-transparente-preise-kunst",
+    category: "kunst-kapitalismus",
+    titleDe: "Warum ich meine Kunstpreise öffentlich mache (und alle anderen es nicht tun)",
+    promptDe:
+      "Founder-Essay über radikale Preistransparenz in der Kunst. Warum verbergen Galerien Preise? Was gewinnt man durch Offenlegung? Screenshots der Preiskurve erwähnen. Keyword: „transparente Kunstpreise\", „Preis auf Anfrage Galerie\".",
+    imagePrompt: "gallery price tags flipped face-up in bright light, handwritten chalkboard prices",
+    tags: ["Transparenz", "Preispolitik", "Radikale Ehrlichkeit"],
+  },
+  {
+    key: "seo-kunstdruck-qualitaet-giclee",
+    category: "kunstmarkt",
+    titleDe: "Giclée, Offset, Siebdruck — welcher Kunstdruck lohnt sich?",
+    promptDe:
+      "Vergleich der gängigen Drucktechniken für Kunstdrucke: Giclée (Fine-Art-Pigmentdruck), Offset, Siebdruck, Lithografie. Welche Technik für welches Budget? Langlebigkeit, Farbqualität, Papier. Keyword: „Kunstdruck Qualität\", „Giclée Druck\", „Fine Art Print\".",
+    imagePrompt: "close-up comparison of print textures: giclée ink dots vs screen print mesh pattern vs offset",
+    tags: ["Drucktechnik", "Giclée", "Qualität"],
+  },
 ];
 
 /**

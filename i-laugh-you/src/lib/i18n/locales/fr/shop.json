@@ -2,22 +2,28 @@
   "cart": {
     "title": "Ton Panier",
     "empty": "Ton panier est vide.",
+    "emptySubtitle": "D\u00e9couvre des pi\u00e8ces uniques de l'\u0153uvre collaborative la plus grande au monde.",
     "continueShopping": "Continuer les achats",
     "itemCount": "{{count}} pi\u00e8ce(s)",
     "currency": "Devise",
-    "applyAllFrames": "Appliquer le cadre \u00e0 toutes",
+    "applyAllFrames": "Cadre pour toutes",
     "applyAll": "Appliquer",
     "remove": "Supprimer",
     "soldBadge": "VENDUE",
     "soldWarning": "{{count}} article(s) dans ton panier ont \u00e9t\u00e9 vendus par quelqu'un d'autre et seront exclus du paiement.",
     "unitPrice": "Prix par pi\u00e8ce",
     "quantity": "Quantit\u00e9",
-    "subtotal": "Total"
+    "subtotal": "Total",
+    "pieceLabel": "Pi\u00e8ce #{{id}}",
+    "uniqueNote": "1 sur 1 \u2014 unique pour toujours",
+    "framedPoster": "Poster Premium Encadr\u00e9 12\u00d716\"",
+    "frame": "Cadre",
+    "shippingNote": "Livraison mondiale gratuite incluse",
+    "orderSummary": "R\u00e9sum\u00e9 de la commande"
   },
   "frameColor": {
     "white": "Blanc",
-    "black": "Noir",
-    "natural": "Bois naturel"
+    "black": "Noir"
   },
   "checkout": {
     "proceed": "Passer \u00e0 la caisse",
@@ -31,7 +37,105 @@
     "orderNumber": "Commande #{{id}}",
     "pieces": "Pi\u00e8ces achet\u00e9es",
     "frame": "cadre",
+    "framedInBlack": "Cadre noir",
+    "framedInWhite": "Cadre blanc",
+    "itemBreakdown": "{{count}} \u00d7 {{price}} {{currency}}",
     "emailSent": "Un e-mail de confirmation avec les d\u00e9tails de ta commande a \u00e9t\u00e9 envoy\u00e9.",
-    "backToGallery": "Retour \u00e0 la Galerie"
+    "emailSentTo": "Envoy\u00e9 \u00e0 {{email}}",
+    "backToGallery": "Retour \u00e0 la Galerie",
+    "errorTitle": "Oups",
+    "artHistoryTagline": "Tu poss\u00e8des d\u00e9sormais un morceau d'histoire de l'art."
+  },
+  "toast": {
+    "added": "Ajout\u00e9 au panier",
+    "removed": "Retir\u00e9 du panier",
+    "viewCart": "Voir le panier"
+  },
+  "delivery": {
+    "title": "Ta pi\u00e8ce unique. Nulle part ailleurs.",
+    "subtitle": "Comment elle arrive chez toi.",
+    "mockupCaption": "Voil\u00e0 comment elle sera bient\u00f4t chez toi.",
+    "unique": "Imprim\u00e9e une fois, vendue une fois",
+    "uniqueSub": "Personne d'autre au monde n'aura ta pi\u00e8ce",
+    "frame": "Cadre premium en bois massif",
+    "frameSub": "Papier photo qualit\u00e9 galerie, acrylique incassable, 30\u00d740 cm",
+    "shipping": "Gratuit jusqu'\u00e0 ta porte",
+    "shippingSub": "Livraison mondiale offerte",
+    "time": "7\u201310 jours sur ton mur",
+    "timeSub": "Imprim\u00e9e \u00e0 la commande, rien que pour toi",
+    "priceTensionHead": "Aujourd'hui, c'est le prix le plus bas.",
+    "priceTension": "Chaque pi\u00e8ce devient plus ch\u00e8re \u00e0 chaque vente.",
+    "priceTensionStrong": "La derni\u00e8re co\u00fbte 777.\u2013",
+    "priceTensionSub": "C'est en ce moment le prix le plus bas que cette pi\u00e8ce aura jamais."
+  },
+  "email": {
+    "subject": "Merci \u2014 Commande #{{orderId}}",
+    "heroTitle": "Merci, {{name}}",
+    "heroSubtitle": "Ta commande est confirm\u00e9e \u2014 une pi\u00e8ce du plus grand autoportrait du monde est en route vers toi.",
+    "orderLabel": "Commande #",
+    "piecesHeading": "Tes pi\u00e8ces",
+    "pieceLabel": "Pi\u00e8ce #{{id}}",
+    "frameLabel": "Cadre",
+    "framedInBlack": "Cadre noir",
+    "framedInWhite": "Cadre blanc",
+    "totalLabel": "Total",
+    "productDescription": "Poster Encadr\u00e9 Papier Photo Premium Luster (12\u00d716\")",
+    "shippingInfo": "Chaque pi\u00e8ce sera imprim\u00e9e et exp\u00e9di\u00e9e \u00e0 ton adresse.",
+    "accessHeading": "Tes pages de pi\u00e8ce sont pr\u00eates",
+    "accessIntro": "Chaque pi\u00e8ce a sa propre page que tu peux personnaliser. Connecte-toi avec le mot de passe ci-dessous pour la rendre tienne.",
+    "passwordColumnPiece": "Pi\u00e8ce",
+    "passwordColumnPassword": "Mot de passe",
+    "emailSafeReminder": "Conserve cet e-mail \u2014 tu auras besoin du mot de passe pour personnaliser la page de ta pi\u00e8ce.",
+    "trackingNotice": "Tu recevras les informations de suivi d\u00e8s que ta commande sera exp\u00e9di\u00e9e.",
+    "artHistoryNote": "Chaque pi\u00e8ce est un fragment unique du plus grand autoportrait du monde. Tu poss\u00e8des d\u00e9sormais un morceau d'histoire de l'art.",
+    "footerTagline": "Fait avec amour et rires en Suisse",
+    "shipping": {
+      "subject": "Ta pi\u00e8ce #{{imageId}} a \u00e9t\u00e9 exp\u00e9di\u00e9e !",
+      "heroTitle": "En route vers toi, {{name}}",
+      "heroSubtitle": "Ta pi\u00e8ce est emball\u00e9e et voyage vers toi.",
+      "intro": "Bonne nouvelle \u2014 la pi\u00e8ce #{{imageId}} de la commande #{{orderId}} a quitt\u00e9 l'atelier d'impression.",
+      "trackHeading": "Suis ton colis",
+      "trackButton": "Suivre l'envoi",
+      "trackingNumberLabel": "Num\u00e9ro de suivi",
+      "trackingPending": "Les d\u00e9tails de suivi seront disponibles sous peu.",
+      "closing": "Une pi\u00e8ce unique du plus grand autoportrait du monde arrive chez toi."
+    }
+  },
+  "piece": {
+    "status": {
+      "sold": "Vendue",
+      "available": "Disponible"
+    },
+    "specs": "30 \u00d7 40 cm \u00b7 Impression sur toile \u00b7 \u00c9dition 1 sur 1",
+    "editionOf": "sur {{formattedCount}} pi\u00e8ces",
+    "meta": {
+      "position": "Position",
+      "positionValue": "Ligne {{row}}, Colonne {{column}}",
+      "slug": "Slug",
+      "status": "Statut"
+    },
+    "linkDefault": "Voir plus",
+    "backToGallery": "Retour \u00e0 la Galerie",
+    "edit": {
+      "heading": "Modifier ta pi\u00e8ce",
+      "subtitle": "Personnalise le titre, la description et le lien de ta pi\u00e8ce. Le slug de l'URL se met \u00e0 jour automatiquement.",
+      "titleLabel": "Titre",
+      "descriptionLabel": "Description",
+      "linkUrlLabel": "URL du lien",
+      "linkLabelLabel": "Libell\u00e9 du lien (optionnel)",
+      "save": "Enregistrer les modifications",
+      "logout": "Se d\u00e9connecter",
+      "errorMissing": "Merci de remplir tous les champs obligatoires et d'utiliser une URL valide.",
+      "successUpdated": "Page de la pi\u00e8ce mise \u00e0 jour avec succ\u00e8s.",
+      "successLogout": "Tu as \u00e9t\u00e9 d\u00e9connect\u00e9(e) de l'\u00e9dition."
+    },
+    "login": {
+      "heading": "Acc\u00e8s propri\u00e9taire",
+      "subtitle": "Entre ton mot de passe pour modifier les d\u00e9tails de cette pi\u00e8ce.",
+      "passwordLabel": "Mot de passe",
+      "submit": "Se connecter pour modifier",
+      "wrongPassword": "Mot de passe incorrect. R\u00e9essaie.",
+      "required": "Une connexion en tant que propri\u00e9taire est requise pour modifier cette page."
+    }
   }
 }

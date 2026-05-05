@@ -13,7 +13,6 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://127.0.0.1:4321";
 const FRAME_VARIANT_MAP: Record<string, number> = {
   black: 6886,
   white: 10764,
-  natural: 15010, // "Red Oak" in Printful's catalog
 };
 
 interface CreatePrintfulOrderInput {
@@ -66,38 +65,64 @@ export async function createPrintfulOrder(input: CreatePrintfulOrderInput) {
     ],
   };
 
-  try {
-    const response = await fetch(`${PRINTFUL_API_BASE}/orders`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${PRINTFUL_API_TOKEN}`,
-      },
-      body: JSON.stringify(orderPayload),
-    });
+  const MAX_RETRIES = 3;
+  const RETRY_DELAYS = [1000, 2000, 4000];
 
-    const data = await response.json();
+  // NOTE: no ?confirm=true → orders land as "draft" in the Printful dashboard
+  // and are NOT printed/shipped until confirmed manually (or via API).
+  // Switch to `${PRINTFUL_API_BASE}/orders?confirm=true` once go-live is approved.
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    try {
+      const response = await fetch(`${PRINTFUL_API_BASE}/orders`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${PRINTFUL_API_TOKEN}`,
+        },
+        body: JSON.stringify(orderPayload),
+      });
 
-    if (!response.ok) {
-      console.error("[Printful] Order creation failed:", data);
+      const data = await response.json();
+
+      if (!response.ok) {
+        // 4xx (except 429) = permanent failure, don't retry
+        if (response.status >= 400 && response.status < 500 && response.status !== 429) {
+          console.error(`[Printful] Order creation failed (${response.status}), not retrying:`, data);
+          return null;
+        }
+        // 5xx or 429 = transient, retry
+        if (attempt < MAX_RETRIES - 1) {
+          console.warn(`[Printful] Attempt ${attempt + 1} failed (${response.status}), retrying in ${RETRY_DELAYS[attempt]}ms...`);
+          await new Promise((r) => setTimeout(r, RETRY_DELAYS[attempt]));
+          continue;
+        }
+        console.error(`[Printful] Order creation failed after ${MAX_RETRIES} attempts:`, data);
+        return null;
+      }
+
+      // Update the order item with Printful info
+      const orderItems = getOrderItems(input.orderId);
+      const matchingItem = orderItems.find((item) => item.image_id === input.imageId);
+
+      if (matchingItem) {
+        updateOrderItemPrintful({
+          id: matchingItem.id,
+          printfulOrderId: String(data.result?.id ?? ""),
+          printfulStatus: data.result?.status ?? "pending",
+        });
+      }
+
+      return data.result;
+    } catch (err) {
+      if (attempt < MAX_RETRIES - 1) {
+        console.warn(`[Printful] Network error on attempt ${attempt + 1}, retrying in ${RETRY_DELAYS[attempt]}ms:`, err);
+        await new Promise((r) => setTimeout(r, RETRY_DELAYS[attempt]));
+        continue;
+      }
+      console.error(`[Printful] API request failed after ${MAX_RETRIES} attempts:`, err);
       return null;
     }
-
-    // Update the order item with Printful info
-    const orderItems = getOrderItems(input.orderId);
-    const matchingItem = orderItems.find((item) => item.image_id === input.imageId);
-
-    if (matchingItem) {
-      updateOrderItemPrintful({
-        id: matchingItem.id,
-        printfulOrderId: String(data.result?.id ?? ""),
-        printfulStatus: data.result?.status ?? "pending",
-      });
-    }
-
-    return data.result;
-  } catch (err) {
-    console.error("[Printful] API request failed:", err);
-    return null;
   }
+
+  return null;
 }

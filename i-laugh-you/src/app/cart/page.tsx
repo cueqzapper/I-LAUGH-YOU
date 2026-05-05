@@ -1,38 +1,46 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import "@/lib/i18n/i18n";
+import { persistLanguageChoice, applyDetectedLanguage } from "@/lib/i18n/i18n";
 import { useCart, type FrameColor } from "@/hooks/useCart";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useCurrency } from "@/hooks/useCurrency";
 import { priceAt, formatPrice } from "@/lib/pricing";
 import FrameColorPicker from "@/components/FrameColorPicker";
 import CartPieceImage from "@/components/CartPieceImage";
+import FramedPosterMockup from "@/components/FramedPosterMockup";
 import HeaderNav from "@/components/sections/HeaderNav";
 
 const FRAME_BORDER_COLORS: Record<FrameColor, string> = {
   black: "#1a1a1a",
   white: "#f0f0f0",
-  natural: "#C4A777",
 };
 
 export default function CartPage() {
   const { t, i18n } = useTranslation(["shop", "common"]);
   const { items, removeItem, updateFrameColor, setAllFrameColors, itemCount } = useCart();
-  const { likedIds, basketIds } = useFavorites();
+  const { basketIds } = useFavorites();
   const { currency } = useCurrency();
   const [soldPieceCount, setSoldPieceCount] = useState<number>(0);
   const [soldImageIds, setSoldImageIds] = useState<Set<number>>(new Set());
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [applyAllColor, setApplyAllColor] = useState<FrameColor>("black");
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  const checkoutSectionRef = useRef<HTMLDivElement>(null);
   const currentYear = new Date().getFullYear();
 
   const handleLangChange = (code: string) => {
     i18n.changeLanguage(code);
+    persistLanguageChoice(code);
   };
+
+  // Apply detected language after hydration
+  useEffect(() => { applyDetectedLanguage(); }, []);
 
   useEffect(() => {
     const loadSold = async () => {
@@ -47,6 +55,17 @@ export default function CartPage() {
       }
     };
     void loadSold();
+  }, []);
+
+  useEffect(() => {
+    const el = checkoutSectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowStickyBar(!entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   const unitPrice = priceAt(soldPieceCount);
@@ -70,6 +89,7 @@ export default function CartPage() {
             frameColor: item.frameColor,
           })),
           currency,
+          locale: i18n.language,
         }),
       });
 
@@ -88,7 +108,7 @@ export default function CartPage() {
     } finally {
       setCheckoutLoading(false);
     }
-  }, [availableItems, currency, t]);
+  }, [availableItems, currency, t, i18n.language]);
 
   const handleApplyAllColors = () => {
     setAllFrameColors(applyAllColor);
@@ -98,21 +118,18 @@ export default function CartPage() {
   if (itemCount === 0) {
     return (
       <>
-        <style>{`#header-nav { opacity: 1 !important; }`}</style>
+        <style>{`#header-nav { opacity: 1 !important; pointer-events: auto !important; }`}</style>
         <div style={{
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           position: "relative",
           overflow: "hidden",
-          background: "linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)",
-          backgroundSize: "400% 400%",
-          animation: "Gradient 15s ease infinite",
+          background: "linear-gradient(180deg, #fafafa 0%, #f4f4f6 100%)",
         }}>
           <HeaderNav
             lang={i18n.language}
             onLangChange={handleLangChange}
-            likedCount={likedIds.size}
             basketCount={basketIds.size}
           />
 
@@ -122,23 +139,24 @@ export default function CartPage() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            color: "white",
+            color: "#0f1423",
             padding: "100px 20px 60px",
             fontFamily: "var(--font-oswald)",
           }}>
             <div style={{ textAlign: "center", maxWidth: "480px" }}>
-              <div style={{ fontSize: "4rem", marginBottom: "16px", opacity: 0.25 }}>&#9675;</div>
+              <div style={{ fontSize: "4rem", marginBottom: "16px", color: "#9aa0ad" }}>&#9675;</div>
               <h1 style={{
                 fontSize: "clamp(1.6rem, 4vw, 2.4rem)",
                 marginBottom: "12px",
-                fontWeight: 600,
+                fontWeight: 700,
                 letterSpacing: "0.02em",
+                color: "#0f1423",
               }}>
                 {t("shop:cart.empty")}
               </h1>
               <p style={{
                 fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
-                opacity: 0.6,
+                color: "#6b7080",
                 marginBottom: "36px",
                 lineHeight: 1.5,
               }}>
@@ -157,6 +175,7 @@ export default function CartPage() {
                   padding: "14px 36px",
                   borderRadius: "6px",
                   letterSpacing: "0.03em",
+                  boxShadow: "0 4px 20px rgba(255, 0, 105, 0.3)",
                 }}
               >
                 {t("shop:cart.continueShopping")}
@@ -168,6 +187,10 @@ export default function CartPage() {
           <div id="black-footer" style={{ position: "relative", zIndex: 1 }}>
             <a href="/about">{t("common:footer.about")}</a>
             <a href="/blog">{t("common:footer.blog")}</a>
+            <a href="/legal/impressum">{t("common:footer.impressum")}</a>
+            <a href="/legal/privacy">{t("common:footer.privacy")}</a>
+            <a href="/legal/terms">{t("common:footer.terms")}</a>
+            <a href="/legal/returns">{t("common:footer.returns")}</a>
           </div>
         </div>
       </>
@@ -177,23 +200,38 @@ export default function CartPage() {
   // ---------- CART WITH ITEMS ----------
   return (
     <>
-      <style>{`#header-nav { opacity: 1 !important; }`}</style>
+      <style>{`
+        #header-nav { opacity: 1 !important; pointer-events: auto !important; }
+        @media (max-width: 600px) {
+          .cart-item-card {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 14px !important;
+          }
+          .cart-item-art-wrap { align-self: center !important; }
+          .cart-item-info { text-align: center; }
+          .cart-item-frame-row { justify-content: center !important; }
+          .cart-item-price-col {
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            width: 100% !important;
+          }
+        }
+      `}</style>
       <div style={{
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        color: "white",
+        color: "#0f1423",
         fontFamily: "var(--font-oswald)",
         position: "relative",
         overflow: "hidden",
-        background: "linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)",
-        backgroundSize: "400% 400%",
-        animation: "Gradient 15s ease infinite",
+        background: "linear-gradient(180deg, #fafafa 0%, #f4f4f6 100%)",
       }}>
         <HeaderNav
           lang={i18n.language}
           onLangChange={handleLangChange}
-          likedCount={likedIds.size}
           basketCount={basketIds.size}
         />
 
@@ -210,6 +248,7 @@ export default function CartPage() {
             fontWeight: 700,
             letterSpacing: "0.02em",
             marginBottom: "28px",
+            color: "#0f1423",
           }}>
             {t("shop:cart.title")}
           </h1>
@@ -218,14 +257,13 @@ export default function CartPage() {
           {soldItems.length > 0 && (
             <div style={{
               padding: "14px 20px",
-              background: "rgba(255, 60, 60, 0.15)",
-              backdropFilter: "blur(16px)",
-              WebkitBackdropFilter: "blur(16px)",
-              border: "1px solid rgba(255, 60, 60, 0.3)",
+              background: "rgba(255, 60, 60, 0.08)",
+              border: "1px solid rgba(255, 60, 60, 0.25)",
               borderRadius: "12px",
               marginBottom: "20px",
               fontSize: "0.9rem",
               lineHeight: 1.5,
+              color: "#8a1a1a",
             }}>
               {t("shop:cart.soldWarning", { count: soldItems.length })}
             </div>
@@ -239,53 +277,57 @@ export default function CartPage() {
               return (
                 <div
                   key={item.imageId}
+                  className="cart-item-card"
                   style={{
                     display: "flex",
                     gap: "clamp(12px, 3vw, 24px)",
                     padding: "clamp(12px, 3vw, 20px)",
                     background: isSold
-                      ? "rgba(255, 40, 40, 0.08)"
-                      : "rgba(255, 255, 255, 0.06)",
-                    backdropFilter: "blur(24px)",
-                    WebkitBackdropFilter: "blur(24px)",
+                      ? "rgba(255, 40, 40, 0.05)"
+                      : "#ffffff",
                     borderRadius: "16px",
                     border: isSold
-                      ? "1px solid rgba(255, 60, 60, 0.3)"
-                      : "1px solid rgba(255, 255, 255, 0.1)",
-                    opacity: isSold ? 0.5 : 1,
+                      ? "1px solid rgba(255, 60, 60, 0.25)"
+                      : "1px solid rgba(15, 20, 35, 0.06)",
+                    boxShadow: isSold
+                      ? "none"
+                      : "0 2px 8px rgba(15, 20, 35, 0.04), 0 8px 32px rgba(15, 20, 35, 0.06)",
+                    opacity: isSold ? 0.6 : 1,
                     transition: "all 0.3s ease",
                     alignItems: "center",
                   }}
                 >
                   {/* Artwork with frame preview */}
-                  <div style={{
+                  <div className="cart-item-art-wrap" style={{
                     flexShrink: 0,
                     padding: "10px",
                     backgroundColor: frameBorder,
                     borderRadius: "3px",
-                    boxShadow: "0 8px 30px rgba(0, 0, 0, 0.35)",
+                    boxShadow: "0 8px 30px rgba(15, 20, 35, 0.18)",
                     transition: "background-color 0.3s ease",
                   }}>
                     <CartPieceImage imageId={item.imageId} displayWidth={200} zoom={9} />
                   </div>
 
                   {/* Info */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="cart-item-info" style={{ flex: 1, minWidth: 0 }}>
                     <div style={{
                       fontWeight: 700,
                       fontSize: "clamp(1.1rem, 2.5vw, 1.3rem)",
                       marginBottom: "2px",
+                      color: "#0f1423",
                     }}>
                       {t("shop:cart.pieceLabel", { id: item.imageId })}
                       {isSold && (
                         <span style={{
                           marginLeft: "10px",
                           fontSize: "0.7rem",
-                          color: "rgba(255, 80, 80, 1)",
-                          fontWeight: 500,
+                          color: "#a01a1a",
+                          fontWeight: 600,
                           textTransform: "uppercase",
                           letterSpacing: "0.1em",
-                          background: "rgba(255, 60, 60, 0.2)",
+                          background: "rgba(255, 60, 60, 0.12)",
+                          border: "1px solid rgba(255, 60, 60, 0.25)",
                           padding: "2px 8px",
                           borderRadius: "3px",
                         }}>
@@ -294,13 +336,13 @@ export default function CartPage() {
                       )}
                     </div>
 
-                    <div style={{ fontSize: "0.8rem", opacity: 0.5, marginBottom: "4px" }}>
+                    <div style={{ fontSize: "0.8rem", color: "#6b7080", marginBottom: "4px" }}>
                       {t("shop:cart.framedPoster")}
                     </div>
 
                     <div style={{
                       fontSize: "0.75rem",
-                      opacity: 0.35,
+                      color: "#9aa0ad",
                       marginBottom: "10px",
                       fontStyle: "italic",
                     }}>
@@ -308,8 +350,8 @@ export default function CartPage() {
                     </div>
 
                     {/* Frame color picker */}
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                      <span style={{ fontSize: "0.8rem", opacity: 0.5 }}>
+                    <div className="cart-item-frame-row" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <span style={{ fontSize: "0.8rem", color: "#6b7080" }}>
                         {t("shop:cart.frame")}:
                       </span>
                       <FrameColorPicker
@@ -321,7 +363,7 @@ export default function CartPage() {
                   </div>
 
                   {/* Price + remove */}
-                  <div style={{
+                  <div className="cart-item-price-col" style={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "flex-end",
@@ -332,6 +374,7 @@ export default function CartPage() {
                       <div style={{
                         fontWeight: 700,
                         fontSize: "clamp(1.2rem, 3vw, 1.5rem)",
+                        color: "#0f1423",
                       }}>
                         {formatPrice(unitPrice, currency)}
                       </div>
@@ -342,7 +385,7 @@ export default function CartPage() {
                       style={{
                         background: "transparent",
                         border: "none",
-                        color: "rgba(255, 255, 255, 0.3)",
+                        color: "#9aa0ad",
                         cursor: "pointer",
                         fontSize: "0.75rem",
                         padding: "4px 0",
@@ -352,10 +395,10 @@ export default function CartPage() {
                         transition: "color 0.2s ease",
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.color = "rgba(255, 80, 80, 0.8)";
+                        e.currentTarget.style.color = "#c41a1a";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.color = "rgba(255, 255, 255, 0.3)";
+                        e.currentTarget.style.color = "#9aa0ad";
                       }}
                     >
                       {t("shop:cart.remove")}
@@ -375,13 +418,12 @@ export default function CartPage() {
               alignItems: "center",
               justifyContent: "center",
               padding: "12px 20px",
-              background: "rgba(255, 255, 255, 0.04)",
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
+              background: "#ffffff",
               borderRadius: "10px",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
+              border: "1px solid rgba(15, 20, 35, 0.06)",
+              boxShadow: "0 1px 4px rgba(15, 20, 35, 0.04)",
             }}>
-              <span style={{ opacity: 0.5, fontSize: "0.85rem" }}>
+              <span style={{ color: "#6b7080", fontSize: "0.85rem" }}>
                 {t("shop:cart.applyAllFrames")}:
               </span>
               <FrameColorPicker selected={applyAllColor} onChange={setApplyAllColor} size={22} />
@@ -391,9 +433,9 @@ export default function CartPage() {
                 style={{
                   padding: "4px 12px",
                   borderRadius: "4px",
-                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  border: "1px solid rgba(15, 20, 35, 0.15)",
                   background: "transparent",
-                  color: "white",
+                  color: "#0f1423",
                   cursor: "pointer",
                   fontSize: "0.8rem",
                   fontFamily: "var(--font-oswald)",
@@ -404,14 +446,155 @@ export default function CartPage() {
             </div>
           )}
 
+          {/* Product / delivery info — "So kommt es zu dir" */}
+          {(() => {
+            const showcaseItem = availableItems[0] ?? items[0];
+            if (!showcaseItem) return null;
+            return (
+              <div style={{
+                marginBottom: "28px",
+                padding: "clamp(20px, 3vw, 32px)",
+                background: "#ffffff",
+                borderRadius: "16px",
+                border: "1px solid rgba(15, 20, 35, 0.06)",
+                boxShadow: "0 2px 8px rgba(15, 20, 35, 0.04), 0 8px 32px rgba(15, 20, 35, 0.06)",
+                overflow: "hidden",
+                position: "relative",
+              }}>
+                <div style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "clamp(24px, 4vw, 44px)",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}>
+                  <div style={{
+                    flex: "0 0 auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "10px",
+                  }}>
+                    <FramedPosterMockup
+                      imageId={showcaseItem.imageId}
+                      frameColor={showcaseItem.frameColor}
+                      pieceWidth={220}
+                      showBadge
+                      priceLabel={`#${showcaseItem.imageId}`}
+                    />
+                    <div style={{
+                      marginTop: 18,
+                      fontSize: "0.78rem",
+                      color: "#6b7080",
+                      letterSpacing: "0.05em",
+                      textTransform: "uppercase",
+                    }}>
+                      {t("shop:delivery.mockupCaption")}
+                    </div>
+                  </div>
+
+                  <div style={{
+                    flex: "1 1 320px",
+                    minWidth: 280,
+                    maxWidth: 480,
+                  }}>
+                    <h2 style={{
+                      fontSize: "clamp(1.3rem, 2.6vw, 1.8rem)",
+                      fontWeight: 700,
+                      lineHeight: 1.15,
+                      marginBottom: 18,
+                      letterSpacing: "0.01em",
+                      color: "#0f1423",
+                    }}>
+                      {t("shop:delivery.title")}
+                    </h2>
+                    <ul style={{
+                      listStyle: "none",
+                      padding: 0,
+                      margin: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 14,
+                    }}>
+                      {[
+                        { icon: "✦", title: t("shop:delivery.unique"), sub: t("shop:delivery.uniqueSub") },
+                        { icon: "▦", title: t("shop:delivery.frame"), sub: t("shop:delivery.frameSub") },
+                        { icon: "➤", title: t("shop:delivery.shipping"), sub: t("shop:delivery.shippingSub") },
+                        { icon: "◔", title: t("shop:delivery.time"), sub: t("shop:delivery.timeSub") },
+                      ].map((row, i) => (
+                        <li key={i} style={{
+                          display: "flex",
+                          gap: 14,
+                          alignItems: "flex-start",
+                        }}>
+                          <span style={{
+                            flexShrink: 0,
+                            width: 32,
+                            height: 32,
+                            borderRadius: "50%",
+                            background: "rgba(255, 0, 105, 0.08)",
+                            border: "1px solid rgba(255, 0, 105, 0.15)",
+                            color: "#ff0069",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "0.95rem",
+                            fontWeight: 700,
+                          }}>{row.icon}</span>
+                          <div>
+                            <div style={{ fontWeight: 700, fontSize: "1rem", lineHeight: 1.25, color: "#0f1423" }}>
+                              {row.title}
+                            </div>
+                            <div style={{ fontSize: "0.85rem", color: "#6b7080", lineHeight: 1.35, marginTop: 2 }}>
+                              {row.sub}
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Price-tension banner */}
+                <div style={{
+                  marginTop: 28,
+                  padding: "16px 20px",
+                  borderRadius: 12,
+                  background: "rgba(255, 0, 105, 0.06)",
+                  border: "1px solid rgba(255, 0, 105, 0.18)",
+                  textAlign: "center",
+                }}>
+                  <div style={{
+                    fontSize: "0.95rem",
+                    fontWeight: 700,
+                    marginBottom: 4,
+                    letterSpacing: "0.02em",
+                    color: "#0f1423",
+                  }}>
+                    {t("shop:delivery.priceTensionHead")}
+                  </div>
+                  <div style={{ fontSize: "0.85rem", color: "#0f1423", opacity: 0.85, lineHeight: 1.4 }}>
+                    {t("shop:delivery.priceTension")}{" "}
+                    <strong style={{ color: "#ff0069" }}>
+                      {t("shop:delivery.priceTensionStrong")}
+                    </strong>
+                    <br />
+                    <span style={{ color: "#6b7080", fontSize: "0.8rem" }}>
+                      {t("shop:delivery.priceTensionSub")}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
           {/* Order Summary + Checkout */}
-          <div style={{
+          <div ref={checkoutSectionRef} style={{
             padding: "24px",
-            background: "rgba(255, 255, 255, 0.06)",
-            backdropFilter: "blur(32px)",
-            WebkitBackdropFilter: "blur(32px)",
+            background: "#ffffff",
             borderRadius: "16px",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
+            border: "1px solid rgba(15, 20, 35, 0.06)",
+            boxShadow: "0 2px 8px rgba(15, 20, 35, 0.04), 0 8px 32px rgba(15, 20, 35, 0.06)",
             marginBottom: "32px",
             boxSizing: "border-box",
             maxWidth: "100%",
@@ -419,18 +602,18 @@ export default function CartPage() {
           }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.95rem" }}>
-                <span style={{ opacity: 0.6 }}>{t("shop:cart.unitPrice")}</span>
-                <span>{formatPrice(unitPrice, currency)}</span>
+                <span style={{ color: "#6b7080" }}>{t("shop:cart.unitPrice")}</span>
+                <span style={{ color: "#0f1423" }}>{formatPrice(unitPrice, currency)}</span>
               </div>
               {availableItems.length > 1 && (
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.95rem" }}>
-                  <span style={{ opacity: 0.6 }}>{t("shop:cart.quantity")}</span>
-                  <span>&times; {availableItems.length}</span>
+                  <span style={{ color: "#6b7080" }}>{t("shop:cart.quantity")}</span>
+                  <span style={{ color: "#0f1423" }}>&times; {availableItems.length}</span>
                 </div>
               )}
               <div style={{
                 height: "1px",
-                background: "rgba(255, 255, 255, 0.1)",
+                background: "rgba(15, 20, 35, 0.08)",
                 margin: "2px 0",
               }} />
               <div style={{
@@ -438,6 +621,7 @@ export default function CartPage() {
                 justifyContent: "space-between",
                 fontWeight: 700,
                 fontSize: "clamp(1.2rem, 3vw, 1.5rem)",
+                color: "#0f1423",
               }}>
                 <span>{t("shop:cart.subtotal")}</span>
                 <span>{formatPrice(subtotal, currency)}</span>
@@ -446,7 +630,7 @@ export default function CartPage() {
 
             <div style={{
               fontSize: "0.8rem",
-              opacity: 0.4,
+              color: "#9aa0ad",
               marginBottom: "16px",
               textAlign: "center",
             }}>
@@ -456,12 +640,13 @@ export default function CartPage() {
             {checkoutError && (
               <div style={{
                 padding: "10px 14px",
-                background: "rgba(255, 40, 40, 0.12)",
-                border: "1px solid rgba(255, 60, 60, 0.3)",
+                background: "rgba(255, 40, 40, 0.08)",
+                border: "1px solid rgba(255, 60, 60, 0.25)",
                 borderRadius: "8px",
                 marginBottom: "16px",
                 fontSize: "0.85rem",
                 textAlign: "center",
+                color: "#8a1a1a",
               }}>
                 {checkoutError}
               </div>
@@ -508,7 +693,7 @@ export default function CartPage() {
               style={{
                 display: "block",
                 textAlign: "center",
-                color: "rgba(255, 255, 255, 0.45)",
+                color: "#6b7080",
                 textDecoration: "none",
                 fontSize: "0.85rem",
                 marginTop: "14px",
@@ -545,9 +730,70 @@ export default function CartPage() {
           <div id="black-footer">
             <a href="/about">{t("common:footer.about")}</a>
             <a href="/blog">{t("common:footer.blog")}</a>
+            <a href="/legal/impressum">{t("common:footer.impressum")}</a>
+            <a href="/legal/privacy">{t("common:footer.privacy")}</a>
+            <a href="/legal/terms">{t("common:footer.terms")}</a>
+            <a href="/legal/returns">{t("common:footer.returns")}</a>
           </div>
         </div>
       </div>
+
+      {/* Sticky checkout bar */}
+      <AnimatePresence>
+        {showStickyBar && availableItems.length > 0 && (
+          <motion.div
+            initial={{ y: 100 }}
+            animate={{ y: 0 }}
+            exit={{ y: 100 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            style={{
+              position: "fixed",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              background: "rgba(0, 0, 0, 0.9)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              padding: "12px 24px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 20,
+              zIndex: 10000,
+              borderTop: "1px solid rgba(255,255,255,0.1)",
+              fontFamily: "var(--font-oswald)",
+              color: "white",
+            }}
+          >
+            <span style={{ opacity: 0.7, fontSize: "0.95rem" }}>
+              {t("shop:cart.itemCount", { count: availableItems.length })}
+            </span>
+            <span style={{ fontWeight: 700, fontSize: "1.1rem" }}>
+              {formatPrice(subtotal, currency)}
+            </span>
+            <button
+              type="button"
+              onClick={handleCheckout}
+              disabled={checkoutLoading}
+              style={{
+                padding: "10px 28px",
+                borderRadius: 8,
+                border: "none",
+                background: "rgba(255, 0, 105, 1)",
+                color: "white",
+                fontSize: "0.95rem",
+                fontWeight: 700,
+                cursor: checkoutLoading ? "wait" : "pointer",
+                fontFamily: "var(--font-oswald)",
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+              }}
+            >
+              {checkoutLoading ? t("shop:checkout.processing") : t("shop:checkout.proceed")}
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

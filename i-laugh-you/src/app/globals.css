@@ -173,6 +173,12 @@ body {
   z-index: 10;
 }
 
+#production-slide {
+  background-color: #000;
+  position: relative;
+  z-index: 10;
+}
+
 #concept-slide #content-wrapper {
   margin-top: 0;
   margin-bottom: 0;
@@ -213,7 +219,7 @@ body {
   font-size: clamp(60px, 15vw, 190px);
   color: white;
   font-family: var(--font-oswald), "Oswald", sans-serif;
-  margin-top: clamp(80px, 15vw, 250px);
+  margin: 50px 0 0 0;
   z-index: 222;
   position: relative;
   font-weight: 500;
@@ -1191,26 +1197,59 @@ body {
   margin-right: 16px;
 }
 
-.header-fav-item {
-  display: flex;
+.header-cart-chip {
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  color: rgba(255, 255, 255, 0.7);
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.72);
   font-family: var(--font-oswald), "Oswald", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
+  font-size: 13px;
+  font-weight: 500;
   letter-spacing: 0.05em;
+  text-decoration: none;
+  line-height: 1;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.header-fav-item img {
-  width: 20px;
-  height: 20px;
-  opacity: 0.8;
+.header-cart-chip:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-.header-fav-item .fav-count {
-  min-width: 14px;
-  text-align: center;
+.header-cart-chip.has-items {
+  color: #fff;
+  background: rgba(255, 0, 105, 0.14);
+  border-color: rgba(255, 0, 105, 0.35);
+}
+
+.header-cart-chip.has-items:hover {
+  background: rgba(255, 0, 105, 0.22);
+  border-color: rgba(255, 0, 105, 0.55);
+}
+
+.header-cart-chip svg {
+  flex-shrink: 0;
+}
+
+.header-cart-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 9px;
+  background: #ff0069;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
 }
 
 /* --- Language Wrapper --- */
@@ -1507,9 +1546,10 @@ body {
 
 #helpText {
   position: absolute;
-  right: -30px;
-  bottom: calc(100% + 15px);
-  text-align: right;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(100% + 5px);
+  text-align: center;
   font-family: "Gochi Hand", cursive;
   font-size: 38px;
   color: #ff005c;
@@ -1520,12 +1560,11 @@ body {
 }
 
 #helpText img {
-  position: absolute;
-  top: 60%;
-  right: -25px;
-  transform: scale(0.35) rotate(80deg);
-  transform-origin: center center;
-  margin: 0;
+  display: block;
+  margin: 2px auto -15px;
+  width: 50px !important;
+  height: auto !important;
+  transform: rotate(180deg);
 }
 
 #monochromatic-picker-wrapper {
@@ -1603,6 +1642,10 @@ body {
 }
 
 /* --- Preview Image Overlay --- */
+body.preview-open > *:not(#previewImage) {
+  pointer-events: none;
+}
+
 #previewImage {
   text-align: center;
   z-index: 99999999 !important;
@@ -1611,9 +1654,9 @@ body {
   left: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background-color: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   display: flex !important;
   align-items: center;
   justify-content: center;
@@ -1633,7 +1676,6 @@ body {
   position: relative;
   z-index: 99999998;
   margin-top: 20px;
-  transform: scale(1.2);
 }
 
 #previewImage .infos .imageId {
@@ -1672,17 +1714,14 @@ body {
   object-fit: contain;
 }
 
-#previewImage .overlay-heart .heart-on-img,
 #previewImage .overlay-basket .basket-on-img {
   display: none;
 }
 
-#previewImage .overlay-heart.on .heart-on-img,
 #previewImage .overlay-basket.on .basket-on-img {
   display: block;
 }
 
-#previewImage .overlay-heart.on .heart-off-img,
 #previewImage .overlay-basket.on .basket-off-img {
   display: none;
 }
@@ -1693,19 +1732,6 @@ body {
 
 #previewImage .overlay-basket:hover {
   transform: scale(1.15);
-}
-
-#previewImage .overlay-heart:hover {
-  animation: heartbeat 0.8s ease-in-out infinite;
-}
-
-@keyframes heartbeat {
-  0%   { transform: scale(1); }
-  14%  { transform: scale(1.3); }
-  28%  { transform: scale(1); }
-  42%  { transform: scale(1.25); }
-  60%  { transform: scale(1); }
-  100% { transform: scale(1); }
 }
 
 #closePreview {
@@ -1780,9 +1806,8 @@ body {
   overflow: hidden;
 }
 
-.heart,
 .basket {
-  transform: scale(0.2);
+  transform: scale(0.27);
   transform-origin: right top;
   position: absolute;
   top: 10px;
@@ -1792,18 +1817,10 @@ body {
   pointer-events: none;
 }
 
-.basket {
-  right: 80px;
-  transform: scale(0.27);
-}
-
-.heartimgwrapper,
 .basketimgwrapper {
   position: relative;
 }
 
-.heart-off-image,
-.heart-on-image,
 .basket-off-image,
 .basket-on-image {
   position: absolute;
@@ -1811,22 +1828,18 @@ body {
   right: 0;
 }
 
-.heart-on-image,
 .basket-on-image {
   display: none;
 }
 
-.heart.on .heart-on-image,
 .basket.on .basket-on-image {
   display: block;
 }
 
-.heart.on .heart-off-image,
 .basket.on .basket-off-image {
   display: none;
 }
 
-.tile:hover .heart,
 .tile:hover .basket {
   animation: fadeInFromNone 1s ease-out;
   opacity: 1;
@@ -1891,7 +1904,6 @@ body {
 
   .text-pop-up-top {
     font-size: 80px;
-    margin-top: 100px;
   }
 
   #header-nav {
@@ -2130,6 +2142,15 @@ body {
   #black-footer {
     padding: 12px 12px 56px;
     font-size: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 0;
+  }
+
+  #black-footer a {
+    padding: 4px 10px;
+    white-space: nowrap;
   }
 
   #canvas-image-wrapper img {
@@ -2279,15 +2300,9 @@ body {
   }
 
   /* Touch targets: larger hit areas */
-  .header-fav-item {
-    padding: 8px;
-    min-height: 44px;
-    min-width: 44px;
-  }
-
-  .header-fav-item img {
-    width: 24px;
-    height: 24px;
+  .header-cart-chip {
+    padding: 9px 14px;
+    min-height: 40px;
   }
 }
 
@@ -2329,4 +2344,17 @@ body {
   #mobile-scroll-nav button:active {
     opacity: 0.5;
   }
+}
+
+/* Accessibility: visually-hidden utility for SEO-rich H1 context and screen readers. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

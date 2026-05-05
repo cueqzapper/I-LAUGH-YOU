@@ -482,18 +482,21 @@ export async function generateImage(prompt: string): Promise<Buffer | null> {
   }
 }
 
+export const BLOG_IMAGES_ROOT =
+  process.env.BLOG_IMAGES_DIR ?? path.join(process.cwd(), "data", "blog-images");
+
 export function saveImage(buffer: Buffer, date: Date, filename: string): string {
   const year = date.getFullYear().toString();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
 
-  const dir = path.join(process.cwd(), "public", "img", "blog", year, month, day);
+  const dir = path.join(BLOG_IMAGES_ROOT, year, month, day);
   fs.mkdirSync(dir, { recursive: true });
 
   const filePath = path.join(dir, filename);
   fs.writeFileSync(filePath, buffer);
 
-  return `/img/blog/${year}/${month}/${day}/${filename}`;
+  return `/blog-images/${year}/${month}/${day}/${filename}`;
 }
 
 function slugify(text: string): string {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Script from "next/script";
 import { notFound } from "next/navigation";
 import {
   getBlogArticleBySlug,
@@ -7,6 +8,14 @@ import {
 } from "@/lib/sqlite";
 import { CATEGORY_LABELS, type BlogCategory } from "@/lib/blog-topics";
 import type { Metadata } from "next";
+import {
+  SITE_URL,
+  buildHreflangAlternates,
+  articleJsonLd,
+  breadcrumbJsonLd,
+  jsonLdString,
+  type SupportedLocale,
+} from "@/lib/seo";
 import "../blog.css";
 
 export const dynamic = "force-dynamic";
@@ -86,25 +95,39 @@ export async function generateMetadata({
     }
   }
 
+  const heroImage = article.hero_image ?? undefined;
+
   return {
     title: `${title} — I LAUGH YOU Blog`,
     description,
+    alternates: buildHreflangAlternates(`/blog/${slug}`),
     openGraph: {
       title,
       description,
       type: "article",
+      url: `${SITE_URL}/blog/${slug}${lang === "de" ? "" : `?lang=${lang}`}`,
+      siteName: "I LAUGH YOU",
       publishedTime: article.published_at,
-      ...(article.hero_image
+      authors: ["Simon"],
+      locale: lang === "de" ? "de_DE" : lang === "es" ? "es_ES" : lang === "fr" ? "fr_FR" : "en_US",
+      ...(heroImage
         ? {
             images: [
               {
-                url: article.hero_image,
+                url: heroImage,
                 width: 1024,
                 height: 680,
+                alt: title,
               },
             ],
           }
         : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(heroImage ? { images: [heroImage] } : {}),
     },
   };
 }
@@ -154,8 +177,35 @@ export default async function BlogArticlePage({
 
   const backHref = lang === "de" ? "/blog" : `/blog?lang=${lang}`;
 
+  const articleSchema = articleJsonLd({
+    title: displayTitle,
+    excerpt: displayExcerpt,
+    slug: article.slug,
+    heroImage: article.hero_image,
+    publishedAt: article.published_at,
+    tags,
+    locale: lang as SupportedLocale,
+  });
+  const breadcrumb = breadcrumbJsonLd([
+    { name: "Home", url: "/" },
+    { name: "Blog", url: "/blog" },
+    { name: displayTitle, url: `/blog/${article.slug}` },
+  ]);
+
   return (
     <div id="blog-page">
+      <Script
+        id="article-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: jsonLdString(articleSchema) }}
+      />
+      <Script
+        id="article-breadcrumb-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: jsonLdString(breadcrumb) }}
+      />
       <header className="blog-header">
         <Link href="/" className="blog-home-link">
           &larr; I LAUGH YOU

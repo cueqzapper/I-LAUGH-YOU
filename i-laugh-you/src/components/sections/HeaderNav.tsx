@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
 const NAV_ICON_KEYS = [
@@ -9,7 +11,6 @@ const NAV_ICON_KEYS = [
   { icon: "icon-heart-broken", labelKey: "nav.lovelySmile" },
   { icon: "icon-money", labelKey: "nav.whatDoesItCost" },
   { icon: "icon-sofa", labelKey: "nav.castingCouch" },
-  { icon: "icon-info", labelKey: "nav.whoIsTheGuy" },
 ];
 
 const LANGUAGES = [
@@ -28,7 +29,6 @@ const NavButtonSvg = () => (
 interface HeaderNavProps {
   lang: string;
   onLangChange: (lang: string) => void;
-  likedCount?: number;
   basketCount?: number;
 }
 
@@ -36,8 +36,7 @@ function sectionToNavIndex(section: number): number {
   if (section >= 2 && section <= 4) return 1;  // USPs → lovely smile
   if (section === 5 || section === 6) return 0; // zoom/picker → pick a piece
   if (section === 7) return 2;                   // price → money
-  if (section === 8) return 3;                   // sofa → sofa
-  if (section >= 9) return 4;                    // bid/concept → info
+  if (section >= 8) return 3;                    // sofa → sofa
   return -1;                                     // intro/title → none
 }
 
@@ -47,19 +46,39 @@ function navIndexToSection(index: number): number {
     case 1: return 2; // lovely smile -> USPs (section 2)
     case 2: return 7; // money -> price (section 7)
     case 3: return 8; // sofa -> sofa (section 8)
-    case 4: return 9; // info -> bid (section 9)
     default: return 0;
   }
 }
 
-export default function HeaderNav({ lang, onLangChange, likedCount = 0, basketCount = 0 }: HeaderNavProps) {
+export default function HeaderNav({ lang, onLangChange, basketCount = 0 }: HeaderNavProps) {
   const { t } = useTranslation("common");
+  const router = useRouter();
+  const pathname = usePathname();
   const [headerVisible, setHeaderVisible] = useState(false);
   const [navVisible, setNavVisible] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [activeNavIndex, setActiveNavIndex] = useState(-1);
 
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === "/") {
+      // Already on home — just scroll to the top slide
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      // Navigate home via SPA, then make sure we land at the top
+      e.preventDefault();
+      router.push("/");
+      window.scrollTo({ top: 0 });
+    }
+  };
+
   useEffect(() => {
+    if (pathname !== "/") {
+      setHeaderVisible(true);
+      setNavVisible(false);
+      return;
+    }
+
     const FADE_IN_OFFSET = 3300;
 
     const handleScroll = () => {
@@ -82,7 +101,7 @@ export default function HeaderNav({ lang, onLangChange, likedCount = 0, basketCo
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [pathname]);
 
   const handleMobileNavOpen = () => {
     setMobileNavOpen(true);
@@ -105,7 +124,7 @@ export default function HeaderNav({ lang, onLangChange, likedCount = 0, basketCo
     <>
       {/* Top Header Bar */}
       <div id="header-nav" className={headerVisible ? "visible" : ""}>
-        <a href="/" id="header-logo-link">
+        <Link href="/" id="header-logo-link" onClick={handleLogoClick}>
           <Image
             src="/img/logo-white.png"
             id="logo"
@@ -114,16 +133,30 @@ export default function HeaderNav({ lang, onLangChange, likedCount = 0, basketCo
             height={150}
             priority
           />
-        </a>
+        </Link>
 
         <div id="header-favorites">
-          <div className="header-fav-item">
-            <img src="/img/heart-on.png" alt="" />
-            <span className="fav-count">{likedCount}</span>
-          </div>
-          <a href="/cart" className="header-fav-item" style={{ textDecoration: "none", color: "inherit" }}>
-            <img src="/img/basket-on.png" alt="" />
-            <span className="fav-count">{basketCount}</span>
+          <a
+            href="/cart"
+            className={`header-cart-chip${basketCount > 0 ? " has-items" : ""}`}
+            aria-label={t("nav.cart", { defaultValue: "Cart" })}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            {basketCount > 0 && <span className="header-cart-count">{basketCount}</span>}
           </a>
         </div>
 
@@ -159,11 +192,12 @@ export default function HeaderNav({ lang, onLangChange, likedCount = 0, basketCo
       {/* Desktop Side Nav */}
       <div id="desktop-nav" className={navVisible ? "visible" : ""}>
         {NAV_ICON_KEYS.map((item, i) => (
-          <div 
-            className={`nav-entry${i === activeNavIndex ? " activeNavEntry" : ""}`} 
+          <div
+            className={`nav-entry${i === activeNavIndex ? " activeNavEntry" : ""}`}
             key={i}
             onClick={() => scrollToNavIndex(i)}
             style={{ cursor: "pointer" }}
+            title={t(item.labelKey)}
           >
             <NavButtonSvg />
             <div className={`icon ${item.icon}`} />

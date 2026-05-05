@@ -14,6 +14,32 @@ import frCommon from "./locales/fr/common.json";
 import frHome from "./locales/fr/home.json";
 import frShop from "./locales/fr/shop.json";
 
+const LANG_STORAGE_KEY = "ily-language";
+const SUPPORTED_LANGS = ["de", "en", "es", "fr"];
+
+/** Detect preferred language from localStorage or browser. Client-only. */
+export function detectLanguage(): string {
+  if (typeof window === "undefined") return "de";
+
+  try {
+    const stored = localStorage.getItem(LANG_STORAGE_KEY);
+    if (stored && SUPPORTED_LANGS.includes(stored)) return stored;
+  } catch { /* ignore */ }
+
+  const browserLang = navigator.language?.toLowerCase() || "";
+  for (const lang of SUPPORTED_LANGS) {
+    if (browserLang.startsWith(lang)) return lang;
+  }
+
+  return "en";
+}
+
+export function persistLanguageChoice(code: string) {
+  try { localStorage.setItem(LANG_STORAGE_KEY, code); } catch { /* ignore */ }
+}
+
+// Init with fixed "de" for SSR/hydration consistency. Language is
+// switched to the detected value after hydration via applyDetectedLanguage().
 i18n.use(initReactI18next).init({
   resources: {
     de: { common: deCommon, home: deHome, shop: deShop },
@@ -27,5 +53,13 @@ i18n.use(initReactI18next).init({
   defaultNS: "home",
   interpolation: { escapeValue: false },
 });
+
+/** Call once after hydration to switch to the user's preferred language. */
+export function applyDetectedLanguage() {
+  const detected = detectLanguage();
+  if (i18n.language !== detected) {
+    i18n.changeLanguage(detected);
+  }
+}
 
 export default i18n;
