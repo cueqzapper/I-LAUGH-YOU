@@ -27,6 +27,8 @@ $tarFile = Join-Path $tempDir "ily-deploy.tar.gz"
     --exclude='.next' `
     --exclude='.git' `
     --exclude='data/*.sqlite*' `
+    --exclude='data/blog-images' `
+    --exclude='data/blog-uploads' `
     --exclude='.env.local' `
     --exclude='.env.test' `
     --exclude='.env.production' `
@@ -45,7 +47,7 @@ if (-not $?) { throw "Failed to upload tarball" }
 
 # Step 3: Extract on server
 Write-Host "[3/6] Extracting on server..." -ForegroundColor Yellow
-ssh $SERVER "rm -rf $BUILD_PATH && mkdir -p $BUILD_PATH && tar -xzf /tmp/ily-deploy.tar.gz -C $BUILD_PATH && rm /tmp/ily-deploy.tar.gz"
+ssh $SERVER "echo '$SERVER_PW' | sudo -S bash -c 'rm -rf $BUILD_PATH && mkdir -p $BUILD_PATH && tar --no-same-permissions --no-same-owner -xzf /tmp/ily-deploy.tar.gz -C $BUILD_PATH && chmod -R u+rwX,go+rX $BUILD_PATH && rm /tmp/ily-deploy.tar.gz'"
 if (-not $?) { throw "Failed to extract on server" }
 
 # Cleanup local tarball
@@ -87,7 +89,7 @@ if (-not $?) { throw "Failed to restart containers" }
 
 # Step 6: Cleanup
 Write-Host "[6/6] Cleaning up build artifacts..." -ForegroundColor Yellow
-ssh $SERVER "rm -rf $BUILD_PATH"
+ssh $SERVER "echo '$SERVER_PW' | sudo -S rm -rf $BUILD_PATH"
 
 Write-Host "`n=== DEPLOY COMPLETE ===" -ForegroundColor Green
 Write-Host "Image: ${IMAGE}:${TAG}"

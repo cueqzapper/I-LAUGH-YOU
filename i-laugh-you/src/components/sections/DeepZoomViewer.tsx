@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import OpenSeadragon from "openseadragon";
 import { PIECE_COLUMNS, PIECE_ROWS, TOTAL_PIECES } from "@/lib/piece-config";
+import { detectOsdDeviceProfile } from "@/lib/osd-device-profile";
 
 const IMAGE_HEIGHT = 396288;
 const IMAGE_WIDTH = 337920;
@@ -22,11 +23,6 @@ const PIECE_IMAGE_WIDTH =
 const PIECE_IMAGE_HEIGHT =
   (IMAGE_HEIGHT - SOURCE_OFFSETS.top - SOURCE_OFFSETS.bottom) / PIECE_ROWS;
 const GRID_MIN_PIECE_SIZE_PX = 10;
-const GRID_DPR_CAP = 1;
-// Zoom limits - allow deep zoom to see individual pieces clearly
-const MAX_VIEWER_ZOOM = 100; // high zoom for detailed piece viewing
-const MAX_ZOOM_PIXEL_RATIO = 16; // allow more upscaling for close inspection
-const OSD_ANIMATION_TIME = 0.35;
 // Disable verbose logging in dev to avoid JSON.stringify overflow
 const GRID_BENCHMARK_ENABLED = false;
 const GRID_BENCHMARK_LOG_EVERY_MS = 5000;
@@ -36,8 +32,6 @@ const OSD_PERF_LOG_ENABLED = false;
 const OSD_PERF_LOG_EVERY_MS = 5000;
 // Use update-viewport for synchronous drawing (matches original WP implementation)
 const USE_UPDATE_VIEWPORT_EVENT = true;
-// Disable continuous RAF loop - it may cause contention with OSD
-const USE_CONTINUOUS_RAF_LOOP = false;
 // Set to true to disable grid drawing entirely (for debugging OSD performance)
 const DISABLE_GRID_DRAWING = false;
 // Set to true to disable ALL event handlers except basic OSD (for debugging)
@@ -153,22 +147,35 @@ export default function DeepZoomViewer({ onImageClick, visible, viewerRef: exter
     // when trying to JSON.stringify large OSD internal objects
     const originalAssert = console.assert;
     console.assert = () => {};
-    
-    const viewer = OpenSeadragon({
-      element: containerRef.current,
-      prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/5.0.0/images/",
-      tileSources: imageSource,
-      showNavigationControl: false, // original: no nav buttons visible
-      zoomPerClick: 1, // original: viewer.zoomPerClick = 1 (no zoom on click)
-      animationTime: OSD_ANIMATION_TIME,
-      maxZoomLevel: MAX_VIEWER_ZOOM,
-      maxZoomPixelRatio: MAX_ZOOM_PIXEL_RATIO,
-      // Use OSD defaults for tile loading
-      // CRITICAL: Enable CORS for WebGL rendering - without this, OSD falls back to slow canvas2D
-      crossOriginPolicy: "Anonymous",
-      // Disable OSD debug mode to reduce console noise
-      debugMode: false,
-    });
+
+    const profile = detectOsdDeviceProfile();
+    console.info("[OSD] device profile", profile.tier, profile.reasons.join(", "));
+
+    const buildViewer = (drawer: string[]) =>
+      OpenSeadragon({
+        element: containerRef.current!,
+        prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/5.0.0/images/",
+        tileSources: imageSource,
+        showNavigationControl: false, // original: no nav buttons visible
+        zoomPerClick: 1, // original: viewer.zoomPerClick = 1 (no zoom on click)
+        // CRITICAL: Enable CORS for WebGL rendering - without this, OSD falls back to slow canvas2D
+        crossOriginPolicy: "Anonymous",
+        // Disable OSD debug mode to reduce console noise
+        debugMode: false,
+        ...profile.osdOptions,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        drawer: drawer as any,
+      });
+
+    let viewer: OpenSeadragon.Viewer;
+    try {
+      viewer = buildViewer(profile.drawer);
+    } catch (err) {
+      // Some GPUs throw inside OSD's WebGL drawer init (e.g. Mali on
+      // Samsung A22) before OSD's own fallback chain runs. Retry on canvas.
+      console.warn("[OSD] WebGL drawer init failed, falling back to canvas", err);
+      viewer = buildViewer(["canvas"]);
+    }
     
     // Restore console.assert after OSD init (keep suppressed during runtime)
     // Actually keep it suppressed to avoid runtime assertion serialization issues
@@ -316,7 +323,7 @@ export default function DeepZoomViewer({ onImageClick, visible, viewerRef: exter
       const height = viewer.element?.clientHeight ?? 0;
       if (!width || !height) return;
 
-      const dpr = Math.min(window.devicePixelRatio || 1, GRID_DPR_CAP);
+      const dpr = Math.min(window.devicePixelRatio || 1, profile.gridDprCap);
       const nextWidth = Math.floor(width * dpr);
       const nextHeight = Math.floor(height * dpr);
       if (gridCanvas.width !== nextWidth || gridCanvas.height !== nextHeight) {
@@ -599,12 +606,14 @@ export default function DeepZoomViewer({ onImageClick, visible, viewerRef: exter
       enqueueGridDrawFrame();
     };
 
-    // Continuous RAF loop for smooth 60fps updates during interaction (optional)
+    // Continuous RAF loop for smooth 60fps updates during interaction.
+    // Disabled on the low device tier — extra fillRect work crushes Mali-class GPUs.
+    const continuousRafEnabled = !profile.disableContinuousRaf;
     let isInteracting = false;
     let continuousRafId: number | null = null;
-    
+
     const continuousDrawLoop = () => {
-      if (!USE_CONTINUOUS_RAF_LOOP || !isInteracting || !visibleRef.current) {
+      if (!continuousRafEnabled || !isInteracting || !visibleRef.current) {
         continuousRafId = null;
         return;
       }
@@ -613,33 +622,33 @@ export default function DeepZoomViewer({ onImageClick, visible, viewerRef: exter
       drawGrid();
       continuousRafId = requestAnimationFrame(continuousDrawLoop);
     };
-    
+
     const startContinuousLoop = () => {
-      if (!USE_CONTINUOUS_RAF_LOOP) return;
+      if (!continuousRafEnabled) return;
       if (isInteracting) return;
       isInteracting = true;
       if (continuousRafId === null) {
         continuousRafId = requestAnimationFrame(continuousDrawLoop);
       }
     };
-    
+
     const stopContinuousLoop = () => {
-      if (!USE_CONTINUOUS_RAF_LOOP) return;
+      if (!continuousRafEnabled) return;
       isInteracting = false;
       // Draw one final frame to ensure we're synced
       if (visibleRef.current) {
         drawGrid();
       }
     };
-    
+
     // Mouse/touch handlers for continuous updates during drag
     const handlePointerDown = () => startContinuousLoop();
     const handlePointerUp = () => stopContinuousLoop();
     const handlePointerLeave = () => stopContinuousLoop();
-    
+
     // update-viewport fires synchronously with OSD's render loop
     const handleUpdateViewport = () => {
-      if (USE_CONTINUOUS_RAF_LOOP && isInteracting) return; // Skip if continuous loop is running
+      if (continuousRafEnabled && isInteracting) return; // Skip if continuous loop is running
       if (!visibleRef.current) return;
       benchmark.scheduleRequested += 1;
       benchmark.sourceCounts["update-viewport"] += 1;
