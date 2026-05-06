@@ -88,8 +88,16 @@ ssh $SERVER "echo '$SERVER_PW' | sudo -S bash -c 'cd $SERVER_PATH && docker comp
 if (-not $?) { throw "Failed to restart containers" }
 
 # Step 6: Cleanup
-Write-Host "[6/6] Cleaning up build artifacts..." -ForegroundColor Yellow
+Write-Host "[6/6] Cleaning up build artifacts and old images..." -ForegroundColor Yellow
 ssh $SERVER "echo '$SERVER_PW' | sudo -S rm -rf $BUILD_PATH"
+
+# Retain only the 3 most recent ilaughyou/app tags (keep :latest and the 3
+# newest vYYYYMMDD.HHMM tags). Stops /var/lib/containerd from blowing up.
+$pruneCmd = "docker images $IMAGE --format '{{.Tag}}|{{.ID}}' | grep -E '^v[0-9]' | sort -r | tail -n +4 | cut -d'|' -f2 | xargs -r docker rmi -f"
+ssh $SERVER "echo '$SERVER_PW' | sudo -S bash -c `"$pruneCmd`" 2>&1 | tail -5"
+
+# Reclaim build cache above 20 GB. Keeps recent layers for fast incremental builds.
+ssh $SERVER "echo '$SERVER_PW' | sudo -S docker builder prune -f --keep-storage 20GB 2>&1 | tail -3"
 
 Write-Host "`n=== DEPLOY COMPLETE ===" -ForegroundColor Green
 Write-Host "Image: ${IMAGE}:${TAG}"
