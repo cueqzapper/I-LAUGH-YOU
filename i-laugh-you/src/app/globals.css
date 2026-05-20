@@ -2312,20 +2312,26 @@ body.preview-open > *:not(#previewImage) {
 }
 
 @media only screen and (max-width: 768px) {
+  /* Cart moved to bottom bar on mobile — hide the top-header cart chip */
+  #header-favorites {
+    display: none;
+  }
+
   #mobile-scroll-nav {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 9999;
-    height: 44px;
+    height: 56px;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
-    padding: 0 16px;
+    padding: 0 8px;
+    padding-bottom: env(safe-area-inset-bottom, 0);
   }
 
   #mobile-scroll-nav button {
@@ -2335,7 +2341,8 @@ body.preview-open > *:not(#previewImage) {
     background: none;
     border: none;
     color: #fff;
-    padding: 8px 12px;
+    height: 56px;
+    width: 100%;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
@@ -2343,6 +2350,48 @@ body.preview-open > *:not(#previewImage) {
 
   #mobile-scroll-nav button:active {
     opacity: 0.5;
+  }
+
+  #mobile-scroll-nav-cart {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  #mobile-scroll-nav-cart.has-items {
+    color: #fff;
+    background: rgba(255, 0, 105, 0.18);
+    border-color: rgba(255, 0, 105, 0.45);
+  }
+
+  #mobile-scroll-nav-cart:active {
+    opacity: 0.6;
+  }
+
+  .mobile-scroll-nav-cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: #ff0069;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
   }
 }
 

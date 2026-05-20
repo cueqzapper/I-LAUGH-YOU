@@ -538,6 +538,34 @@ export default function HomeClient() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const raw = sessionStorage.getItem("ily-nav-target");
+    if (raw === null) return;
+    sessionStorage.removeItem("ily-nav-target");
+    const targetSection = Number.parseInt(raw, 10);
+    if (!Number.isFinite(targetSection)) return;
+    let stableHits = 0;
+    let attempts = 0;
+    const lockScroll = () => {
+      const sections = document.querySelectorAll<HTMLElement>("#fullpage .section");
+      const target = sections[targetSection];
+      if (target && target.offsetTop > 0) {
+        const desired = target.offsetTop;
+        if (Math.abs(window.scrollY - desired) > 2) {
+          window.scrollTo({ top: desired, behavior: "auto" });
+          stableHits = 0;
+        } else {
+          stableHits++;
+        }
+      }
+      if (stableHits < 3 && attempts++ < 80) {
+        setTimeout(lockScroll, 50);
+      }
+    };
+    setTimeout(lockScroll, 50);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
     const handler = () => {
       const raw = new URL(window.location.href).searchParams.get("piece");
       if (!raw) {
@@ -1223,6 +1251,7 @@ export default function HomeClient() {
         isSnapping={isSnapping}
         osdZoneRef={osdZoneRef}
         applyOsdZoneVisibility={applyOsdZoneVisibility}
+        basketCount={basketIds.size}
       />
 
       {/* ===== FULLPAGE SECTIONS ===== */}

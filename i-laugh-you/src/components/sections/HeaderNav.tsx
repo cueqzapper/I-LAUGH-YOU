@@ -115,6 +115,11 @@ export default function HeaderNav({ lang, onLangChange, basketCount = 0 }: Heade
 
   const scrollToNavIndex = (index: number) => {
     const targetSection = navIndexToSection(index);
+    if (pathname !== "/") {
+      sessionStorage.setItem("ily-nav-target", String(targetSection));
+      router.push("/", { scroll: false });
+      return;
+    }
     const sections = document.querySelectorAll<HTMLElement>("#fullpage .section");
     const targetY = sections[targetSection]?.offsetTop ?? 0;
     window.scrollTo({ top: targetY, behavior: "smooth" });
