@@ -157,6 +157,7 @@ export async function POST(request: NextRequest) {
         unitPrice: Math.floor(unitPrice),
         totalAmount: Math.floor(totalAmount),
         itemCount: items.length,
+        locale,
       });
     }
 

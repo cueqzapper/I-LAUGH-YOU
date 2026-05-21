@@ -5,9 +5,6 @@
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://i-laugh-you.com").replace(/\/$/, "");
 
-// TODO (asset): add a 1200x630 PNG/JPEG at public/og-image.png (under 1 MB).
-// Should visually represent: the full self-portrait grid, the word "I LAUGH YOU",
-// plus tagline "24,236 unique pieces". Needed for Open Graph + Twitter cards.
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 
 // Favicon + apple-touch-icon are auto-wired by Next.js from
@@ -57,7 +54,7 @@ export function organizationJsonLd() {
     url: SITE_URL,
     logo: `${SITE_URL}/img/logo.png`,
     description:
-      "An art project selling 24,236 unique numbered pieces of the largest hand-painted self-portrait in art history, with a scarcity-driven dynamic pricing curve.",
+      "An art project selling 6,059 unique numbered pieces of the largest hand-painted self-portrait in art history, with a scarcity-driven dynamic pricing curve.",
     founder: {
       "@type": "Person",
       name: "Simon",

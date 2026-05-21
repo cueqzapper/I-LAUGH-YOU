@@ -63,7 +63,7 @@ const DATE_LOCALES: Record<SupportedLang, string> = {
 
 const BLOG_TITLE = "Blog — Art, capitalism & scarcity pricing in art";
 const BLOG_DESCRIPTION =
-  "Essays on the art market, scarcity pricing, collectible numbered prints, and the I LAUGH YOU project — a hand-painted self-portrait split into 24,236 pieces.";
+  "Essays on the art market, scarcity pricing, collectible numbered prints, and the I LAUGH YOU project — a hand-painted self-portrait split into 6,059 pieces.";
 
 export const metadata: Metadata = {
   title: BLOG_TITLE,

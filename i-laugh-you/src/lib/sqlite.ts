@@ -282,6 +282,7 @@ function initializeSchema(database: SqliteDatabase) {
       unit_price INTEGER NOT NULL,
       total_amount INTEGER NOT NULL,
       item_count INTEGER NOT NULL,
+      locale TEXT NOT NULL DEFAULT 'en',
       status TEXT NOT NULL DEFAULT 'pending',
       created_at TEXT NOT NULL,
       paid_at TEXT,
@@ -343,6 +344,9 @@ initializeSchema(db);
 // Migrate blog_images: add status + is_selected columns
 try { db.exec(`ALTER TABLE blog_images ADD COLUMN status TEXT NOT NULL DEFAULT 'ok'`); } catch { /* column already exists */ }
 try { db.exec(`ALTER TABLE blog_images ADD COLUMN is_selected INTEGER NOT NULL DEFAULT 1`); } catch { /* column already exists */ }
+
+// Migrate orders: add locale column so shipping emails can be localized
+try { db.exec(`ALTER TABLE orders ADD COLUMN locale TEXT NOT NULL DEFAULT 'en'`); } catch { /* column already exists */ }
 
 if (process.env.NODE_ENV !== "production") {
   databaseCache.__ilySqliteDb = db;
@@ -1683,6 +1687,7 @@ export interface OrderRecord {
   unit_price: number;
   total_amount: number;
   item_count: number;
+  locale: string;
   status: string;
   created_at: string;
   paid_at: string | null;
@@ -1710,6 +1715,7 @@ export interface CreateOrderInput {
   unitPrice: number;
   totalAmount: number;
   itemCount: number;
+  locale: string;
 }
 
 export interface CreateOrderItemInput {
@@ -1727,6 +1733,7 @@ const insertOrderStatement = db.prepare(`
     unit_price,
     total_amount,
     item_count,
+    locale,
     status,
     created_at,
     updated_at
@@ -1737,6 +1744,7 @@ const insertOrderStatement = db.prepare(`
     @unit_price,
     @total_amount,
     @item_count,
+    @locale,
     'pending',
     @created_at,
     @updated_at
@@ -1815,6 +1823,7 @@ export function createOrder(input: CreateOrderInput): OrderRecord {
     unit_price: input.unitPrice,
     total_amount: input.totalAmount,
     item_count: input.itemCount,
+    locale: input.locale,
     created_at: now,
     updated_at: now,
   }) as { lastInsertRowid: number | bigint };

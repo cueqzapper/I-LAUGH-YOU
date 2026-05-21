@@ -22,6 +22,7 @@ import ProductionSection from "@/components/sections/ProductionSection";
 import { useFavorites } from "@/hooks/useFavorites";
 import {
   LEGACY_TILE_COLUMNS,
+  LEGACY_TILE_ROWS,
   PIECE_COLUMNS,
   PIECE_ROWS,
   TOTAL_PIECES,
@@ -73,11 +74,11 @@ interface SoldPiecesResponse {
 }
 
 const TILE_COLUMNS = PIECE_COLUMNS;
-const LEGACY_TILE_COUNT = LEGACY_TILE_COLUMNS * (PIECE_ROWS / 2);
-const TOTAL_PIECES_COPY = "24.236";
+const LEGACY_TILE_COUNT = LEGACY_TILE_COLUMNS * LEGACY_TILE_ROWS;
+const TOTAL_PIECES_COPY = "6.059";
 
-const MONOCHROME_PREVIEW_ZOOM = 8;
-const GET_BY_ID_PREVIEW_ZOOM = 10;
+const MONOCHROME_PREVIEW_ZOOM = 7;
+const GET_BY_ID_PREVIEW_ZOOM = 9;
 
 function randomHexColor(): string {
   return Math.floor(Math.random() * 0xffffff)
@@ -271,29 +272,13 @@ function buildColorReferences(colorsMap: LegacyColorsMap): ColorReference[] {
     const referenceColor = palette[6] ?? palette[0] ?? DEFAULT_PALETTE[0];
 
     if (isLegacyPaletteMap) {
-      const legacyZeroBasedId = sourceId - 1;
-      const legacyRow = Math.floor(legacyZeroBasedId / LEGACY_TILE_COLUMNS);
-      const legacyColumn = legacyZeroBasedId % LEGACY_TILE_COLUMNS;
-
-      const mappedRow = legacyRow * 2;
-      const mappedColumn = legacyColumn * 2;
-      const expandedIds = [
-        mappedRow * TILE_COLUMNS + mappedColumn + 1,
-        mappedRow * TILE_COLUMNS + mappedColumn + 2,
-        (mappedRow + 1) * TILE_COLUMNS + mappedColumn + 1,
-        (mappedRow + 1) * TILE_COLUMNS + mappedColumn + 2,
-      ];
-
-      expandedIds.forEach((expandedId) => {
-        if (expandedId >= 1 && expandedId <= TILE_COUNT) {
-          references.push({
-            id: expandedId,
-            palette,
-            referenceLab: toLegacyLabColor(rgbToLab(referenceColor)),
-          });
-        }
-      });
-
+      if (sourceId >= 1 && sourceId <= TILE_COUNT) {
+        references.push({
+          id: sourceId,
+          palette,
+          referenceLab: toLegacyLabColor(rgbToLab(referenceColor)),
+        });
+      }
       return;
     }
 
@@ -1295,7 +1280,7 @@ export default function HomeClient() {
             <h1 className={`text-pop-up-top ${titleAnimated ? "hover" : ""}`}>
               I LAUGH YOU!
               <span className="sr-only">
-                {" "}&mdash; {t("seoTagline", { defaultValue: "24,236 unique numbered pieces of the largest self-portrait in art history. Own a fragment of one hand-painted oil painting." })}
+                {" "}&mdash; {t("seoTagline", { defaultValue: "6,059 unique numbered pieces of the largest self-portrait in art history. Own a fragment of one hand-painted oil painting." })}
               </span>
             </h1>
           </div>

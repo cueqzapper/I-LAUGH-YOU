@@ -1,10 +1,10 @@
 import { TOTAL_PIECES } from "@/lib/piece-config";
 
-const MAX_SOLD_INDEX = TOTAL_PIECES - 1; // 24235
+const MAX_SOLD_INDEX = TOTAL_PIECES - 1; // 6058
 
 /**
- * Exponential price curve: piece #1 = 77, piece #24,236 = 777.
- * Formula: 77 + 700 * (soldCount / 24235)^3
+ * Exponential price curve: piece #1 = 77, piece #6,059 = 777.
+ * Formula: 77 + 700 * (soldCount / 6058)^3
  */
 export function priceAt(soldCount: number): number {
   const clamped = Math.max(0, Math.min(MAX_SOLD_INDEX, soldCount));

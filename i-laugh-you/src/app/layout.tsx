@@ -22,9 +22,9 @@ const ultra = Ultra({
   weight: "400",
 });
 
-const DEFAULT_TITLE = "I LAUGH YOU — 24,236 numbered pieces of the largest self-portrait";
+const DEFAULT_TITLE = "I LAUGH YOU — 6,059 numbered pieces of the largest self-portrait";
 const DEFAULT_DESCRIPTION =
-  "An art project selling 24,236 unique numbered pieces of one hand-painted oil self-portrait. Dynamic scarcity pricing, 77–777 CHF. Art × capitalism, live.";
+  "An art project selling 6,059 unique numbered pieces of one hand-painted oil self-portrait. Dynamic scarcity pricing, 77–777 CHF. Art × capitalism, live.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
         url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "I LAUGH YOU — 24,236 unique pieces of one hand-painted self-portrait",
+        alt: "I LAUGH YOU — 6,059 unique pieces of one hand-painted self-portrait",
       },
     ],
   },
@@ -149,6 +149,15 @@ export default function RootLayout({
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: jsonLdString(websiteJsonLd()) }}
         />
+        {process.env.NEXT_PUBLIC_UMAMI_SRC && process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
+          <Script
+            id="umami"
+            src={process.env.NEXT_PUBLIC_UMAMI_SRC}
+            data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+            strategy="afterInteractive"
+            defer
+          />
+        )}
         {children}
       </body>
     </html>

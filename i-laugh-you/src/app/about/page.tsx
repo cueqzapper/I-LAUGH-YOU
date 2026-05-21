@@ -10,9 +10,9 @@ import {
 } from "@/lib/seo";
 import "./about.css";
 
-const ABOUT_TITLE = "About I LAUGH YOU — art × capitalism, 24,236 numbered pieces";
+const ABOUT_TITLE = "About I LAUGH YOU — art × capitalism, 6,059 numbered pieces";
 const ABOUT_DESCRIPTION =
-  "The story behind I LAUGH YOU — an art project critiquing scarcity pricing and the art market by selling 24,236 numbered pieces of one hand-painted self-portrait. By DTSQR.";
+  "The story behind I LAUGH YOU — an art project critiquing scarcity pricing and the art market by selling 6,059 numbered pieces of one hand-painted self-portrait. By DTSQR.";
 
 export const metadata: Metadata = {
   title: ABOUT_TITLE,
@@ -51,10 +51,10 @@ export default function AboutPage() {
       artform: "Oil painting",
       artMedium: "Oil on canvas",
       creator: { "@type": "Person", name: "DTSQR" },
-      numberOfPages: 24236,
+      numberOfPages: 6059,
       locationCreated: "Basel, Switzerland",
       description:
-        "One hand-painted oil self-portrait divided into 24,236 unique numbered pieces, each sold once.",
+        "One hand-painted oil self-portrait divided into 6,059 unique numbered pieces, each sold once.",
     },
   };
 

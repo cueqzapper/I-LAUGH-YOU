@@ -280,8 +280,6 @@ export async function sendShippingNotification(input: {
   trackingNumber: string | null;
   locale?: string;
 }) {
-  // TODO: Once an `orders.locale` column is added via migration, the Printful
-  // webhook will pass the real buyer locale. Until then, we default to "en".
   const locale = input.locale ?? "en";
 
   const subject = tEmail(locale, "shipping.subject", { imageId: input.imageId });

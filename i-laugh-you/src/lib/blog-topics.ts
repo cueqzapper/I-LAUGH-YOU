@@ -246,7 +246,7 @@ export const BLOG_TOPICS: BlogTopic[] = [
     category: "das-projekt",
     titleDe: "I LAUGH YOU — wie das größte Selbstporträt entstand",
     promptDe:
-      "Erzähle die Entstehungsgeschichte des I LAUGH YOU Projekts. 24.236 einzigartige Teile, die zusammen ein Gesicht ergeben. Preise von 77€ bis 777€ — steigende Preise bei sinkender Auswahl. Beschreibe die Fakten, ohne die dahinterliegende Absicht zu erklären.",
+      "Erzähle die Entstehungsgeschichte des I LAUGH YOU Projekts. 6.059 einzigartige Teile, die zusammen ein Gesicht ergeben. Preise von 77€ bis 777€ — steigende Preise bei sinkender Auswahl. Beschreibe die Fakten, ohne die dahinterliegende Absicht zu erklären.",
     imagePrompt: "giant mosaic face made of thousands of tiny colorful pieces",
     tags: ["I LAUGH YOU", "Entstehung", "Selbstporträt"],
   },
@@ -255,14 +255,14 @@ export const BLOG_TOPICS: BlogTopic[] = [
     category: "das-projekt",
     titleDe: "Ab 77€ pro Stück — Kunst für alle",
     promptDe:
-      "Schreibe über das Preismodell von I LAUGH YOU. 24.236 Teile, Preise von 77€ bis 777€. Je mehr verkauft werden, desto weniger Auswahl bleibt und desto teurer wird es. Beschreibe die Mechanik sachlich — lass den Leser seine eigenen Schlüsse über Wert und Knappheit ziehen.",
+      "Schreibe über das Preismodell von I LAUGH YOU. 6.059 Teile, Preise von 77€ bis 777€. Je mehr verkauft werden, desto weniger Auswahl bleibt und desto teurer wird es. Beschreibe die Mechanik sachlich — lass den Leser seine eigenen Schlüsse über Wert und Knappheit ziehen.",
     imagePrompt: "single euro coin transforming into colorful artwork",
     tags: ["I LAUGH YOU", "Preis", "Zugang"],
   },
   {
     key: "ily-teilhabe",
     category: "das-projekt",
-    titleDe: "24.236 Besitzer — eine Gemeinschaft der Kunst",
+    titleDe: "6.059 Besitzer — eine Gemeinschaft der Kunst",
     promptDe:
       "Schreibe über die Vision von I LAUGH YOU: ein Kunstwerk, das tausenden Menschen gehört. Was bedeutet geteiltes Eigentum an Kunst?",
     imagePrompt: "crowd of diverse people each holding a small piece of a larger picture",

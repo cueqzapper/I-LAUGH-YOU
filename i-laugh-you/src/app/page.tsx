@@ -8,9 +8,9 @@ import {
   jsonLdString,
 } from "@/lib/seo";
 
-const HOME_TITLE = "I LAUGH YOU — Own one of 24,236 numbered pieces of the largest self-portrait";
+const HOME_TITLE = "I LAUGH YOU — Own one of 6,059 numbered pieces of the largest self-portrait";
 const HOME_DESCRIPTION =
-  "Buy your numbered piece of the largest hand-painted self-portrait in art history. 24,236 unique collectible prints, priced by scarcity from 77 to 777 CHF. Find art by color, own a fragment of one painting.";
+  "Buy your numbered piece of the largest hand-painted self-portrait in art history. 6,059 unique collectible prints, priced by scarcity from 77 to 777 CHF. Find art by color, own a fragment of one painting.";
 
 export const metadata: Metadata = {
   title: HOME_TITLE,
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
         url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "I LAUGH YOU — 24,236 unique pieces of one hand-painted self-portrait",
+        alt: "I LAUGH YOU — 6,059 unique pieces of one hand-painted self-portrait",
       },
     ],
     locale: "en_US",
@@ -47,7 +47,7 @@ export default function HomePage() {
     "@type": "Product",
     name: "I LAUGH YOU — numbered art piece",
     description:
-      "One of 24,236 unique numbered prints, each a distinct fragment of a single hand-painted oil self-portrait. Priced dynamically by scarcity (77–777 CHF).",
+      "One of 6,059 unique numbered prints, each a distinct fragment of a single hand-painted oil self-portrait. Priced dynamically by scarcity (77–777 CHF).",
     brand: {
       "@type": "Brand",
       name: "I LAUGH YOU",
@@ -59,7 +59,7 @@ export default function HomePage() {
       priceCurrency: "CHF",
       lowPrice: "77",
       highPrice: "777",
-      offerCount: "24236",
+      offerCount: "6059",
       availability: "https://schema.org/InStock",
     },
   };

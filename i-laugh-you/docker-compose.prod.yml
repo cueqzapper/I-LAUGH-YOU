@@ -12,6 +12,30 @@ services:
     environment:
       - NODE_ENV=production
 
+  umami-db:
+    image: postgres:16-alpine
+    container_name: ily-umami-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=umami
+      - POSTGRES_USER=umami
+      - POSTGRES_PASSWORD=${UMAMI_DB_PASSWORD}
+    volumes:
+      - ./data/umami-db:/var/lib/postgresql/data
+
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    container_name: ily-umami
+    restart: unless-stopped
+    expose:
+      - "3000"
+    environment:
+      - DATABASE_URL=postgresql://umami:${UMAMI_DB_PASSWORD}@umami-db:5432/umami
+      - DATABASE_TYPE=postgresql
+      - APP_SECRET=${UMAMI_APP_SECRET}
+    depends_on:
+      - umami-db
+
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: ily-cloudflared
@@ -21,3 +45,4 @@ services:
       - .env.production
     depends_on:
       - ily-app
+      - umami

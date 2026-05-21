@@ -5,12 +5,16 @@ import { sendShippingNotification } from "@/lib/resend";
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
-  // Validate webhook secret (Printful v1 has no built-in signing)
+  // Validate webhook secret. Printful v1 has no built-in signing, so we require
+  // a shared secret on the URL: configure the webhook in Printful as
+  // https://i-laugh-you.com/api/webhooks/printful?secret=<PRINTFUL_WEBHOOK_SECRET>.
+  const expectedSecret = process.env.PRINTFUL_WEBHOOK_SECRET;
+  if (!expectedSecret) {
+    console.error("[Printful Webhook] PRINTFUL_WEBHOOK_SECRET not configured");
+    return NextResponse.json({ error: "Webhook not configured." }, { status: 500 });
+  }
   const secret = request.nextUrl.searchParams.get("secret");
-  if (
-    process.env.PRINTFUL_WEBHOOK_SECRET &&
-    secret !== process.env.PRINTFUL_WEBHOOK_SECRET
-  ) {
+  if (secret !== expectedSecret) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
@@ -76,9 +80,6 @@ export async function POST(request: NextRequest) {
       const order = getOrderById(orderId);
       if (order?.buyer_email) {
         try {
-          // TODO: The `orders` table has no `locale` column yet — a future
-          // migration should add one so we can send shipping emails in the
-          // buyer's language. Until then, default to English.
           await sendShippingNotification({
             buyerEmail: order.buyer_email,
             buyerName: order.buyer_name || "Collector",
@@ -86,7 +87,7 @@ export async function POST(request: NextRequest) {
             imageId,
             trackingUrl: shipment.tracking_url ?? null,
             trackingNumber: shipment.tracking_number ?? null,
-            locale: "en",
+            locale: order.locale,
           });
         } catch (emailErr) {
           console.error("[Printful Webhook] Shipping email failed:", emailErr);
