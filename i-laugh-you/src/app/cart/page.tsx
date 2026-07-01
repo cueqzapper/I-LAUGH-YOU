@@ -31,8 +31,22 @@ export default function CartPage() {
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [applyAllColor, setApplyAllColor] = useState<FrameColor>("black");
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [showcaseMockupWidth, setShowcaseMockupWidth] = useState(220);
   const checkoutSectionRef = useRef<HTMLDivElement>(null);
   const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      if (w < 380) setShowcaseMockupWidth(120);
+      else if (w < 460) setShowcaseMockupWidth(150);
+      else if (w < 560) setShowcaseMockupWidth(180);
+      else setShowcaseMockupWidth(220);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   const handleLangChange = (code: string) => {
     i18n.changeLanguage(code);
@@ -478,7 +492,7 @@ export default function CartPage() {
                     <FramedPosterMockup
                       imageId={showcaseItem.imageId}
                       frameColor={showcaseItem.frameColor}
-                      pieceWidth={220}
+                      pieceWidth={showcaseMockupWidth}
                       showBadge
                       priceLabel={`#${showcaseItem.imageId}`}
                     />
@@ -494,8 +508,8 @@ export default function CartPage() {
                   </div>
 
                   <div style={{
-                    flex: "1 1 320px",
-                    minWidth: 280,
+                    flex: "1 1 280px",
+                    minWidth: 0,
                     maxWidth: 480,
                   }}>
                     <h2 style={{

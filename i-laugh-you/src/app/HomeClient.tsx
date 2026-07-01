@@ -75,6 +75,21 @@ interface SoldPiecesResponse {
 
 const TILE_COLUMNS = PIECE_COLUMNS;
 const LEGACY_TILE_COUNT = LEGACY_TILE_COLUMNS * LEGACY_TILE_ROWS;
+
+// URL hash slug per fullpage section, in DOM order. Index 0 (intro) has an
+// empty slug so the canonical landing URL stays `/`.
+const SECTION_SLUGS = [
+  "",
+  "title",
+  "story",
+  "art",
+  "pieces",
+  "image",
+  "colors",
+  "price",
+  "sofa",
+  "production",
+] as const;
 const TOTAL_PIECES_COPY = "6.059";
 
 const MONOCHROME_PREVIEW_ZOOM = 7;
@@ -521,6 +536,55 @@ export default function HomeClient() {
     }
   }, [applyPreviewState]);
 
+  // Hash → section: on load (and on browser back/forward) scroll to the section
+  // whose slug matches `location.hash`. Skip when the cross-page nav handoff
+  // (ily-nav-target) is active — that one wins and would otherwise fight us.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const scrollToSlug = (slug: string) => {
+      const targetSection = SECTION_SLUGS.indexOf(
+        slug as (typeof SECTION_SLUGS)[number]
+      );
+      if (targetSection < 0) return;
+      let stableHits = 0;
+      let attempts = 0;
+      const lockScroll = () => {
+        const sections = document.querySelectorAll<HTMLElement>(
+          "#fullpage .section"
+        );
+        const target = sections[targetSection];
+        if (target && (target.offsetTop > 0 || targetSection === 0)) {
+          const desired = target.offsetTop;
+          if (Math.abs(window.scrollY - desired) > 2) {
+            window.scrollTo({ top: desired, behavior: "auto" });
+            stableHits = 0;
+          } else {
+            stableHits++;
+          }
+        }
+        if (stableHits < 3 && attempts++ < 80) {
+          setTimeout(lockScroll, 50);
+        }
+      };
+      setTimeout(lockScroll, 50);
+    };
+
+    const initialSlug = window.location.hash.replace(/^#/, "");
+    const hasCrossPageTarget = sessionStorage.getItem("ily-nav-target") !== null;
+    if (initialSlug && !hasCrossPageTarget) {
+      scrollToSlug(initialSlug);
+    }
+
+    const onHashChange = () => {
+      const slug = window.location.hash.replace(/^#/, "");
+      if (!slug) return;
+      scrollToSlug(slug);
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     const raw = sessionStorage.getItem("ily-nav-target");
@@ -710,6 +774,17 @@ export default function HomeClient() {
       }
     }
     currentSectionRef.current = currentSection;
+
+    // Mirror the active section into the URL hash so each slide has its own
+    // shareable URL. replaceState (not pushState) keeps the back button taking
+    // the user to whatever page they came from, not section-by-section.
+    const slug = SECTION_SLUGS[currentSection] ?? "";
+    const desiredHash = slug ? `#${slug}` : "";
+    if (window.location.hash !== desiredHash) {
+      const newUrl =
+        window.location.pathname + window.location.search + desiredHash;
+      window.history.replaceState(window.history.state, "", newUrl);
+    }
 
     if (!titleAnimated && scrollTop > 2) {
       setTitleAnimated(true);

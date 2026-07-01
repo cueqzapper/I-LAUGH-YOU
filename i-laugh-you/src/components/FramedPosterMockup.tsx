@@ -28,6 +28,11 @@ export default function FramedPosterMockup({
   const frame = FRAME_STYLES[frameColor];
   const matPadding = Math.max(22, Math.round(pieceWidth * 0.1));
   const framePadding = Math.max(14, Math.round(pieceWidth * 0.055));
+  const scale = Math.min(1, pieceWidth / 220);
+  const badgeSize = Math.round(62 * Math.max(0.6, scale));
+  const badgeOffset = Math.round(14 * Math.max(0.5, scale));
+  const badgeMainFont = `${(1.2 * Math.max(0.65, scale)).toFixed(2)}rem`;
+  const badgeSubFont = `${(0.55 * Math.max(0.7, scale)).toFixed(2)}rem`;
 
   const frameEl = (
     <div
@@ -96,13 +101,13 @@ export default function FramedPosterMockup({
         <div
           style={{
             position: "absolute",
-            top: -14,
-            right: -14,
+            top: -badgeOffset,
+            right: -badgeOffset,
             background: "rgba(255, 0, 105, 1)",
             color: "white",
             borderRadius: "50%",
-            width: 62,
-            height: 62,
+            width: badgeSize,
+            height: badgeSize,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -115,8 +120,8 @@ export default function FramedPosterMockup({
             zIndex: 2,
           }}
         >
-          <span style={{ fontSize: "1.2rem", fontWeight: 800, lineHeight: 1 }}>1/1</span>
-          <span style={{ fontSize: "0.55rem", opacity: 0.9, marginTop: 2, textTransform: "uppercase" }}>
+          <span style={{ fontSize: badgeMainFont, fontWeight: 800, lineHeight: 1 }}>1/1</span>
+          <span style={{ fontSize: badgeSubFont, opacity: 0.9, marginTop: 2, textTransform: "uppercase" }}>
             unique
           </span>
         </div>

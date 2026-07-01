@@ -413,6 +413,13 @@ export default function DeepZoomViewer({ onImageClick, visible, viewerRef: exter
       const x = ((viewportOriginX / imgWidth - viewportOriginX) / viewportWidth) * containerWidth;
       const y = ((viewportOriginY / imgHeight - viewportOriginY) / viewportHeight) * containerHeight;
 
+      // The canvas bitmap is `containerCSS * dpr` pixels (see ensureGridCanvasSize),
+      // but x/y/zoom below are CSS-pixel quantities. Without this scale step, the
+      // grid is drawn 1/dpr the intended size and drifts toward (0,0) as you pan —
+      // visible on mobile (gridDprCap > 1), invisible on desktop (gridDprCap == 1).
+      const dpr = Math.min(window.devicePixelRatio || 1, profile.gridDprCap);
+      context.scale(dpr, dpr);
+
       // Apply transform: translate then scale (matches original WP pattern)
       context.translate(x, y);
       context.scale(zoom, zoom);

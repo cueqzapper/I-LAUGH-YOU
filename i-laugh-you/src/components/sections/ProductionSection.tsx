@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 
@@ -15,6 +16,14 @@ export default function ProductionSection({
   totalPiecesCopy,
 }: ProductionSectionProps) {
   const { t } = useTranslation(["home"]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const update = () => setIsMobile(window.innerWidth < 640);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   const steps = [
     {
@@ -105,7 +114,7 @@ export default function ProductionSection({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
             gap: "clamp(18px, 2.5vw, 36px)",
             alignItems: "start",
           }}
@@ -117,6 +126,7 @@ export default function ProductionSection({
                 display: "flex",
                 flexDirection: "column",
                 gap: "clamp(10px, 1.2vh, 14px)",
+                minWidth: 0,
               }}
               initial={{ opacity: 0, y: 32, scale: 0.985 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -217,7 +227,7 @@ export default function ProductionSection({
             flexWrap: "wrap",
             gap: "clamp(14px, 2vw, 28px)",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: isMobile ? "center" : "space-between",
             borderTop: "1px solid #ececec",
             paddingTop: "clamp(16px, 2.2vh, 24px)",
           }}
@@ -233,6 +243,7 @@ export default function ProductionSection({
               gap: "8px 10px",
               flex: "1 1 auto",
               minWidth: 0,
+              justifyContent: isMobile ? "center" : "flex-start",
             }}
           >
             {specs.map((spec, i) => (

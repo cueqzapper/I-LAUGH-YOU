@@ -21,5 +21,8 @@
       "Read(//c/Users/simon/.claude/projects/G--I-LAUGH-YOU/memory//**)",
       "Bash(grep -q \"Done\\\\\\\\. Success\" \"C:/Users/simon/AppData/Local/Temp/claude/G--I-LAUGH-YOU/c1c21226-4169-4c34-adcc-b00a4dece600/tasks/b5h31qnmh.output\")"
     ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true
   }
 }

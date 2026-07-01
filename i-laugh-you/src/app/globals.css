@@ -2122,8 +2122,8 @@ body.preview-open > *:not(#previewImage) {
   }
 
   #where-is-me-from {
-    background-size: 90%;
-    background-position: center top;
+    background-size: cover;
+    background-position: center center;
     height: 150px;
     margin: 0;
     padding: 0;
