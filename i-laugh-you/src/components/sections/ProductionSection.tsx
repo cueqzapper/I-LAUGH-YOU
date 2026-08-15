@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface ProductionSectionProps {
   firstPriceFormatted: string;
@@ -27,17 +28,17 @@ export default function ProductionSection({
 
   const steps = [
     {
-      image: "/images/production/step-1-painted.png",
+      image: "/img/production/step-1-painted.webp",
       title: t("home:production.step1Title"),
       text: t("home:production.step1Text"),
     },
     {
-      image: "/images/production/step-2-divided.png",
+      image: "/img/production/step-2-divided.webp",
       title: t("home:production.step2Title"),
       text: t("home:production.step2Text", { total: totalPiecesCopy }),
     },
     {
-      image: "/images/production/step-3-yours.png",
+      image: "/img/production/step-3-yours.webp",
       title: t("home:production.step3Title"),
       text: t("home:production.step3Text"),
     },
@@ -191,14 +192,13 @@ export default function ProductionSection({
                     "0 20px 40px -18px rgba(0,0,0,0.22), 0 4px 12px -4px rgba(0,0,0,0.06)",
                 }}
               >
-                <img
+                <Image
                   src={step.image}
                   alt={step.title}
+                  fill
+                  sizes={isMobile ? "100vw" : "(max-width: 1320px) 33vw, 420px"}
                   style={{
-                    width: "100%",
-                    height: "100%",
                     objectFit: "cover",
-                    display: "block",
                   }}
                 />
               </div>
