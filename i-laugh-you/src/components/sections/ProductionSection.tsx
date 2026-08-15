@@ -33,7 +33,7 @@ export default function ProductionSection({
       text: t("home:production.step1Text"),
     },
     {
-      image: "/img/production/step-2-divided-v6.webp",
+      image: "/img/production/step-2-divided-v7.webp",
       title: t("home:production.step2Title"),
       text: t("home:production.step2Text", { total: totalPiecesCopy }),
     },
