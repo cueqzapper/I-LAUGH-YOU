@@ -28,17 +28,17 @@ export default function ProductionSection({
 
   const steps = [
     {
-      image: "/img/production/step-1-painted-v3.webp",
+      image: "/img/production/step-1-painted-v4.webp",
       title: t("home:production.step1Title"),
       text: t("home:production.step1Text"),
     },
     {
-      image: "/img/production/step-2-divided-v3.webp",
+      image: "/img/production/step-2-divided-v4.webp",
       title: t("home:production.step2Title"),
       text: t("home:production.step2Text", { total: totalPiecesCopy }),
     },
     {
-      image: "/img/production/step-3-yours-v3.webp",
+      image: "/img/production/step-3-yours-v4.webp",
       title: t("home:production.step3Title"),
       text: t("home:production.step3Text"),
     },
